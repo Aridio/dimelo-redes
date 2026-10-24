@@ -1,0 +1,77 @@
+# Copia de prueba de Dímelo Redes con base vacía (marca/LEEME § Probar). Solo para probar: claves de prueba.
+# Uso (desde la raíz del repositorio):
+#   IMAGEN=ghcr.io/aridio/dimelo-redes:v2.25.1-dw1 docker compose -f marca/prueba/docker-compose.yml up -d
+#   → http://localhost:4007   (crear cuenta, entrar, recorrer)
+#   docker compose -f marca/prueba/docker-compose.yml down -v   (borra la prueba entera)
+name: dimelo-redes-prueba
+services:
+  redes:
+    image: ${IMAGEN:-dimelo-redes:prueba}
+    environment:
+      MAIN_URL: 'http://localhost:4007'
+      FRONTEND_URL: 'http://localhost:4007'
+      NEXT_PUBLIC_BACKEND_URL: 'http://localhost:4007/api'
+      BACKEND_INTERNAL_URL: 'http://localhost:3000'
+      JWT_SECRET: 'solo-para-la-prueba-local-de-dimelo-redes'
+      DATABASE_URL: 'postgresql://prueba:prueba@redes-postgres:5432/prueba'
+      REDIS_URL: 'redis://redes-redis:6379'
+      TEMPORAL_ADDRESS: 'temporal:7233'
+      IS_GENERAL: 'true'
+      DISABLE_REGISTRATION: 'false'
+      NOT_SECURED: 'true'
+      STORAGE_PROVIDER: 'local'
+      UPLOAD_DIRECTORY: '/uploads'
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: '/uploads'
+      EMAIL_FROM_NAME: 'Dímelo Redes'
+      API_LIMIT: 30
+      NX_ADD_PLUGINS: 'false'
+    ports:
+      - '127.0.0.1:4007:5000'
+    depends_on:
+      redes-postgres: { condition: service_healthy }
+      redes-redis: { condition: service_healthy }
+      temporal: { condition: service_healthy }
+  redes-postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: prueba
+      POSTGRES_PASSWORD: prueba
+      POSTGRES_DB: prueba
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prueba -d prueba"]
+      interval: 5s
+      retries: 20
+  redes-redis:
+    image: redis:7.2
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep -q PONG"]
+      interval: 5s
+      retries: 20
+  temporal-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 5s
+      retries: 20
+  temporal:
+    image: temporalio/auto-setup:1.28.1
+    depends_on:
+      temporal-postgres: { condition: service_healthy }
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=temporal-postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+      - TEMPORAL_NAMESPACE=default
+    volumes:
+      - ../../dynamicconfig:/etc/temporal/config/dynamicconfig
+    healthcheck:
+      test: ["CMD", "temporal", "operator", "cluster", "health", "--address", "temporal:7233"]
+      interval: 10s
+      retries: 30
+      start_period: 30s

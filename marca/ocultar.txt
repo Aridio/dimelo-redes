@@ -1,0 +1,28 @@
+# Lo que Dímelo Redes no ofrece y habla de Postiz. aplicar.sh lo lee línea a línea:
+#   menu <ruta del menú>    quita la entrada del menú lateral (components/layout/top.menu.tsx)
+#   ajuste <pestaña>        quita la pestaña de Ajustes (components/layout/settings.component.tsx)
+#   ruta <prefijo>          quien abra esa dirección vuelve al calendario (src/proxy.ts)
+# Otras cosas ocultas que no caben en esta lista (pasos de bienvenida, canales con extensión del navegador,
+# icono de la extensión) están en aplicar.sh § Ocultar a mano.
+
+# Agente de IA
+menu /agents
+ruta /agents
+
+# Facturación, «lifetime deal» y afiliados (ya salen ocultos sin Stripe; se quitan igual)
+menu /billing
+menu https://affiliate.postiz.com
+ruta /billing
+
+# API pública, MCP, CLI y conectores de agentes (Ajustes > Agentes)
+ajuste agents
+
+# Desarrolladores: apps OAuth y apps autorizadas (Ajustes > Apps), y su pantalla de permiso
+ajuste apps
+ruta /oauth/authorize
+
+# Webhooks (herramienta para programadores)
+ajuste webhooks
+
+# Extensión del navegador
+ruta /modal

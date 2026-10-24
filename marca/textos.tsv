@@ -1,0 +1,36 @@
+# Reemplazos literales de Dímelo Redes: archivo<TAB>texto de Postiz<TAB>texto nuevo.
+# aplicar.sh falla si un texto ya no está (al actualizar Postiz: buscar dónde se movió y corregir esta línea).
+# Después de esta lista, aplicar.sh cambia cualquier «Postiz»/«Gitroom» que quede por «Dímelo Redes» (aplicar.sh § Reglas generales).
+# Títulos de pestaña
+apps/frontend/src/app/(app)/auth/login/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Login	Entrar · Dímelo Redes
+apps/frontend/src/app/(app)/auth/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Register	Crear cuenta · Dímelo Redes
+apps/frontend/src/app/(app)/auth/forgot/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Forgot Password	Recuperar clave · Dímelo Redes
+apps/frontend/src/app/(app)/auth/forgot/[token]/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Forgot Password	Nueva clave · Dímelo Redes
+apps/frontend/src/app/(app)/(preview)/p/[id]/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Preview	Vista previa · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/settings/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Settings	Ajustes · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/launches/page.tsx	${isGeneralServerSide() ? 'Postiz Calendar' : 'Gitroom Launches'}	Calendario · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/media/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Media	Medios · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/analytics/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Analytics	Estadísticas · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/billing/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Billing	Dímelo Redes
+apps/frontend/src/app/(app)/(site)/billing/lifetime/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Lifetime deal	Dímelo Redes
+apps/frontend/src/app/(app)/(site)/admin/errors/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Admin Errors	Errores · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/admin/stats/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Admin Stats	Datos · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/agents/layout.tsx	'Postiz - Agent'	'Dímelo Redes'
+apps/frontend/src/app/(app)/(site)/agents/page.tsx	'Postiz - Agent'	'Dímelo Redes'
+apps/frontend/src/app/(app)/(site)/agents/[id]/page.tsx	'Postiz - Agent'	'Dímelo Redes'
+apps/frontend/src/app/(app)/(site)/err/page.tsx	title: 'Error',	title: 'Error · Dímelo Redes',
+apps/frontend/src/app/(app)/oauth/authorize/layout.tsx	title: 'Authorize Application',	title: 'Autorizar · Dímelo Redes',
+apps/frontend/src/app/(app)/auth/activate/page.tsx	} - Activate your account	} · Activa tu cuenta
+apps/frontend/src/app/(app)/auth/activate/[code]/page.tsx	} - Activate your account	} · Activa tu cuenta
+# Salir de la cuenta
+apps/frontend/src/components/layout/logout.component.tsx	${isGeneral ? ' Postiz' : ' Gitroom'}	 Dímelo Redes
+apps/frontend/src/components/layout/logout.component.tsx	{isGeneral ? ' Postiz' : ' Gitroom'}	 Dímelo Redes
+# Enlaces de la pantalla de registro
+apps/frontend/src/components/auth/register.tsx	https://postiz.com/terms	https://dimeloweb.com/terminos/
+apps/frontend/src/components/auth/register.tsx	https://postiz.com/privacy	https://dimeloweb.com/privacidad/
+# Vista previa pública: icono propio
+apps/frontend/src/app/(app)/(preview)/p/[id]/page.tsx	src={'/postiz.svg'}	src={'/dimelo-redes.svg'}
+# Mensajes del servidor que llegan a la pantalla o al correo
+libraries/nestjs-libraries/src/database/prisma/organizations/organization.service.ts	'No Postiz account found for this email'	'No hay ninguna cuenta de Dímelo Redes con este correo'
+apps/orchestrator/src/workflows/digest.email.workflow.ts	`[Postiz] Your latest notifications`	`[Dímelo Redes] Tus últimos avisos`
+libraries/nestjs-libraries/src/database/prisma/users/users.service.ts	'Your Postiz login was changed'	'Cambió tu acceso a Dímelo Redes'

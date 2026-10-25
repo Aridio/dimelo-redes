@@ -149,12 +149,12 @@ find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' 
 # 6. Colores: el morado de Postiz pasa a guayaba (DESIGN.md de dimeloweb.com) ---------------------------
 { find apps/frontend/src libraries/react-shared-libraries/src -type f \
     \( -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.css' \) -print0
-  printf '%s\0' apps/frontend/public/no-channels-colors.svg; } |
+  find apps/frontend/public -name '*.svg' -not -path '*/icons/*' -print0; } |
   xargs -0 perl -i -pe '
     s{#(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6)\b}{#c62f47}gi;
     s{%23(612bd3|612ad5)}{%23c62f47}gi;
     s{#(5520cb|7640e0|3900b2|7c3aff|9d6eff|5023b8|5720cb|5826c2)\b}{#ad2840}gi;
-    s{#(662fda|8c66ff)\b}{#c62f47}gi;
+    s{#(662fda|8c66ff|6c63ff)\b}{#c62f47}gi;
     s{#(ae8afc|b69dec|cebdf2)\b}{#ff7a8c}gi;
     s{#291259\b}{#2b1519}gi;
     s{#e7ddfe\b}{#ffe8eb}gi;

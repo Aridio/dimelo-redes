@@ -53,11 +53,13 @@ jobs:
       - name: Probar con base vacía
         run: |
           IMAGEN="$IMAGEN" docker compose -f marca/prueba/docker-compose.yml up -d
+          listo=no
           for i in $(seq 1 60); do
             curl -sf -o /dev/null http://localhost:4007/auth/login && \
-              curl -s -o /dev/null -w '%{http_code}' http://localhost:4007/api/auth/can-register | grep -q 200 && break
+              curl -s -o /dev/null -w '%{http_code}' http://localhost:4007/api/auth/can-register | grep -q 200 && { listo=si; break; }
             sleep 10
           done
+          [ "$listo" = si ] || { echo "La copia de prueba no arrancó en 10 minutos"; exit 1; }
           marca/comprobar.sh http://localhost:4007
           # Cuenta de prueba (solo existe en esta copia que se borra al terminar)
           curl -s -D cabeceras.txt -o /dev/null -H 'Content-Type: application/json' \

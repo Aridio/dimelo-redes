@@ -67,7 +67,8 @@ for (const modo of ['oscuro', 'claro']) {
         await revisar(page, nombre);
         // Calendario: abrir «Agregar canal» para ver la lista de redes
         if (ruta === '/launches') {
-          const boton = page.getByText(/agregar canal|añadir canal|add channel/i).first();
+          // el menú lateral de computadora queda oculto en celular: buscar solo el botón visible
+          const boton = page.locator('text=/agregar canal|añadir canal|add channel/i >> visible=true').first();
           if (await boton.isVisible().catch(() => false)) {
             await boton.click().catch(() => {});
             await page.waitForTimeout(1500);

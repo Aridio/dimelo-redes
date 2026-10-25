@@ -19,8 +19,10 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Títulos de pestaña y textos concretos, en español | `marca/textos.tsv` |
 | «Postiz»/«Gitroom» que quede → «Dímelo Redes»; enlaces a postiz.com y docs.postiz.com → dimeloweb.com | `marca/aplicar.sh` § Reglas generales |
 | Secciones ocultas: agente, API pública, MCP, CLI, apps de desarrolladores, webhooks, facturación, afiliados, extensión del navegador | `marca/ocultar.txt` y `marca/aplicar.sh` § Ocultar a mano |
+| Botones y acentos en guayaba en vez del morado de Postiz | `marca/aplicar.sh` § Colores |
+| Textos en español que faltaban en la traducción de Postiz, correos y avisos del servidor | `marca/es.json` y `marca/textos.tsv` |
 | Pantalla de entrada con frase propia (sin testimonios de Postiz) y bienvenida solo con «Conectar canales» | `marca/aplicar.sh` § Ocultar a mano |
-| Página 404 propia | `marca/archivos/.../app/(app)/not-found.tsx` |
+| Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |
 | Enlace «Código fuente» a este repositorio (entrada y Ajustes) | `marca/archivos/.../components/marca/codigo.fuente.tsx` |
 
 Lo que el cliente no ve (paquetes `@gitroom/…`, variables `POSTIZ_…`, carpetas) se queda como está.
@@ -42,14 +44,18 @@ git checkout -- . && git clean -fd apps libraries           # vuelve a la copia 
 
 ## Pasar a una versión nueva de Postiz
 
-1. Traer la etiqueta nueva: `git fetch https://github.com/gitroomhq/postiz-app.git tag vX.Y.Z`.
-2. Rama nueva desde ella y llevar encima los commits de la marca: `git checkout -b dimelo-vX.Y.Z vX.Y.Z && git cherry-pick <commits de dimelo que no son de Postiz>` (o `git rebase --onto vX.Y.Z v2.25.1 dimelo`). Solo tocan `marca/`, `LEEME-DIMELO.md` y `.github/workflows/`, así que no chocan.
+1. Traer la etiqueta nueva y la actual: `git fetch https://github.com/gitroomhq/postiz-app.git tag vX.Y.Z tag v2.25.1`.
+2. Rama nueva desde ella y llevar encima los commits de la marca: `git checkout -b dimelo-vX.Y.Z vX.Y.Z && git cherry-pick <commits de dimelo que no son de Postiz>` (o `git rebase --onto vX.Y.Z v2.25.1 dimelo`). Solo tocan `marca/`, `LEEME-DIMELO.md` y `.github/workflows/`. Si Postiz cambió alguno de sus workflows, git avisa de un choque «modify/delete»: se resuelve con `git rm .github/workflows/<ese archivo>` y `git rebase --continue` (o `git cherry-pick --continue`).
 3. `marca/aplicar.sh`. Si dice «no encontré …», Postiz movió o cambió ese texto: buscarlo en la versión nueva y corregir la línea en `textos.tsv`, `ocultar.txt` o `aplicar.sh`.
 4. `marca/comprobar.sh` hasta «0 restos de Postiz». Si aparece un texto nuevo de Postiz, añadirlo a `textos.tsv` (si hay que decirlo distinto) o dejar que lo cambie la regla general.
 5. Probar en local (arriba) y recorrer las pantallas en celular, tablet y computadora, claro y oscuro.
 6. Volver a la copia limpia, commit de los cambios de `marca/`, apuntar la versión en la tabla de arriba y pasar `dimelo` a la rama nueva.
 7. Etiqueta `vX.Y.Z-dw1` (o subir el número `-dwN` si es la misma versión de Postiz con cambios de marca) y `git push origin dimelo vX.Y.Z-dw1`. El workflow construye, prueba y publica la imagen.
 8. En el servidor se cambia la imagen a la etiqueta nueva, nunca a «latest».
+
+La primera vez que se publicó la imagen hubo que hacerla pública a mano (GitHub crea los paquetes privados): perfil → Packages → `dimelo-redes` → Package settings → Change visibility → Public. Las etiquetas nuevas heredan esa visibilidad. Para comprobarlo sin sesión: `docker manifest inspect ghcr.io/aridio/dimelo-redes:<etiqueta>`.
+
+Cada construcción guarda las capturas del recorrido (celular, tablet y computadora, claro y oscuro) en la pestaña Actions, en «capturas-dimelo-redes». Lanzada a mano, solo construye y prueba; publica si se marca «publicar».
 
 ## Workflows de Postiz
 

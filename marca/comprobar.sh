@@ -2,7 +2,9 @@
 # Comprueba que no queda «Postiz» ni «Gitroom» a la vista después de marca/aplicar.sh.
 # Uso: marca/comprobar.sh                 revisa el código
 #      marca/comprobar.sh <dirección>     además revisa las páginas que sirve una copia en marcha
-#                                         (p. ej. http://localhost:5000)
+#                                         (p. ej. http://localhost:4007). Con la variable AUTH (valor de la
+#                                         cookie «auth» de una cuenta de prueba) revisa también las pantallas
+#                                         con sesión: calendario, ajustes, medios, estadísticas y la 404.
 # Termina en 0 solo si no encuentra nada. Lo que el cliente no ve (nombres de paquetes @gitroom/…,
 # variables POSTIZ_…, claves de traducción, carpetas) está permitido abajo, en PERMITIDO.
 set -uo pipefail
@@ -18,6 +20,12 @@ ALCANCE=(apps/frontend/src libraries/react-shared-libraries/src libraries/nestjs
 # Nombres internos que no llegan a la pantalla. Se borran de cada línea antes de buscar.
 PERMITIDO='@gitroom/[A-Za-z0-9_./-]+|@postiz/[A-Za-z0-9_./-]+|\b[A-Z0-9_]*POSTIZ[A-Z0-9_]*\b|gitroomhq/postiz-[a-z-]+'
 
+# 0. Que existe todo lo que se revisa (si Postiz mueve una carpeta, que no salga un 0 falso)
+for ruta in "${ALCANCE[@]}" libraries/react-shared-libraries/src/translation/locales/{es,en}/translation.json \
+            apps/frontend/src/app/colors.scss; do
+  [ -e "$ruta" ] || resto "no existe $ruta (¿Postiz la movió?)"
+done
+
 # 1. El nombre con mayúscula, en cualquier parte del código (también lo oculto)
 while IFS= read -r linea; do resto "$linea"; done < <(
   grep -rIn -E '\b(Postiz|Gitroom)\b' "${ALCANCE[@]}" 2>/dev/null)
@@ -30,6 +38,14 @@ while IFS= read -r linea; do resto "$linea"; done < <(
 while IFS= read -r linea; do resto "$linea"; done < <(
   grep -rIn -E "['\"(]/postiz[-.a-z]*\.(svg|png)" apps/frontend/src 2>/dev/null)
 
+# 3b. «postiz»/«gitroom» en minúsculas dentro de textos que se ven (placeholder, alt, title, aria-label, label)
+while IFS= read -r linea; do resto "$linea"; done < <(
+  grep -rIn -i -E '(placeholder|alt|title|aria-label|label)=?[[:space:]]*[{]?["'\''`][^"'\''`]*(postiz|gitroom)' apps/frontend/src 2>/dev/null)
+
+# 3c. Colores de Postiz (morado) en vez de los de Dímelo Web
+while IFS= read -r linea; do resto "$linea"; done < <(
+  grep -rIn -i -E '#(612bd3|7236f1|5520cb)\b' apps/frontend/src libraries/react-shared-libraries/src 2>/dev/null)
+
 # 4. Traducciones en español e inglés: ningún valor dice Postiz o Gitroom (las claves sí pueden)
 for idioma in es en; do
   json="libraries/react-shared-libraries/src/translation/locales/$idioma/translation.json"
@@ -38,7 +54,7 @@ for idioma in es en; do
 import json, re, sys
 for k, v in json.load(open(sys.argv[1], encoding="utf-8")).items():
     if isinstance(v, str) and re.search(r"postiz|gitroom", v, re.I):
-        print(f"{k} = {v[:120]}")' "$json")
+        print(f"{k} = {v[:120]}")' "$json" || echo "no pude leer el archivo")
 done
 
 # 5. Logos e iconos: los de Dímelo Web
@@ -55,8 +71,14 @@ grep -q 'CodigoFuente' apps/frontend/src/components/layout/settings.component.ts
 # 7. Páginas servidas (opcional): título, texto y enlaces sin Postiz
 if [ $# -ge 1 ]; then
   BASE="${1%/}"
-  for ruta in /auth/login /auth /auth/forgot /launches /settings /media /analytics /p/no-existe /no-existe; do
-    html="$(curl -sL --max-time 60 "$BASE$ruta")" || { resto "$ruta no responde"; continue; }
+  RUTAS=(/auth/login /auth /auth/forgot /p/no-existe)
+  CURL=(curl -sL --max-time 60)
+  if [ -n "${AUTH:-}" ]; then
+    RUTAS=(/launches /settings /media /analytics /esta-pagina-no-existe /p/no-existe)
+    CURL+=(-H "Cookie: auth=$AUTH")
+  fi
+  for ruta in "${RUTAS[@]}"; do
+    html="$("${CURL[@]}" "$BASE$ruta")" || { resto "$ruta no responde"; continue; }
     [ -n "$html" ] || { resto "$ruta vacía"; continue; }
     limpio="$(printf '%s' "$html" | perl -pe "s{$PERMITIDO}{}g")"
     if printf '%s' "$limpio" | grep -q -i -E 'postiz|gitroom'; then

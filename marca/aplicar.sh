@@ -118,6 +118,10 @@ S="$FRONT/components/layout/settings.component.tsx"
 patron "$S" 's{(<LogoutComponent />\s*</div>\s*\)\})}{$1\n          <div className="mt-4 mobile:mt-[8px]">\n            <CodigoFuente />\n          </div>}'
 patron "$S" 's{^(\x27use client\x27;\n)}{$1import { CodigoFuente } from \x27\@gitroom/frontend/components/marca/codigo.fuente\x27;\n}'
 
+# Correo de cambio de acceso (solo administradores)
+patron libraries/nestjs-libraries/src/database/prisma/users/users.service.ts \
+  's{`An administrator changed the login for your Postiz account\. ` \+.*?separately from your billing settings\.`}{`Un administrador cambió el acceso a tu cuenta de Dímelo Redes. Ahora entras con \${account.email}. Tu plan no cambió.`}s'
+
 # 5. Reglas generales ----------------------------------------------------------------------------------
 # Sobre todo el código que llega a la pantalla, a los correos o a las redes (también lo oculto, por si vuelve
 # a aparecer en otra versión): nombre, enlaces y direcciones de Postiz.
@@ -127,19 +131,41 @@ find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' 
   xargs -0 perl -i -pe '
     s{isGeneral(ServerSide\(\))? \? \x27Postiz\x27 : \x27Gitroom\x27}{\x27Dímelo Redes\x27}g;
     s{\x27Postiz/1\.0 \(\+https://postiz\.com\)\x27}{\x27DimeloRedes/1.0 (+https://dimeloweb.com)\x27}g;
-    s{https://(docs|affiliate)\.postiz\.com[^\s\x27"`)<]*}{https://dimeloweb.com}g;
-    s{https://(www\.)?postiz\.com[^\s\x27"`)<]*}{https://dimeloweb.com}g;
-    s{https://chromewebstore\.google\.com/detail/postiz/[^\s\x27"`)<]*}{https://dimeloweb.com}g;
-    s{https://uploads\.gitroom\.com/[^\s\x27"`)<]*}{https://dimeloweb.com/favicon.svg}g;
+    s{https://(docs|affiliate)\.postiz\.com[^\s\x27"`)<\$\{]*}{https://dimeloweb.com}g;
+    s{https://(www\.)?postiz\.com[^\s\x27"`)<\$\{]*}{https://dimeloweb.com}g;
+    s{https://chromewebstore\.google\.com/detail/postiz/[^\s\x27"`)<\$\{]*}{https://dimeloweb.com}g;
+    s{https://uploads\.gitroom\.com/[^\s\x27"`)<\$\{]*}{https://dimeloweb.com/favicon.svg}g;
     s{https://github\.com/gitroomhq/postiz-app}{https://github.com/Aridio/dimelo-redes}g;
     s{\@postiz\.com}{\@sin-correo.dimeloweb.com}g;
     s{postiz\.example\.com}{redes.example.com}g;
     s{(["\x27])(postiz\.com|postiz\.pro|gitroom\.com)\1}{$1dimeloweb.com$1}g;
     s{\bpostiz\.com\b}{dimeloweb.com}g;
     s{MyPostizAgent}{MiAgenteDeRedes}g;
+    s{#Postiz\b}{#DimeloRedes}g;
     s{\bPostiz\b}{Dímelo Redes}g;
     s{\bGitroom\b}{Dímelo Redes}g;
   '
+
+# 6. Colores: el morado de Postiz pasa a guayaba (DESIGN.md de dimeloweb.com) ---------------------------
+find apps/frontend/src libraries/react-shared-libraries/src -type f \
+  \( -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.css' \) -print0 |
+  xargs -0 perl -i -pe '
+    s{#(612bd3|7236f1|8155dd)\b}{#c62f47}gi;
+    s{#(5520cb|7640e0|3900b2)\b}{#ad2840}gi;
+    s{#ebe8ff\b}{#ffe8eb}gi;
+    s{#2d1b57\b}{#2b1519}gi;
+    s{#fc69ff\b}{#ff7a8c}gi;
+    s{rgba?\(\s*97,\s*43,\s*211}{rgba(198, 47, 71}g;
+  '
+
+# 7. Textos en español que faltan en la traducción de Postiz (marca/es.json) ----------------------------
+python3 -I - "$MARCA/es.json" libraries/react-shared-libraries/src/translation/locales/es/translation.json <<'PY' || fallo "no pude mezclar marca/es.json"
+import json, sys
+nuevos = json.load(open(sys.argv[1], encoding="utf-8")); nuevos.pop("_nota", None)
+ruta = sys.argv[2]; actual = json.load(open(ruta, encoding="utf-8"))
+actual.update(nuevos)
+open(ruta, "w", encoding="utf-8").write(json.dumps(actual, ensure_ascii=False, indent=2) + "\n")
+PY
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

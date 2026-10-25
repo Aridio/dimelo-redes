@@ -24,7 +24,7 @@ apps/frontend/src/app/(app)/auth/activate/page.tsx	} - Activate your account	} �
 apps/frontend/src/app/(app)/auth/activate/[code]/page.tsx	} - Activate your account	} · Activa tu cuenta
 # Salir de la cuenta
 apps/frontend/src/components/layout/logout.component.tsx	${isGeneral ? ' Postiz' : ' Gitroom'}	 Dímelo Redes
-apps/frontend/src/components/layout/logout.component.tsx	{isGeneral ? ' Postiz' : ' Gitroom'}	 Dímelo Redes
+apps/frontend/src/components/layout/logout.component.tsx	{isGeneral ? ' Postiz' : ' Gitroom'}	{' Dímelo Redes'}
 # Enlaces de la pantalla de registro
 apps/frontend/src/components/auth/register.tsx	https://postiz.com/terms	https://dimeloweb.com/terminos/
 apps/frontend/src/components/auth/register.tsx	https://postiz.com/privacy	https://dimeloweb.com/privacidad/
@@ -34,3 +34,19 @@ apps/frontend/src/app/(app)/(preview)/p/[id]/page.tsx	src={'/postiz.svg'}	src={'
 libraries/nestjs-libraries/src/database/prisma/organizations/organization.service.ts	'No Postiz account found for this email'	'No hay ninguna cuenta de Dímelo Redes con este correo'
 apps/orchestrator/src/workflows/digest.email.workflow.ts	`[Postiz] Your latest notifications`	`[Dímelo Redes] Tus últimos avisos`
 libraries/nestjs-libraries/src/database/prisma/users/users.service.ts	'Your Postiz login was changed'	'Cambió tu acceso a Dímelo Redes'
+# Arreglos de la revisión (ronda 1)
+apps/frontend/src/components/launches/helpers/linkedin.component.tsx	placeholder="https://www.linkedin.com/company/gitroom"	placeholder="https://www.linkedin.com/company/tu-empresa"
+apps/frontend/src/components/launches/creation.method.badge.tsx	'Auto-posted by system' : `Created via ${m}`	'Publicado automáticamente' : `Creado por ${m}`
+# Correos (asunto y texto)
+apps/backend/src/services/auth/auth.service.ts	'Activate your account',	'Activa tu cuenta de Dímelo Redes',
+apps/backend/src/services/auth/auth.service.ts	`Click <a href="${process.env.FRONTEND_URL}/auth/activate/	`Pulsa <a href="${process.env.FRONTEND_URL}/auth/activate/
+apps/backend/src/services/auth/auth.service.ts	">here</a> to activate your account`	">aquí</a> para activar tu cuenta`
+apps/backend/src/services/auth/auth.service.ts	'Reset your password',	'Cambia tu clave de Dímelo Redes',
+apps/backend/src/services/auth/auth.service.ts	`You have requested to reset your password. <br />Click <a href="${process.env.FRONTEND_URL}/auth/forgot/${resetValues}">here</a> to reset your password<br />The link will expire in 20 minutes`	`Pediste cambiar tu clave. <br />Pulsa <a href="${process.env.FRONTEND_URL}/auth/forgot/${resetValues}">aquí</a> para poner una nueva.<br />El enlace caduca en 20 minutos.`
+libraries/nestjs-libraries/src/database/prisma/organizations/organization.service.ts	`${user.name || user.email} invited you to join "${org.name}"`	`${user.name || user.email} te invita al equipo «${org.name}» en Dímelo Redes`
+libraries/nestjs-libraries/src/database/prisma/organizations/organization.service.ts	`${inviter} has invited you to join the "${org.name}" team.<br /><a href="${url}">Accept the invitation</a> to get started.<br />The link will expire in 2 days.`	`${inviter} te invita al equipo «${org.name}» en Dímelo Redes.<br /><a href="${url}">Acepta la invitación</a> para empezar.<br />El enlace caduca en 2 días.`
+libraries/nestjs-libraries/src/services/email.service.ts	You can change your notification preferences in your <a href="${process.env.FRONTEND_URL}/settings">account settings.</a>	Puedes cambiar qué avisos recibes en <a href="${process.env.FRONTEND_URL}/settings">Ajustes</a>.
+# Errores del servidor que llegan a la pantalla
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	'Postiz is not authorized to publish as this page, please reconnect the channel'	'Dímelo Redes no tiene permiso para publicar en esta página; vuelve a conectar el canal'
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	'You have to upload the picture/video to Postiz when sending a URL'	'Sube la imagen o el video a Dímelo Redes antes de enviar un enlace'
+libraries/nestjs-libraries/src/integrations/social/threads.provider.ts	"One of the media URLs is invalid or inaccessible, make sure it's being uploaded to Postiz first"	'Un archivo no se puede abrir; súbelo primero a Dímelo Redes'

@@ -44,7 +44,7 @@ while IFS= read -r linea; do resto "$linea"; done < <(
 
 # 3c. Colores de Postiz (morado) en vez de los de Dímelo Web
 while IFS= read -r linea; do resto "$linea"; done < <(
-  grep -rIn -i -E '(#|%23)(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6|5520cb|7640e0|3900b2|7c3aff|9d6eff|5023b8|5720cb|5826c2|662fda|8c66ff|ae8afc|b69dec|cebdf2|291259)\b|-(purple|violet|indigo)-[0-9]' apps/frontend/src libraries/react-shared-libraries/src 2>/dev/null)
+  grep -rIn -i -E '(#|%23)(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6|5520cb|7640e0|3900b2|7c3aff|9d6eff|5023b8|5720cb|5826c2|662fda|8c66ff|ae8afc|b69dec|cebdf2|291259|e7ddfe|dacbfb)\b|-(purple|violet|indigo)-[0-9]' apps/frontend/src libraries/react-shared-libraries/src apps/frontend/public/no-channels-colors.svg 2>/dev/null)
 
 # 4. Traducciones en español e inglés: ningún valor dice Postiz o Gitroom (las claves sí pueden)
 for idioma in es en; do

@@ -50,3 +50,4 @@ libraries/nestjs-libraries/src/services/email.service.ts	You can change your not
 libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	'Postiz is not authorized to publish as this page, please reconnect the channel'	'Dímelo Redes no tiene permiso para publicar en esta página; vuelve a conectar el canal'
 libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	'You have to upload the picture/video to Postiz when sending a URL'	'Sube la imagen o el video a Dímelo Redes antes de enviar un enlace'
 libraries/nestjs-libraries/src/integrations/social/threads.provider.ts	"One of the media URLs is invalid or inaccessible, make sure it's being uploaded to Postiz first"	'Un archivo no se puede abrir; súbelo primero a Dímelo Redes'
+apps/frontend/src/components/launches/launches.component.tsx	alt="No channels"	alt="Sin canales"

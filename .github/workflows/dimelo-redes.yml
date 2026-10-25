@@ -63,7 +63,7 @@ jobs:
           curl -s -D cabeceras.txt -o /dev/null -H 'Content-Type: application/json' \
             -d '{"email":"prueba@dimeloweb.test","password":"Prueba-12345","company":"Prueba","provider":"LOCAL"}' \
             http://localhost:4007/api/auth/register
-          AUTH="$(grep -i '^auth:' cabeceras.txt | head -1 | cut -d' ' -f2 | tr -d '\r')"
+          AUTH="$(grep -i '^auth:' cabeceras.txt | head -1 | cut -d' ' -f2 | tr -d '\r' || true)"
           [ -n "$AUTH" ] || { echo "No se pudo crear la cuenta de prueba"; cat cabeceras.txt; exit 1; }
           echo "AUTH=$AUTH" >> "$GITHUB_ENV"
           AUTH="$AUTH" marca/comprobar.sh http://localhost:4007
@@ -71,7 +71,7 @@ jobs:
       - name: Recorrido con capturas (celular, tablet, computadora; claro y oscuro)
         run: |
           mkdir -p "$RUNNER_TEMP/recorrido" && cd "$RUNNER_TEMP/recorrido"
-          corepack enable
+          npm install -g pnpm@10.6.1 > /dev/null
           echo '{"name":"recorrido","private":true}' > package.json
           pnpm add playwright@1.49.1 > /dev/null
           pnpm exec playwright install --with-deps chromium > /dev/null

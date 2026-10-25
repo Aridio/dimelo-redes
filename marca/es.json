@@ -196,5 +196,12 @@
   "select_or_upload_pictures_max_1gb": "Elige o sube imágenes (máximo 1 GB por subida).",
   "no_media_match_search": "Ningún archivo coincide con la búsqueda",
   "processing": "Procesando…",
-  "could_not_optimize_file": "No se pudo optimizar el archivo; se usará el original"
+  "could_not_optimize_file": "No se pudo optimizar el archivo; se usará el original",
+  "media_imported_successfully": "Archivos importados",
+  "media_import_failed": "No se pudieron importar los archivos",
+  "select_media_to_import": "Elige qué importar de",
+  "no_media_found": "No hay archivos",
+  "import_selected": "Importar lo elegido",
+  "import_from": "Importar de",
+  "import": "Importar"
 }

@@ -150,8 +150,10 @@ find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' 
 find apps/frontend/src libraries/react-shared-libraries/src -type f \
   \( -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.css' \) -print0 |
   xargs -0 perl -i -pe '
-    s{#(612bd3|7236f1|8155dd)\b}{#c62f47}gi;
-    s{#(5520cb|7640e0|3900b2)\b}{#ad2840}gi;
+    s{#(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6)\b}{#c62f47}gi;
+    s{%23(612bd3|612ad5)}{%23c62f47}gi;
+    s{#(5520cb|7640e0|3900b2|7c3aff|9d6eff)\b}{#ad2840}gi;
+    s{\b(shadow|bg|text|border|ring|from|to)-(purple|violet|indigo)-([0-9]+)}{$1-rose-$3}g;
     s{#ebe8ff\b}{#ffe8eb}gi;
     s{#2d1b57\b}{#2b1519}gi;
     s{#fc69ff\b}{#ff7a8c}gi;

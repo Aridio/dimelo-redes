@@ -65,9 +65,9 @@ for (const modo of ['oscuro', 'claro']) {
         await page.waitForTimeout(1500);
         await page.screenshot({ path: `${SALIDA}${nombre}.png`, fullPage: true });
         await revisar(page, nombre);
-        // Calendario: abrir «Añadir canal» para ver la lista de redes
+        // Calendario: abrir «Agregar canal» para ver la lista de redes
         if (ruta === '/launches') {
-          const boton = page.getByText(/añadir canal|add channel/i).first();
+          const boton = page.getByText(/agregar canal|añadir canal|add channel/i).first();
           if (await boton.isVisible().catch(() => false)) {
             await boton.click().catch(() => {});
             await page.waitForTimeout(1500);
@@ -75,7 +75,7 @@ for (const modo of ['oscuro', 'claro']) {
             await revisar(page, `${nombre} (añadir canal)`);
             await page.keyboard.press('Escape').catch(() => {});
           } else {
-            problemas.push(`${nombre}: no encontré el botón «Añadir canal»`);
+            problemas.push(`${nombre}: no encontré el botón «Agregar canal»`);
           }
         }
       }

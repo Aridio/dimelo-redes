@@ -40,11 +40,11 @@ while IFS= read -r linea; do resto "$linea"; done < <(
 
 # 3b. «postiz»/«gitroom» en minúsculas dentro de textos que se ven (placeholder, alt, title, aria-label, label)
 while IFS= read -r linea; do resto "$linea"; done < <(
-  grep -rIn -i -E '(placeholder|alt|title|aria-label|label)=?[[:space:]]*[{]?["'\''`][^"'\''`]*(postiz|gitroom)' apps/frontend/src 2>/dev/null)
+  grep -rIn -i -E '(placeholder|alt|title|aria-label|label)=?[[:space:]]*[{]?["'\''`][^"'\''`]*(postiz|gitroom)|\bt\([[:space:]]*["'\'']['\''"]*[A-Za-z0-9_.-]+["'\''][[:space:]]*,[[:space:]]*["'\''`][^"'\''`]*(postiz|gitroom)' apps/frontend/src 2>/dev/null)
 
 # 3c. Colores de Postiz (morado) en vez de los de Dímelo Web
 while IFS= read -r linea; do resto "$linea"; done < <(
-  grep -rIn -i -E '#(612bd3|7236f1|5520cb)\b' apps/frontend/src libraries/react-shared-libraries/src 2>/dev/null)
+  grep -rIn -i -E '(#|%23)(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6|5520cb|7640e0|3900b2|7c3aff|9d6eff)\b|-(purple|violet|indigo)-[0-9]' apps/frontend/src libraries/react-shared-libraries/src 2>/dev/null)
 
 # 4. Traducciones en español e inglés: ningún valor dice Postiz o Gitroom (las claves sí pueden)
 for idioma in es en; do

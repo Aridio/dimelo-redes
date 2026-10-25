@@ -53,7 +53,7 @@ git checkout -- . && git clean -fd apps libraries           # vuelve a la copia 
 7. Etiqueta `vX.Y.Z-dw1` (o subir el número `-dwN` si es la misma versión de Postiz con cambios de marca) y `git push origin dimelo vX.Y.Z-dw1`. El workflow construye, prueba y publica la imagen.
 8. En el servidor se cambia la imagen a la etiqueta nueva, nunca a «latest».
 
-La primera vez que se publicó la imagen hubo que hacerla pública a mano (GitHub crea los paquetes privados): perfil → Packages → `dimelo-redes` → Package settings → Change visibility → Public. Las etiquetas nuevas heredan esa visibilidad. Para comprobarlo sin sesión: `docker manifest inspect ghcr.io/aridio/dimelo-redes:<etiqueta>`.
+Tras la primera publicación hay que hacer pública la imagen una vez, a mano (GitHub crea los paquetes privados): perfil → Packages → `dimelo-redes` → Package settings → Change visibility → Public. Las etiquetas nuevas heredan esa visibilidad. Para comprobarlo sin sesión: `docker manifest inspect ghcr.io/aridio/dimelo-redes:<etiqueta>`.
 
 Cada construcción guarda las capturas del recorrido (celular, tablet y computadora, claro y oscuro) en la pestaña Actions, en «capturas-dimelo-redes». Lanzada a mano, solo construye y prueba; publica si se marca «publicar».
 

@@ -59,6 +59,9 @@ while IFS=$'\t' read -r archivo viejo nuevo; do
   literal "$archivo" "$viejo" "$nuevo"
 done < "$MARCA/textos.tsv"
 
+# Idiomas: solo inglés, español y francés (Aridio, 2026-10-25)
+patron libraries/react-shared-libraries/src/translation/i18n.config.ts 's{export const languages = \[.*?\];}{export const languages = [fallbackLng, \x27es\x27, \x27fr\x27];}s'
+
 # 3. Ocultar (ocultar.txt) -----------------------------------------------------------------------------
 AJUSTES=()
 RUTAS=()

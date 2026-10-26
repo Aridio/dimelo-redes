@@ -9,7 +9,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Versión | Postiz | Imagen |
 |---|---|---|
 | dw1 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw1` |
-| dw2 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw2` (más textos en español y nombres de redes) |
+| dw2 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw2` (más textos en español, nombres de redes; solo español, sin selector de idioma) |
 
 ## Qué cambia
 
@@ -21,6 +21,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | «Postiz»/«Gitroom» que quede → «Dímelo Redes»; enlaces a postiz.com y docs.postiz.com → dimeloweb.com | `marca/aplicar.sh` § Reglas generales |
 | Secciones ocultas: agente, API pública, MCP, CLI, apps de desarrolladores, webhooks, facturación, afiliados, extensión del navegador | `marca/ocultar.txt` y `marca/aplicar.sh` § Ocultar a mano |
 | Botones y acentos en guayaba en vez del morado de Postiz | `marca/aplicar.sh` § Colores |
+| Solo español, por defecto y sin selector (inglés y francés, más adelante) | `marca/aplicar.sh` § Idioma |
 | Textos en español que faltaban en la traducción de Postiz, correos y avisos del servidor | `marca/es.json` y `marca/textos.tsv` |
 | Pantalla de entrada con frase propia (sin testimonios de Postiz) y bienvenida solo con «Conectar canales» | `marca/aplicar.sh` § Ocultar a mano |
 | Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |

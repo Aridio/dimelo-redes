@@ -59,8 +59,10 @@ while IFS=$'\t' read -r archivo viejo nuevo; do
   literal "$archivo" "$viejo" "$nuevo"
 done < "$MARCA/textos.tsv"
 
-# Idiomas: solo inglés, español y francés (Aridio, 2026-10-25)
-patron libraries/react-shared-libraries/src/translation/i18n.config.ts 's{export const languages = \[.*?\];}{export const languages = [fallbackLng, \x27es\x27, \x27fr\x27];}s'
+# Idioma: solo español, también por defecto; sin selector de idioma (Aridio, 2026-10-25; inglés y francés, más adelante)
+patron libraries/react-shared-libraries/src/translation/i18n.config.ts 's{export const fallbackLng = \x27en\x27;}{export const fallbackLng = \x27es\x27;}'
+patron libraries/react-shared-libraries/src/translation/i18n.config.ts 's{export const languages = \[.*?\];}{export const languages = [fallbackLng];}s'
+patron "$FRONT/components/new-layout/layout.component.tsx" 's{<div className="w-\[1px\] h-\[20px\] bg-blockSeparator mobile:hidden" />\s*<LanguageComponent />}{{/* Dímelo Redes: solo español */}}'
 
 # 3. Ocultar (ocultar.txt) -----------------------------------------------------------------------------
 AJUSTES=()

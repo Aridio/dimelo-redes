@@ -165,3 +165,5 @@ libraries/nestjs-libraries/src/integrations/social/linkedin.page.provider.ts	ove
 libraries/nestjs-libraries/src/integrations/social/tiktok.business.provider.ts	name = 'TikTok';	name = 'TikTok\n(empresa)';
 libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	name = 'Tiktok';	name = 'TikTok';
 libraries/nestjs-libraries/src/integrations/social/gmb.provider.ts	name = 'Google My Business';	name = 'Google Business';
+# Vista previa pública en español
+apps/frontend/src/app/(provider)/layout.tsx	language="en"	language="es"

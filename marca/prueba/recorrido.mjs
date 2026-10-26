@@ -61,7 +61,7 @@ for (const modo of ['oscuro', 'claro']) {
       const page = await contexto.newPage();
       for (const ruta of conSesion ? CON_SESION : SIN_SESION) {
         const nombre = `${modo}-${tamano}${ruta.replaceAll('/', '_')}`;
-        await page.goto(BASE + ruta, { waitUntil: 'networkidle', timeout: 90000 }).catch(() => {});
+        await page.goto(BASE + ruta, { waitUntil: 'load', timeout: 30000 }).catch(() => {});
         await page.waitForTimeout(1500);
         await page.screenshot({ path: `${SALIDA}${nombre}.png`, fullPage: true });
         await revisar(page, nombre);

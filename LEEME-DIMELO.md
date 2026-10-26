@@ -9,6 +9,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Versión | Postiz | Imagen |
 |---|---|---|
 | dw1 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw1` |
+| dw2 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw2` (más textos en español y nombres de redes) |
 
 ## Qué cambia
 

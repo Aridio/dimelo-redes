@@ -55,3 +55,113 @@ apps/frontend/src/components/launches/launches.component.tsx	alt="No channels"	a
 apps/frontend/src/components/launches/add.provider.component.tsx	title: 'Add Channel',	title: 'Agregar canal',
 apps/frontend/src/components/settings/metric.component.tsx	>Date Metrics<	>Formato de hora<
 apps/frontend/src/components/settings/metric.component.tsx	{ label: '24 hours', value: 'GLOBAL' }	{ label: '24 horas', value: 'GLOBAL' }
+# Textos escritos en inglés en el código de Postiz (sin traducción)
+apps/frontend/src/app/(app)/auth/login-required/page.tsx	Login to use the wizard to generate API code	Entra para usar el asistente
+apps/frontend/src/components/auth/forgot-return.tsx	'Repeat Password'	'Repite la contraseña'
+apps/frontend/src/components/auth/forgot-return.tsx	"New Password"	"Nueva contraseña"
+apps/frontend/src/components/launches/add.provider.component.tsx	'Invite link copied to clipboard, link will be available for 1 hour'	'Enlace de invitación copiado; funciona durante 1 hora'
+apps/frontend/src/components/launches/add.provider.component.tsx	We will store your cookies securely to facilitate the connection.	Guardaremos tus cookies de forma segura para hacer la conexión.
+apps/frontend/src/components/launches/ai.video.tsx	'Video generation failed or timed out — if it completes, it will appear in your media library'	'El video no se pudo crear o tardó demasiado; si termina, aparecerá en tus medios'
+apps/frontend/src/components/launches/ai.video.tsx	'Please fill all required fields'	'Completa todos los campos obligatorios'
+apps/frontend/src/components/launches/ai.video.tsx	'Video generation failed'	'No se pudo crear el video'
+apps/frontend/src/components/launches/ai.video.tsx	Generate	Generar
+apps/frontend/src/components/launches/general.preview.component.tsx	"Verified account"	"Cuenta verificada"
+apps/frontend/src/components/launches/helpers/date.picker.tsx	"Pick time"	"Elige la hora"
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Clear Thumbnail	Quitar miniatura
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Save Changes	Guardar cambios
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Cancel	Cancelar
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	>Back<	>Atrás<
+apps/frontend/src/components/launches/polonto/polonto.picture.generation.tsx	"Type your image generation prompt here..."	"Describe la imagen que quieres crear..."
+apps/frontend/src/components/layout/continue.provider.tsx	'Configure Channel'	'Configurar canal'
+apps/frontend/src/components/layout/drop.files.tsx	'Upload current in progress, please wait and then try again.'	'Hay una subida en curso; espera y vuelve a intentarlo.'
+apps/frontend/src/components/layout/new-modal.tsx	'Are you sure you want to close this modal?'	'¿Seguro que quieres cerrar esta ventana?'
+apps/frontend/src/components/layout/new-modal.tsx	'Are you sure?'	'¿Seguro?'
+apps/frontend/src/components/layout/organization.selector.tsx	>Select Organization<	>Elegir organización<
+apps/frontend/src/components/media/media.component.tsx	"Go to previous page"	"Página anterior"
+apps/frontend/src/components/media/media.component.tsx	"Go to next page"	"Página siguiente"
+apps/frontend/src/components/new-launch/delay.component.tsx	Remove delay	Quitar espera
+apps/frontend/src/components/new-launch/delay.component.tsx	"Custom min"	"Minutos"
+apps/frontend/src/components/new-launch/delay.component.tsx	Set	Poner
+apps/frontend/src/components/new-launch/dummy.code.component.tsx	'Code copied to clipboard'	'Código copiado'
+apps/frontend/src/components/new-launch/dummy.code.component.tsx	Copy Code	Copiar código
+apps/frontend/src/components/new-launch/editor.tsx	'Upload current in progress, please wait and then try again.'	'Hay una subida en curso; espera y vuelve a intentarlo.'
+apps/frontend/src/components/new-launch/finisher/thread.finisher.tsx	>Add a thread finisher<	>Añadir cierre del hilo<
+apps/frontend/src/components/new-launch/manage.modal.tsx	'Save Set'	'Guardar conjunto'
+apps/frontend/src/components/new-launch/mention.component.tsx	We don't have autocomplete for this social media	No hay sugerencias para esta red
+apps/frontend/src/components/new-launch/mention.component.tsx	>No results found<	>Sin resultados<
+apps/frontend/src/components/new-launch/providers/continue-provider/facebook/facebook.continue.tsx	'We recommend you to connect all the pages and all the businesses.'	'Te recomendamos conectar todas las páginas y todos los negocios.'
+apps/frontend/src/components/new-launch/providers/continue-provider/facebook/facebook.continue.tsx	"We couldn't find any business connected to the selected pages."	"No encontramos ningún negocio conectado a las páginas elegidas."
+apps/frontend/src/components/new-launch/providers/continue-provider/gmb/gmb.continue.tsx	"We couldn't find any business locations connected to your account."	"No encontramos ningún negocio conectado a tu cuenta."
+apps/frontend/src/components/new-launch/providers/continue-provider/gmb/gmb.continue.tsx	'Please close this dialog, delete the integration and try again.'	'Cierra esta ventana, borra el canal y vuelve a intentarlo.'
+apps/frontend/src/components/new-launch/providers/continue-provider/gmb/gmb.continue.tsx	'Please ensure your business is verified on Google My Business.'	'Comprueba que tu negocio está verificado en Google Business.'
+apps/frontend/src/components/new-launch/providers/continue-provider/instagram/instagram.continue.tsx	"We couldn't find any business connected to the selected pages."	"No encontramos ningún negocio conectado a las páginas elegidas."
+apps/frontend/src/components/new-launch/providers/continue-provider/linkedin/linkedin.continue.tsx	"We couldn't find any business connected to your LinkedIn Page."	"No encontramos ningún negocio conectado a tu página de LinkedIn."
+apps/frontend/src/components/new-launch/providers/continue-provider/youtube/youtube.continue.tsx	"We couldn't find any YouTube channels connected to your account."	"No encontramos ningún canal de YouTube en tu cuenta."
+apps/frontend/src/components/new-launch/providers/continue-provider/youtube/youtube.continue.tsx	'Please close this dialog, delete the integration and try again.'	'Cierra esta ventana, borra el canal y vuelve a intentarlo.'
+apps/frontend/src/components/new-launch/providers/continue-provider/youtube/youtube.continue.tsx	'Please ensure you have a YouTube channel created.'	'Comprueba que tienes un canal de YouTube creado.'
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	>Most relevant<	>Más relevantes<
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	>Comments<	>Comentarios<
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	>Share<	>Compartir<
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	>Reply<	>Responder<
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	>Like<	>Me gusta<
+apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	"Post Type"	"Tipo de publicación"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Call to Action URL"	"Enlace del botón"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	'Standard Update'	'Novedad'
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Call to Action"	"Botón"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Valid until..."	"Válida hasta..."
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	>Event Details<	>Datos del evento<
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	>Offer Details<	>Datos de la oferta<
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	'Order Online'	'Pedir en línea'
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Event Title"	"Título del evento"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	'Learn More'	'Más información'
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Event name"	"Nombre del evento"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Start Date"	"Fecha de inicio"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	'Get Offer'	'Ver oferta'
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"Post Type"	"Tipo de publicación"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	"End Date"	"Fecha de fin"
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	'Sign Up'	'Registrarse'
+apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	"Post Type"	"Tipo de publicación"
+apps/frontend/src/components/new-launch/providers/instagram/instagram.preview.tsx	>Reply<	>Responder<
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	>Comments<	>Comentarios<
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	>Repost<	>Compartir<
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	>Reply<	>Responder<
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	>Like<	>Recomendar<
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	>Send<	>Enviar<
+apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	'Accounts you follow'	'Cuentas que sigues'
+apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	'Mentioned accounts'	'Cuentas mencionadas'
+apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	'Verified accounts'	'Cuentas verificadas'
+apps/frontend/src/components/new-launch/providers/youtube/youtube.preview.tsx	Subscribe	Suscribirse
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	"Made for kids"	"Hecho para niños"
+apps/frontend/src/components/new-launch/select.current.tsx	'Are you sure you want to remove this social from scheduling?'	'¿Seguro que quieres quitar esta cuenta de la publicación?'
+apps/frontend/src/components/new-launch/select.current.tsx	'Remove Social Account'	'Quitar cuenta'
+apps/frontend/src/components/new-layout/layout.component.tsx	"Open menu"	"Abrir menú"
+apps/frontend/src/components/platform-analytics/platform.analytics.tsx	'Please refresh the integration from the calendar'	'Vuelve a conectar el canal desde el calendario'
+apps/frontend/src/components/plugs/plug.tsx	'Invalid value'	'Valor no válido'
+apps/frontend/src/components/plugs/plug.tsx	'Plug updated'	'Enchufe guardado'
+apps/frontend/src/components/plugs/plugs.tsx	'Please refresh the integration from the calendar'	'Vuelve a conectar el canal desde el calendario'
+apps/frontend/src/components/provider-preview/preview.provider.component.tsx	This provider has no configurable settings.	Esta red no tiene ajustes.
+apps/frontend/src/components/sets/sets.tsx	Manage your content sets for easy reuse across posts.	Guarda conjuntos de contenido para reutilizarlos en tus publicaciones.
+apps/frontend/src/components/sets/sets.tsx	"Enter a name for this set"	"Escribe un nombre para este conjunto"
+apps/frontend/src/components/sets/sets.tsx	'Set deleted successfully'	'Conjunto borrado'
+apps/frontend/src/components/sets/sets.tsx	'Set saved successfully'	'Conjunto guardado'
+apps/frontend/src/components/sets/sets.tsx	'Failed to save set'	'No se pudo guardar el conjunto'
+apps/frontend/src/components/sets/sets.tsx	'Save as Set'	'Guardar como conjunto'
+apps/frontend/src/components/sets/sets.tsx	Add a set	Añadir conjunto
+apps/frontend/src/components/sets/sets.tsx	"Set Name"	"Nombre del conjunto"
+apps/frontend/src/components/settings/metric.component.tsx	>Current Timezone<	>Zona horaria<
+apps/frontend/src/components/settings/signatures.component.tsx	'Signature deleted successfully'	'Firma borrada'
+apps/frontend/src/components/settings/signatures.component.tsx	"Write your signature..."	"Escribe tu firma..."
+apps/frontend/src/components/settings/signatures.component.tsx	"Auto add signature?"	"¿Añadir la firma sola?"
+apps/frontend/src/components/signature.tsx	'Add Signature'	'Añadir firma'
+apps/frontend/src/components/layout/check.payment.tsx	'We could not validate your payment method, please try again'	'No pudimos validar tu forma de pago; inténtalo de nuevo'
+apps/frontend/src/components/layout/check.payment.tsx	'Invalid Payment'	'Pago no válido'
+apps/frontend/src/components/layout/pre-condition.component.tsx	'Suspicious activity detected'	'Actividad sospechosa'
+apps/frontend/src/components/layout/pre-condition.component.tsx	>Cancel<	>Cancelar<
+# Nombres de las redes en «Agregar canal»
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	name = 'Facebook Page';	name = 'Página de Facebook';
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	name = 'Instagram\n(Facebook Business)';	name = 'Instagram\n(con Facebook)';
+libraries/nestjs-libraries/src/integrations/social/instagram.standalone.provider.ts	name = 'Instagram\n(Standalone)';	name = 'Instagram\n(sin Facebook)';
+libraries/nestjs-libraries/src/integrations/social/linkedin.page.provider.ts	override name = 'LinkedIn Page';	override name = 'Página de LinkedIn';
+libraries/nestjs-libraries/src/integrations/social/tiktok.business.provider.ts	name = 'TikTok';	name = 'TikTok\n(empresa)';
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	name = 'Tiktok';	name = 'TikTok';
+libraries/nestjs-libraries/src/integrations/social/gmb.provider.ts	name = 'Google My Business';	name = 'Google Business';

@@ -7,10 +7,10 @@ apps/frontend/src/app/(app)/auth/page.tsx	${isGeneralServerSide() ? 'Postiz' : '
 apps/frontend/src/app/(app)/auth/forgot/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Forgot Password	Recuperar clave · Dímelo Redes
 apps/frontend/src/app/(app)/auth/forgot/[token]/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Forgot Password	Nueva clave · Dímelo Redes
 apps/frontend/src/app/(app)/(preview)/p/[id]/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Preview	Vista previa · Dímelo Redes
-apps/frontend/src/app/(app)/(site)/settings/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Settings	Ajustes · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/settings/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Settings	Configuración · Dímelo Redes
 apps/frontend/src/app/(app)/(site)/launches/page.tsx	${isGeneralServerSide() ? 'Postiz Calendar' : 'Gitroom Launches'}	Calendario · Dímelo Redes
 apps/frontend/src/app/(app)/(site)/media/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Media	Medios · Dímelo Redes
-apps/frontend/src/app/(app)/(site)/analytics/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Analytics	Estadísticas · Dímelo Redes
+apps/frontend/src/app/(app)/(site)/analytics/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Analytics	Analíticas · Dímelo Redes
 apps/frontend/src/app/(app)/(site)/billing/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Billing	Dímelo Redes
 apps/frontend/src/app/(app)/(site)/billing/lifetime/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Lifetime deal	Dímelo Redes
 apps/frontend/src/app/(app)/(site)/admin/errors/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Admin Errors	Errores · Dímelo Redes
@@ -86,7 +86,7 @@ apps/frontend/src/components/new-launch/dummy.code.component.tsx	'Code copied to
 apps/frontend/src/components/new-launch/dummy.code.component.tsx	Copy Code	Copiar código
 apps/frontend/src/components/new-launch/editor.tsx	'Upload current in progress, please wait and then try again.'	'Hay una subida en curso; espera y vuelve a intentarlo.'
 apps/frontend/src/components/new-launch/finisher/thread.finisher.tsx	>Add a thread finisher<	>Añadir cierre del hilo<
-apps/frontend/src/components/new-launch/manage.modal.tsx	'Save Set'	'Guardar conjunto'
+apps/frontend/src/components/new-launch/manage.modal.tsx	'Save Set'	'Guardar plantilla'
 apps/frontend/src/components/new-launch/mention.component.tsx	We don't have autocomplete for this social media	No hay sugerencias para esta red
 apps/frontend/src/components/new-launch/mention.component.tsx	>No results found<	>Sin resultados<
 apps/frontend/src/components/new-launch/providers/continue-provider/facebook/facebook.continue.tsx	'We recommend you to connect all the pages and all the businesses.'	'Te recomendamos conectar todas las páginas y todos los negocios.'
@@ -137,17 +137,17 @@ apps/frontend/src/components/new-launch/select.current.tsx	'Remove Social Accoun
 apps/frontend/src/components/new-layout/layout.component.tsx	"Open menu"	"Abrir menú"
 apps/frontend/src/components/platform-analytics/platform.analytics.tsx	'Please refresh the integration from the calendar'	'Vuelve a conectar el canal desde el calendario'
 apps/frontend/src/components/plugs/plug.tsx	'Invalid value'	'Valor no válido'
-apps/frontend/src/components/plugs/plug.tsx	'Plug updated'	'Enchufe guardado'
+apps/frontend/src/components/plugs/plug.tsx	'Plug updated'	'Complemento guardado'
 apps/frontend/src/components/plugs/plugs.tsx	'Please refresh the integration from the calendar'	'Vuelve a conectar el canal desde el calendario'
 apps/frontend/src/components/provider-preview/preview.provider.component.tsx	This provider has no configurable settings.	Esta red no tiene ajustes.
-apps/frontend/src/components/sets/sets.tsx	Manage your content sets for easy reuse across posts.	Guarda conjuntos de contenido para reutilizarlos en tus publicaciones.
-apps/frontend/src/components/sets/sets.tsx	"Enter a name for this set"	"Escribe un nombre para este conjunto"
-apps/frontend/src/components/sets/sets.tsx	'Set deleted successfully'	'Conjunto borrado'
-apps/frontend/src/components/sets/sets.tsx	'Set saved successfully'	'Conjunto guardado'
-apps/frontend/src/components/sets/sets.tsx	'Failed to save set'	'No se pudo guardar el conjunto'
-apps/frontend/src/components/sets/sets.tsx	'Save as Set'	'Guardar como conjunto'
-apps/frontend/src/components/sets/sets.tsx	Add a set	Añadir conjunto
-apps/frontend/src/components/sets/sets.tsx	"Set Name"	"Nombre del conjunto"
+apps/frontend/src/components/sets/sets.tsx	Manage your content sets for easy reuse across posts.	Guarda plantillas de contenido para reutilizarlas en tus publicaciones.
+apps/frontend/src/components/sets/sets.tsx	"Enter a name for this set"	"Escribe un nombre para esta plantilla"
+apps/frontend/src/components/sets/sets.tsx	'Set deleted successfully'	'Plantilla borrada'
+apps/frontend/src/components/sets/sets.tsx	'Set saved successfully'	'Plantilla guardada'
+apps/frontend/src/components/sets/sets.tsx	'Failed to save set'	'No se pudo guardar la plantilla'
+apps/frontend/src/components/sets/sets.tsx	'Save as Set'	'Guardar como plantilla'
+apps/frontend/src/components/sets/sets.tsx	Add a set	Añadir plantilla
+apps/frontend/src/components/sets/sets.tsx	"Set Name"	"Nombre de la plantilla"
 apps/frontend/src/components/settings/metric.component.tsx	>Current Timezone<	>Zona horaria<
 apps/frontend/src/components/settings/signatures.component.tsx	'Signature deleted successfully'	'Firma borrada'
 apps/frontend/src/components/settings/signatures.component.tsx	"Write your signature..."	"Escribe tu firma..."
@@ -167,3 +167,9 @@ libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	name = 'Ti
 libraries/nestjs-libraries/src/integrations/social/gmb.provider.ts	name = 'Google My Business';	name = 'Google Business';
 # Vista previa pública en español
 apps/frontend/src/app/(provider)/layout.tsx	language="en"	language="es"
+# Detalles de dw6 (Aridio, 2026-10-27)
+apps/frontend/src/components/launches/general.preview.component.tsx	'Global Edit'	'Para todos los canales'
+apps/frontend/src/components/launches/calendar.tsx	${time === 12 ? 12 : time % 12}:00	${time % 12 || 12}:00
+apps/frontend/src/components/launches/calendar.tsx	'dddd, MMMM D, YYYY'	'dddd, D MMMM YYYY'
+apps/frontend/src/components/launches/helpers/date.picker.tsx	'MM/DD/YYYY hh:mm A'	'DD/MM/YYYY hh:mm A'
+apps/frontend/src/components/launches/helpers/date.picker.tsx	'MMM D, h:mm A'	'D MMM, h:mm A'

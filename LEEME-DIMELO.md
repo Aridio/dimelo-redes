@@ -13,6 +13,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw3 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw3` (menú lateral en un solo bloque, sin globos que repiten el texto; Configuración y Analíticas sin cosas apretadas en celular) |
 | dw4 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw4` (entrar con Mi Dímelo: `/auth/dimelo`, el espacio del negocio se crea la primera vez sin formulario, sesión de un día) |
 | dw5 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw5` (vuelve el fondo de Postiz; separación entre menú y contenido igual a la del borde) |
+| dw6 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw6` (métricas de Analíticas en español en todas las redes; sin número de versión a la vista; títulos de pestaña como el menú; 12:00 AM y fechas día/mes/año; nombre de archivo legible en Medios; vista previa de video que cabe; «Complementos» y «Plantillas»; botón de comentario en rojo de la marca) |
 
 ## Qué cambia
 
@@ -26,6 +27,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Botones y acentos en guayaba en vez del morado de Postiz | `marca/aplicar.sh` § Colores |
 | Solo español, por defecto y sin selector (inglés y francés, más adelante) | `marca/aplicar.sh` § Idioma |
 | Textos en español que faltaban en la traducción de Postiz, correos y avisos del servidor | `marca/es.json` y `marca/textos.tsv` |
+| Nombres de las métricas de Analíticas en español (todas las redes) | `marca/archivos/libraries/nestjs-libraries/src/marca/metricas.ts` y `marca/aplicar.sh` § 10 |
 | Pantalla de entrada con frase propia (sin testimonios de Postiz) y bienvenida solo con «Conectar canales» | `marca/aplicar.sh` § Ocultar a mano |
 | Ajustes visuales: separación entre menú y contenido igual a la del borde, menú más ancho, sin globo en botones con texto, filas de Configuración y Analíticas sin aplastarse en celular | `marca/aplicar.sh` § Ajustes visuales |
 | Entrar con Mi Dímelo (acceso propio `GENERIC`; spec 039 de dimelo-web-admin) | `marca/archivos/.../app/(app)/auth/dimelo/page.tsx` y `marca/aplicar.sh` § 9 |

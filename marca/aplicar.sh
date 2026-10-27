@@ -156,7 +156,7 @@ find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' 
     \( -name '*.ts' -o -name '*.tsx' -o -name '*.scss' -o -name '*.css' \) -print0
   find apps/frontend/public -name '*.svg' -not -path '*/icons/*' -print0; } |
   xargs -0 perl -i -pe '
-    s{#(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6)\b}{#c62f47}gi;
+    s{#(612bd3|612ad5|622aff|622ff6|7236f1|8155dd|7950f2|832ad5|8b5cf6|d82d7e)\b}{#c62f47}gi;
     s{%23(612bd3|612ad5)}{%23c62f47}gi;
     s{#(5520cb|7640e0|3900b2|7c3aff|9d6eff|5023b8|5720cb|5826c2)\b}{#ad2840}gi;
     s{#(662fda|8c66ff|6c63ff)\b}{#c62f47}gi;
@@ -315,6 +315,28 @@ literal "$FRONT/components/auth/register.tsx" "    const { token } = await (
       return;
     }
     const { token } = await res.json();"
+
+# 10. Detalles de dw6 (Aridio, 2026-10-27) -----------------------------------------------------------------------
+# Analíticas: nombres de las métricas en español para todas las redes (marca/archivos/.../marca/metricas.ts),
+# también para lo que ya estaba guardado en la memoria intermedia
+IS=libraries/nestjs-libraries/src/database/prisma/integrations/integration.service.ts
+literal "$IS" "      return JSON.parse(getIntegrationData);" "      return traducirMetricas(JSON.parse(getIntegrationData));"
+literal "$IS" "        return loadAnalytics;" "        return traducirMetricas(loadAnalytics);"
+patron "$IS" 's{^}{import { traducirMetricas } from \x27\@gitroom/nestjs-libraries/marca/metricas\x27;\n}'
+PS=libraries/nestjs-libraries/src/database/prisma/posts/posts.service.ts
+literal "$PS" "      return loadAnalytics;" "      return traducirMetricas(loadAnalytics);"
+patron "$PS" 's{^}{import { traducirMetricas } from \x27\@gitroom/nestjs-libraries/marca/metricas\x27;\n}'
+
+# Calendario: sin el número de versión bajo la lista de canales
+patron "$FRONT/components/launches/launches.component.tsx" \
+  's{\s*<div>\s*\{process\.env\.NEXT_PUBLIC_VERSION\s*\?\s*process\.env\.NEXT_PUBLIC_VERSION\s*:\s*\x27\x27\}\s*</div>}{}'
+
+# Medios y Biblioteca de medios: el nombre del archivo sobre una franja oscura que se lee en cualquier miniatura
+MC="$FRONT/components/media/media.component.tsx"
+literal "$MC" "'absolute bottom-[10px] start-[10px] end-[10px] z-[100] truncate text-end mobile:text-[12px]'," \
+  "'absolute bottom-[6px] start-[6px] end-[6px] z-[100] truncate text-start text-[12px] leading-[18px] text-white bg-black/70 rounded-[4px] px-[6px] pointer-events-none',"
+# Vista previa a pantalla completa: el video o la imagen caben en el alto de la ventana, con controles en el video
+patron "$MC" 's~<div className="w-full h-full p-\[50px\]">\s*\{hasExtension\(media\.path, \x27mp4\x27\) \? \(\s*<VideoFrame\s*autoplay=\{true\}\s*url=\{mediaDirectory\.set\(media\.path\)\}\s*/>\s*\) : \(\s*<img\s*width="100%"\s*height="100%"\s*className="w-full h-full max-h-\[100%\] max-w-\[100%\] object-cover"~<div className="w-full h-full p-[50px] mobile:p-[12px] flex justify-center items-center">\n            {hasExtension(media.path, \x27mp4\x27) ? (\n              <video\n                className="block max-w-full max-h-[calc(100vh-180px)] rounded-[4px]"\n                src={mediaDirectory.set(media.path)}\n                autoPlay\n                controls\n              />\n            ) : (\n              <img\n                className="block max-w-full max-h-[calc(100vh-180px)] object-contain"~s'
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

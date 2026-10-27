@@ -226,5 +226,18 @@
   "subscription_manage_on_platform": "Ve a {{platform}} para gestionarla",
   "developer": "Desarrolladores",
   "read_the_docs": "Ayuda",
-  "description_optional": "Descripción (opcional)"
+  "description_optional": "Descripción (opcional)",
+  "plugs": "Complementos",
+  "top_title_auto_plug": "Complemento automático: {{title}}",
+  "there_are_not_plugs_matching_your_channels": "No hay complementos para tus canales",
+  "sets": "Plantillas",
+  "save_set": "Guardar plantilla",
+  "choose_set_or_continue": "Elige una plantilla o continúa sin ninguna",
+  "continue_without_set": "Continuar sin plantilla",
+  "select_set": "Elegir una plantilla",
+  "cant_edit_networks_when_creating_set": "No puedes cambiar las redes al crear una plantilla",
+  "launches": "Calendario",
+  "check_launch": "Revisar publicación",
+  "are_you_sure_you_want_to_close_this_modal_all_data_will_be_lost": "¿Seguro que quieres cerrar esta ventana? Se perderá lo que escribiste.",
+  "generating_hook": "Generando el inicio..."
 }

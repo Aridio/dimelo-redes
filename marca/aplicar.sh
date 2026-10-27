@@ -214,6 +214,109 @@ literal "$PA" "import { capitalize, orderBy } from 'lodash';" "import { orderBy 
 literal "$PA" '<div className="text-[48px]">' '<div className="text-[48px] mobile:text-[26px] leading-[1.2]">'
 literal "$PA" '<div className="text-[20px]">' '<div className="text-[20px] mobile:text-[16px]">'
 
+# 9. Entrar con Mi Dímelo (spec 039 de dimelo-web-admin, 2026-10-27) ------------------------------------------
+# Mi Dímelo es el acceso propio (GENERIC) de Postiz: /auth/dimelo (marca/archivos) lanza el acceso; aquí, que esa página
+# empiece sin la sesión anterior y que la primera entrada cree el espacio del negocio sin pedir «Empresa».
+literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {" \
+"  // Dímelo Redes: entrar desde Mi Dímelo cierra la sesión anterior (puede ser de otro negocio)
+  if (nextUrl.pathname === '/auth/dimelo') {
+    for (const name of ['auth', 'showorg']) {
+      topResponse.cookies.set(name, '', {
+        path: '/',
+        ...(!process.env.NOT_SECURED
+          ? { secure: true, httpOnly: true, sameSite: false }
+          : {}),
+        maxAge: -1,
+        domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      });
+    }
+    return topResponse;
+  }
+
+  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {"
+OP=apps/backend/src/services/auth/providers/oauth.provider.ts
+literal "$OP" "async getUser(access_token: string): Promise<{ email: string; id: string }> {" \
+  "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string }> {"
+literal "$OP" "    const { email, sub: id } = await response.json();
+    return { email, id };" "    const { email, sub: id, name } = await response.json();
+    return { email, id, name };"
+AS=apps/backend/src/services/auth/auth.service.ts
+literal "$AS" "    redirectUri?: string,
+    state?: string,
+    stateCookie?: string
+  ) {" "    redirectUri?: string,
+    state?: string,
+    stateCookie?: string,
+    ip?: string,
+    userAgent?: string
+  ) {"
+literal "$AS" "    if (checkExists) {
+      return { jwt: await this.jwt(checkExists) };
+    }
+
+    return { token };" "    if (checkExists) {
+      return { jwt: await this.jwt(checkExists) };
+    }
+
+    // Dímelo Redes: la primera entrada con Mi Dímelo crea el espacio del negocio con su nombre, sin otro formulario
+    if (provider === Provider.GENERIC) {
+      const created = await this.loginOrRegisterProvider(
+        Provider.GENERIC,
+        {
+          providerToken: token,
+          company: (user as unknown as { name?: string }).name || user.email,
+        } as unknown as CreateOrgUserDto,
+        ip || '',
+        userAgent || ''
+      );
+      return { jwt: await this.jwt(created) };
+    }
+
+    return { token };"
+literal apps/backend/src/api/routes/auth.controller.ts "      state,
+      req?.cookies?.oauth_state
+    );" "      state,
+      req?.cookies?.oauth_state,
+      req.ip,
+      String(req.headers['user-agent'] || '')
+    );"
+
+# La sesión que abre Mi Dímelo dura un día (no un año): quitar Dímelo Redes en DWA corta el acceso en menos de un día
+patron apps/backend/src/api/routes/auth.controller.ts 's{(return response\.json\(\{ token \}\);.*?expires: new Date\(Date\.now\(\) \+ )1000 \* 60 \* 60 \* 24 \* 365}{${1}1000 * 60 * 60 * (provider.toUpperCase() === "GENERIC" ? 24 : 24 * 365)}s'
+# Y la clave de esa sesión vence al día también en el servidor (aunque alguien la copie del navegador)
+literal "$AS" "      delete user.password;
+    }
+    return AuthChecker.signJWT(user);" "      delete user.password;
+    }
+    if (user.providerName === Provider.GENERIC) {
+      return AuthChecker.signJWT({
+        ...user,
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+      });
+    }
+    return AuthChecker.signJWT(user);"
+# Si el acceso con Mi Dímelo no se completa (código vencido), a la entrada en vez de «cargando» sin fin
+literal "$FRONT/components/auth/register.tsx" "    const { token } = await (
+      await fetch(\`/auth/oauth/\${provider?.toUpperCase() || 'LOCAL'}/exists\`, {
+        method: 'POST',
+        body: JSON.stringify({
+          code,
+          state,
+        }),
+      })
+    ).json();" "    const res = await fetch(\`/auth/oauth/\${provider?.toUpperCase() || 'LOCAL'}/exists\`, {
+      method: 'POST',
+      body: JSON.stringify({
+        code,
+        state,
+      }),
+    });
+    if (!res.ok) {
+      window.location.href = '/auth/login';
+      return;
+    }
+    const { token } = await res.json();"
+
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2
   exit 1

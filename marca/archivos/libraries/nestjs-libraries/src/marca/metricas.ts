@@ -33,8 +33,8 @@ const METRICAS: Record<string, string> = {
   'paid followers': 'Seguidores por anuncios',
   // YouTube
   'estimated minutes watched': 'Minutos vistos',
-  'average view duration': 'Duración media vista',
-  'average view percentage': 'Porcentaje medio visto',
+  'average view duration': 'Duración promedio vista',
+  'average view percentage': 'Porcentaje promedio visto',
   'subscribers gained': 'Suscriptores nuevos',
   'subscribers lost': 'Suscriptores perdidos',
   favorites: 'Favoritos',
@@ -50,7 +50,7 @@ const METRICAS: Record<string, string> = {
   // Threads y X
   replies: 'Respuestas',
   reply: 'Respuestas',
-  reposts: 'Compartidos',
+  reposts: 'Republicaciones',
   quotes: 'Citas',
   quote: 'Citas',
   retweets: 'Compartidos',

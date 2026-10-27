@@ -173,3 +173,6 @@ apps/frontend/src/components/launches/calendar.tsx	${time === 12 ? 12 : time % 1
 apps/frontend/src/components/launches/calendar.tsx	'dddd, MMMM D, YYYY'	'dddd, D MMMM YYYY'
 apps/frontend/src/components/launches/helpers/date.picker.tsx	'MM/DD/YYYY hh:mm A'	'DD/MM/YYYY hh:mm A'
 apps/frontend/src/components/launches/helpers/date.picker.tsx	'MMM D, h:mm A'	'D MMM, h:mm A'
+apps/frontend/src/components/preview/render.preview.date.tsx	'MMMM D, YYYY h:mm A'	'D MMMM YYYY, h:mm A'
+apps/frontend/src/components/notifications/notification.component.tsx	'MMM D, YYYY h:mm A'	'D MMM YYYY, h:mm A'
+apps/frontend/src/components/preview/comments.components.tsx	'MMM D, YYYY HH:mm'	'D MMM YYYY, HH:mm'

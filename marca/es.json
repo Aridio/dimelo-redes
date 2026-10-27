@@ -239,5 +239,22 @@
   "launches": "Calendario",
   "check_launch": "Revisar publicación",
   "are_you_sure_you_want_to_close_this_modal_all_data_will_be_lost": "¿Seguro que quieres cerrar esta ventana? Se perderá lo que escribiste.",
-  "generating_hook": "Generando el inicio..."
+  "generating_hook": "Generando el inicio...",
+  "you_are_in_global_editing_mode": "Estás editando para todos los canales",
+  "no_longer_global_mode": "Ahora editas solo este canal",
+  "are_you_sure_go_back_to_global_mode": "¿Volver a editar para todos los canales? Se perderán los cambios de este canal.",
+  "yes_go_back_to_global_mode": "Sí, volver",
+  "back_to_global": "Volver a todos los canales",
+  "click_to_exit_global_editing": "Haz clic aquí para personalizar la publicación solo para este canal",
+  "can_t_change_date_remove_post_from_publication": "No se puede cambiar la fecha; quita la publicación del grupo",
+  "add_slot": "Agregar horario",
+  "post_on_next_available_slot": "Publicar en el siguiente horario libre",
+  "are_you_sure_you_want_to_delete_this_slot": "¿Seguro que quieres quitar este horario?",
+  "time_table_slots": "Horarios de publicación",
+  "top_title_time_table_slots": "Horarios de publicación",
+  "collapse": "Contraer",
+  "your_assistant": "Tu asistente",
+  "add_post": "Agregar publicación",
+  "farcaster_signer_revoked": "La aprobación de Farcaster fue revocada; inténtalo de nuevo",
+  "farcaster_approval_timeout": "Se acabó el tiempo para aprobar en Farcaster; inténtalo de nuevo"
 }

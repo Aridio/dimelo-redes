@@ -183,9 +183,8 @@ PY
 
 # 8. Ajustes visuales (Aridio, 2026-10-27) ---------------------------------------------------------------
 L="$FRONT/components/new-layout/layout.component.tsx"
-# Marco, menú y contenido en un solo bloque: sin las franjas más oscuras alrededor del menú
-literal "$L" "'flex flex-col min-h-screen min-w-screen text-newTextColor p-[12px]" \
-  "'flex flex-col min-h-screen min-w-screen bg-newBgColorInner text-newTextColor p-[12px]"
+# Separación entre menú y contenido igual a la del borde de la ventana (12 px); el fondo se queda como en Postiz
+literal "$L" '<div className="flex-1 flex gap-[8px] mobile:gap-0">' '<div className="flex-1 flex gap-[12px] mobile:gap-0">'
 # Menú más ancho para que «Configuración» y el botón activo quepan dentro sin salirse hacia el contenido
 literal "$L" "'flex flex-col bg-newBgColorInner w-[80px] rounded-[12px]" "'flex flex-col bg-newBgColorInner w-[96px] rounded-[12px]"
 literal "$L" "'fixed h-full w-[64px] start-[20px]" "'fixed h-full w-[80px] start-[20px]"

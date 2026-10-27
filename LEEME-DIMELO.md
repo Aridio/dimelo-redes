@@ -12,6 +12,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw2 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw2` (más textos en español, nombres de redes; solo español, sin selector de idioma) |
 | dw3 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw3` (menú lateral en un solo bloque, sin globos que repiten el texto; Configuración y Analíticas sin cosas apretadas en celular) |
 | dw4 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw4` (entrar con Mi Dímelo: `/auth/dimelo`, el espacio del negocio se crea la primera vez sin formulario, sesión de un día) |
+| dw5 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw5` (vuelve el fondo de Postiz; separación entre menú y contenido igual a la del borde) |
 
 ## Qué cambia
 
@@ -26,7 +27,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Solo español, por defecto y sin selector (inglés y francés, más adelante) | `marca/aplicar.sh` § Idioma |
 | Textos en español que faltaban en la traducción de Postiz, correos y avisos del servidor | `marca/es.json` y `marca/textos.tsv` |
 | Pantalla de entrada con frase propia (sin testimonios de Postiz) y bienvenida solo con «Conectar canales» | `marca/aplicar.sh` § Ocultar a mano |
-| Ajustes visuales: menú lateral y marco en un solo bloque, menú más ancho, sin globo en botones con texto, filas de Configuración y Analíticas sin aplastarse en celular | `marca/aplicar.sh` § Ajustes visuales |
+| Ajustes visuales: separación entre menú y contenido igual a la del borde, menú más ancho, sin globo en botones con texto, filas de Configuración y Analíticas sin aplastarse en celular | `marca/aplicar.sh` § Ajustes visuales |
 | Entrar con Mi Dímelo (acceso propio `GENERIC`; spec 039 de dimelo-web-admin) | `marca/archivos/.../app/(app)/auth/dimelo/page.tsx` y `marca/aplicar.sh` § 9 |
 | Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |
 | Enlace «Código fuente» a este repositorio (entrada y Ajustes) | `marca/archivos/.../components/marca/codigo.fuente.tsx` |

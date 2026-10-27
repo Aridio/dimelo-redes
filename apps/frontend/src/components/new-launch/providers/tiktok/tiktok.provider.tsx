@@ -63,8 +63,9 @@ const TikTokSettings: FC<{
   const [creator, setCreator] = useState<CreatorInfo | null | undefined>();
 
   // TikTok requires the latest creator info every time this page opens
+  // (the Business API has no creator_info)
   useEffect(() => {
-    if (!integration?.id) return;
+    if (!integration?.id || integration?.identifier === 'tiktok-business') return;
     let cancelled = false;
     customFunc
       .get('creatorInfo')
@@ -110,6 +111,16 @@ const TikTokSettings: FC<{
     if (duetLocked && watch('duet')) setValue('duet', false);
     if (stitchLocked && watch('stitch')) setValue('stitch', false);
   }, [commentLocked, duetLocked, stitchLocked]);
+  // A visibility saved earlier that this account no longer allows must be chosen again
+  useEffect(() => {
+    if (
+      creator &&
+      privacy_level &&
+      !creator.privacyLevelOptions.includes(privacy_level)
+    ) {
+      setValue('privacy_level', '', { shouldValidate: true });
+    }
+  }, [creator, privacy_level]);
   useEffect(() => {
     if (brandedLocked && brand_content_toggle) {
       setValue('brand_content_toggle', false, { shouldValidate: true });
@@ -276,7 +287,7 @@ const TikTokSettings: FC<{
         <Select
           label={t('label_who_can_see_this_video', 'Who can see this video?')}
           disabled={isUploadMode}
-          {...register('privacy_level')}
+          {...register('privacy_level', { deps: ['brand_organic_toggle'] })}
         >
           <option value="">{t('select', 'Select')}</option>
           {privacyLevel.map((item) => {
@@ -294,6 +305,11 @@ const TikTokSettings: FC<{
             );
           })}
         </Select>
+        {!!disclose && !!brand_content_toggle && (
+          <div className="text-[13px] -mt-[14px] mb-[6px] text-customColor18">
+            {brandedPrivateReason}
+          </div>
+        )}
       </div>
       <div className="text-[14px] mt-[10px] mb-[18px] text-balance">
         {t(
@@ -442,6 +458,7 @@ const TikTokSettings: FC<{
             disabled={isUploadMode}
             {...register('disclose', {
               value: false,
+              deps: ['brand_organic_toggle'],
             })}
           />
           {disclose && (
@@ -521,6 +538,7 @@ const TikTokSettings: FC<{
               disabled={isUploadMode}
               {...register('brand_content_toggle', {
                 value: false,
+                deps: ['brand_organic_toggle', 'privacy_level'],
               })}
             />
           </Locked>

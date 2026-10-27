@@ -79,14 +79,14 @@ class DiscloseNeedsChoice implements ValidatorConstraintInterface {
   }
 }
 
-// TikTok Direct Post rules: branded content can't be private.
+// TikTok Direct Post rules: branded content can't be private. Checked even
+// without `disclose` (API clients may not send it): the provider sends the toggle.
 @ValidatorConstraint({ name: 'tiktokBrandedNotPrivate' })
 class BrandedNotPrivate implements ValidatorConstraintInterface {
   validate(_: unknown, args: ValidationArguments) {
     const p = args.object as TikTokDto;
     return (
       !isDirectPost(p) ||
-      !p.disclose ||
       !p.brand_content_toggle ||
       p.privacy_level !== 'SELF_ONLY'
     );

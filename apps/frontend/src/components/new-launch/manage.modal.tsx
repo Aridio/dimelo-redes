@@ -909,6 +909,13 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             }}
           />
         </MobileTopBar>
+        {/* on phones the publish buttons are at the top: the declaration goes right below them */}
+        {!dummy && !addEditSets && (
+          <TikTokDeclaration
+            integrations={tiktokChannels}
+            className="hidden mobile:block px-[16px] py-[10px] border-b border-newBorder"
+          />
+        )}
         <div className="flex-1 flex mobile:contents">
           <div
             className={clsx(
@@ -1098,12 +1105,13 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             </div>
           </div>
         </div>
-        {!dummy && !addEditSets && !!tiktokChannels.length && (
-          <div className="border-t border-newBorder px-[20px] mobile:px-[16px] pt-[12px] mobile:pb-[12px] flex justify-end text-end mobile:text-start">
-            <TikTokDeclaration integrations={tiktokChannels} />
-          </div>
+        {!dummy && !addEditSets && (
+          <TikTokDeclaration
+            integrations={tiktokChannels}
+            className="mobile:hidden px-[20px] pt-[12px] flex justify-end text-end"
+          />
         )}
-        <div className={clsx('select-none h-[84px] py-[20px] border-newBorder flex items-center mobile:hidden', !(!dummy && !addEditSets && tiktokChannels.length) && 'border-t')}>
+        <div className="select-none h-[84px] py-[20px] border-t border-newBorder flex items-center mobile:hidden">
           <div className="flex-1 flex ps-[20px] gap-[8px]">
             {/* keep a single tags component mounted, the tags sheet has its own */}
             {!dummy && mobileSheet !== 'tags' && (

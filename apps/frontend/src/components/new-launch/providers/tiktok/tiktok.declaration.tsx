@@ -22,16 +22,17 @@ export const useTikTokDeclaration = create<{
 
 const linkClass = 'text-[#B69DEC] hover:underline';
 
-export const TikTokDeclaration: FC<{ integrations: string[] }> = ({
-  integrations,
-}) => {
+export const TikTokDeclaration: FC<{
+  integrations: string[];
+  className?: string;
+}> = ({ integrations, className }) => {
   const t = useT();
   const channels = useTikTokDeclaration((s) => s.channels);
   // a TikTok channel counts as posting directly until its settings say otherwise
   const active = integrations.map(
     (id) => channels[id] || { direct: true, branded: false }
   );
-  if (!active.some((p) => p.direct)) {
+  if (!active.length || !active.some((p) => p.direct)) {
     return null;
   }
   const branded = active.some((p) => p.direct && p.branded);
@@ -48,7 +49,8 @@ export const TikTokDeclaration: FC<{ integrations: string[] }> = ({
   );
 
   return (
-    <div className="text-[13px] text-balance">
+    <div className={className}>
+      <div className="text-[13px] text-balance">
       {t('tiktok_by_posting_you_agree', "By posting, you agree to TikTok's")}{' '}
       {branded && (
         <>
@@ -65,6 +67,7 @@ export const TikTokDeclaration: FC<{ integrations: string[] }> = ({
       )}
       {music}
       {t('tiktok_declaration_end', '.')}
+      </div>
     </div>
   );
 };

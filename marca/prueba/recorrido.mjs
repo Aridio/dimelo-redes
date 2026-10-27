@@ -1,7 +1,8 @@
 // Recorrido de Dímelo Redes en la copia de prueba (quickstart.md § 1 de la spec 032):
 // pantallas con y sin sesión, en celular, tablet y computadora, claro y oscuro.
 // Guarda capturas en marca/prueba/capturas/ y falla si alguna página dice Postiz/Gitroom,
-// enlaza a postiz.com, no lleva «Dímelo Redes» en el título o se desborda a lo ancho.
+// enlaza a postiz.com, no lleva «Dímelo Redes» en el título, se desborda a lo ancho, un globo repite
+// el texto del botón o un botón se sale del menú lateral.
 // Uso: BASE=http://localhost:4007 AUTH=<cookie auth> node marca/prueba/recorrido.mjs
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -31,6 +32,30 @@ async function revisar(page, nombre) {
     atributos: [...document.querySelectorAll('[placeholder],[alt],[title],[aria-label]')].map((e) =>
       ['placeholder', 'alt', 'title', 'aria-label'].map((a) => e.getAttribute(a) || '').join(' ')
     ),
+    // globos que repiten el texto que ya se ve en el mismo elemento
+    repetidos: [...document.querySelectorAll('[title],[data-tooltip-content]')]
+      .filter((e) => {
+        const globo = (e.getAttribute('title') || e.getAttribute('data-tooltip-content') || '').trim();
+        return globo && e.checkVisibility?.() !== false && (e.innerText || '').trim() === globo;
+      })
+      .map((e) => e.innerText.trim()),
+    // botones del menú que se salen de la columna del menú
+    fueraDelMenu: (() => {
+      const caja = document.querySelector('#left-menu')?.parentElement?.getBoundingClientRect();
+      if (!caja || !caja.width) return [];
+      return [...document.querySelectorAll('#left-menu a, #left-menu button')]
+        .filter((b) => {
+          const r = b.getBoundingClientRect();
+          if (!r.width) return false;
+          if (r.left < caja.left || r.right > caja.right) return true;
+          // el texto o el icono que se sale del propio botón
+          return [...b.querySelectorAll('*')].some((c) => {
+            const h = c.getBoundingClientRect();
+            return h.width && (h.left < r.left - 1 || h.right > r.right + 1);
+          });
+        })
+        .map((b) => b.innerText.trim());
+    })(),
   }));
   const todo = [datos.titulo, datos.texto, ...datos.atributos].join('\n').replace(PERMITIDO, '');
   const visto = todo.match(/.{0,40}(postiz|gitroom).{0,40}/i);
@@ -38,6 +63,8 @@ async function revisar(page, nombre) {
   const enlace = datos.enlaces.find((h) => /(postiz|gitroom)\.(com|pro)|docs\.postiz/i.test(h));
   if (enlace) problemas.push(`${nombre}: enlace a ${enlace}`);
   if (!/Dímelo Redes/.test(datos.titulo)) problemas.push(`${nombre}: título «${datos.titulo}»`);
+  if (datos.repetidos.length) problemas.push(`${nombre}: globo que repite el texto: ${datos.repetidos.join(', ')}`);
+  if (datos.fueraDelMenu.length) problemas.push(`${nombre}: se sale del menú: ${datos.fueraDelMenu.join(', ')}`);
   if (datos.ancho > datos.vista + 2) problemas.push(`${nombre}: se sale de lado (${datos.ancho}px en ${datos.vista}px)`);
 }
 

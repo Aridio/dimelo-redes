@@ -181,6 +181,39 @@ actual.update(nuevos)
 open(ruta, "w", encoding="utf-8").write(json.dumps(actual, ensure_ascii=False, indent=2) + "\n")
 PY
 
+# 8. Ajustes visuales (Aridio, 2026-10-27) ---------------------------------------------------------------
+L="$FRONT/components/new-layout/layout.component.tsx"
+# Marco, menú y contenido en un solo bloque: sin las franjas más oscuras alrededor del menú
+literal "$L" "'flex flex-col min-h-screen min-w-screen text-newTextColor p-[12px]" \
+  "'flex flex-col min-h-screen min-w-screen bg-newBgColorInner text-newTextColor p-[12px]"
+# Menú más ancho para que «Configuración» y el botón activo quepan dentro sin salirse hacia el contenido
+literal "$L" "'flex flex-col bg-newBgColorInner w-[80px] rounded-[12px]" "'flex flex-col bg-newBgColorInner w-[96px] rounded-[12px]"
+literal "$L" "'fixed h-full w-[64px] start-[20px]" "'fixed h-full w-[80px] start-[20px]"
+# Botones del menú: sin globo que repite el texto que ya se ve
+M="$FRONT/components/new-layout/menu-item.tsx"
+patron "$M" 's{\s+title=\{label\}}{}g'
+literal "$M" "py-[8px] px-[6px]" "py-[8px] px-[4px]"
+
+# Configuración en celular y tablet: interruptores y botones sin aplastarse; enlaces cortos en columna
+for f in "$FRONT/components/settings/email-notifications.component.tsx" "$FRONT/components/settings/delete-account.component.tsx"; do
+  literal "$f" '<div className="flex items-center justify-between">' \
+    '<div className="flex items-center justify-between gap-[16px] [&>*:last-child]:shrink-0">'
+done
+literal "$FRONT/components/settings/delete-account.component.tsx" 'className="!bg-red-800"' 'className="!bg-red-800 whitespace-nowrap"'
+SL="$FRONT/components/settings/shortlink-preference.component.tsx"
+literal "$SL" '<div className="flex items-center justify-between gap-[24px]">' \
+  '<div className="flex items-center justify-between gap-[24px] mobile:flex-col mobile:items-stretch mobile:gap-[12px]">'
+literal "$SL" '<div className="w-[200px]">' '<div className="w-[200px] shrink-0 mobile:w-full">'
+
+# Analíticas sin canales: nombres de las redes como se ven al agregarlas y título que cabe en el celular
+PA="$FRONT/components/platform-analytics/platform.analytics.tsx"
+literal "$PA" "{t('supported', 'Supported:')}
+          {allowedIntegrations.map((p) => capitalize(p)).join(', ')}" \
+  "Funciona con Facebook, Instagram, Página de LinkedIn, TikTok, YouTube, Google Business, Pinterest, Threads y X."
+literal "$PA" "import { capitalize, orderBy } from 'lodash';" "import { orderBy } from 'lodash';"
+literal "$PA" '<div className="text-[48px]">' '<div className="text-[48px] mobile:text-[26px] leading-[1.2]">'
+literal "$PA" '<div className="text-[20px]">' '<div className="text-[20px] mobile:text-[16px]">'
+
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2
   exit 1

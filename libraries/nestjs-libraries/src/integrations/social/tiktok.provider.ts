@@ -417,6 +417,37 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
     };
   }
 
+  // Called by the post settings each time they open (TikTok requires the latest
+  // creator info on every render): the account that will receive the post, the
+  // privacy options it allows and the interactions disabled in its TikTok app.
+  async creatorInfo(accessToken: string) {
+    const { data, error } = await (
+      await this.fetch(
+        'https://open.tiktokapis.com/v2/post/publish/creator_info/query/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+    ).json();
+
+    return {
+      // e.g. spam_risk_too_many_posts: this account can't post right now
+      canPost: !error?.code || error.code === 'ok',
+      nickname: data?.creator_nickname || '',
+      username: data?.creator_username || '',
+      avatar: data?.creator_avatar_url || '',
+      privacyLevelOptions: (data?.privacy_level_options || []) as string[],
+      commentDisabled: !!data?.comment_disabled,
+      duetDisabled: !!data?.duet_disabled,
+      stitchDisabled: !!data?.stitch_disabled,
+      maxVideoPostDurationSec: data?.max_video_post_duration_sec || 0,
+    };
+  }
+
   async maxVideoLength(accessToken: string) {
     const {
       data: { max_video_post_duration_sec },
@@ -573,8 +604,8 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
             ? { title: firstPost.message }
             : {}),
           ...(isPhoto ? { description: firstPost.message } : {}),
-          privacy_level:
-            firstPost.settings.privacy_level || 'PUBLIC_TO_EVERYONE',
+          // No default: TikTok requires the creator to choose it every time.
+          privacy_level: firstPost.settings.privacy_level,
           ...(isPhoto
             ? {}
             : { disable_duet: !this.assetBoolean(firstPost.settings.duet) }),

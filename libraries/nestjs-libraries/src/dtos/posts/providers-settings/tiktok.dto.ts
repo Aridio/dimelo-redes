@@ -1,5 +1,6 @@
 import {
-  IsBoolean, ValidateIf, IsIn, IsString, MaxLength, IsOptional, IsDefined, IsNumber, Min, Max, ValidateNested
+  IsBoolean, ValidateIf, IsIn, IsString, MaxLength, IsOptional, IsDefined, IsNumber, Min, Max, ValidateNested,
+  Validate, ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { JSONSchema } from 'class-validator-jsonschema';
@@ -58,6 +59,43 @@ export class TikTokLocation {
   address?: string;
 }
 
+const isDirectPost = (p: TikTokDto) => p?.content_posting_method !== 'UPLOAD';
+
+// TikTok Direct Post rules: when "Disclose video content" is on, the creator
+// must say whether it promotes themselves, a third party, or both.
+@ValidatorConstraint({ name: 'tiktokDiscloseNeedsChoice' })
+class DiscloseNeedsChoice implements ValidatorConstraintInterface {
+  validate(_: unknown, args: ValidationArguments) {
+    const p = args.object as TikTokDto;
+    return (
+      !isDirectPost(p) ||
+      !p.disclose ||
+      !!p.brand_organic_toggle ||
+      !!p.brand_content_toggle
+    );
+  }
+  defaultMessage() {
+    return 'Indica si tu contenido te promociona a ti, a un tercero o a ambos.';
+  }
+}
+
+// TikTok Direct Post rules: branded content can't be private.
+@ValidatorConstraint({ name: 'tiktokBrandedNotPrivate' })
+class BrandedNotPrivate implements ValidatorConstraintInterface {
+  validate(_: unknown, args: ValidationArguments) {
+    const p = args.object as TikTokDto;
+    return (
+      !isDirectPost(p) ||
+      !p.disclose ||
+      !p.brand_content_toggle ||
+      p.privacy_level !== 'SELF_ONLY'
+    );
+  }
+  defaultMessage() {
+    return 'El contenido de marca no puede ser privado: elige otra opción en «¿Quién puede ver este video?».';
+  }
+}
+
 // TikTok only honors most of these settings on a DIRECT_POST. With
 // content_posting_method=UPLOAD the media lands in the user's TikTok inbox as a
 // draft, and TikTok's inbox/upload endpoints accept nothing but the title /
@@ -77,16 +115,21 @@ export class TikTokDto {
   })
   title: string;
 
-  @IsIn([
-    'PUBLIC_TO_EVERYONE',
-    'MUTUAL_FOLLOW_FRIENDS',
-    'FOLLOWER_OF_CREATOR',
-    'SELF_ONLY',
-  ])
-  @IsString()
+  // No default: TikTok requires the creator to choose it for every post.
+  @ValidateIf(isDirectPost)
+  @IsIn(
+    [
+      'PUBLIC_TO_EVERYONE',
+      'MUTUAL_FOLLOW_FRIENDS',
+      'FOLLOWER_OF_CREATOR',
+      'SELF_ONLY',
+    ],
+    { message: 'Elige quién puede ver este video.' }
+  )
+  @Validate(BrandedNotPrivate)
   @JSONSchema({
     description:
-      'Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD.',
+      'Required when content_posting_method=DIRECT_POST, chosen by the user (never assume one). Must be one of the options the TikTok account allows. Branded content cannot be SELF_ONLY. Ignored by TikTok on UPLOAD.',
   })
   privacy_level:
     | 'PUBLIC_TO_EVERYONE'
@@ -140,11 +183,20 @@ export class TikTokDto {
   video_made_with_ai: boolean;
 
   @IsBoolean()
+  @Validate(DiscloseNeedsChoice)
   @JSONSchema({
     description:
       'Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD.',
   })
   brand_organic_toggle: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @JSONSchema({
+    description:
+      'Disclose that the post promotes goods or services. When true, brand_organic_toggle and/or brand_content_toggle must be true.',
+  })
+  disclose?: boolean;
 
   @Type(() => TikTokMusic)
   @ValidateNested()

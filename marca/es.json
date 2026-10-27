@@ -256,5 +256,20 @@
   "your_assistant": "Tu asistente",
   "add_post": "Agregar publicación",
   "farcaster_signer_revoked": "La aprobación de Farcaster fue revocada; inténtalo de nuevo",
-  "farcaster_approval_timeout": "Se acabó el tiempo para aprobar en Farcaster; inténtalo de nuevo"
+  "farcaster_approval_timeout": "Se acabó el tiempo para aprobar en Farcaster; inténtalo de nuevo",
+  "label_stitch": "Permitir Stitch",
+  "tiktok_posting_to": "Se publicará en TikTok como",
+  "tiktok_cannot_post_now": "TikTok no deja publicar en esta cuenta ahora mismo. Vuelve a intentarlo más tarde.",
+  "tiktok_creator_info_failed": "No pudimos leer tu cuenta de TikTok. Cierra y abre de nuevo esta publicación; si sigue igual, vuelve a conectar TikTok.",
+  "tiktok_branded_cannot_be_private": "El contenido de marca no puede ser privado.",
+  "tiktok_disabled_in_app": "Desactivado en la configuración de TikTok de esta cuenta",
+  "tiktok_labeled_paid_partnership": "Tu publicación se etiquetará como «Colaboración pagada».",
+  "tiktok_labeled_promotional": "Tu publicación se etiquetará como «Contenido promocional».",
+  "tiktok_disclose_choose": "Indica si tu contenido te promociona a ti, a un tercero o a ambos.",
+  "tiktok_branded_private_notice": "El contenido de marca no puede ser privado. Para marcarlo, elige otra opción en «¿Quién puede ver este video?».",
+  "tiktok_by_posting_you_agree": "Al publicar, aceptas la",
+  "tiktok_branded_content_policy": "Política de contenido de marca",
+  "tiktok_and_the": "y la",
+  "tiktok_music_usage_confirmation": "Confirmación de uso de música",
+  "tiktok_declaration_end": " de TikTok."
 }

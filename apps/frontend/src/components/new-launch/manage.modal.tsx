@@ -11,6 +11,7 @@ import React, {
 } from 'react';
 import { AddEditModalProps } from '@gitroom/frontend/components/new-launch/add.edit.modal';
 import clsx from 'clsx';
+import { TikTokDeclaration } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.declaration';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { PicksSocialsComponent } from '@gitroom/frontend/components/new-launch/picks.socials.component';
 import { EditorWrapper } from '@gitroom/frontend/components/new-launch/editor';
@@ -805,6 +806,15 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
     ]
   );
 
+  // TikTok's declaration goes right before the publish button
+  const tiktokChannels = useMemo(
+    () =>
+      selectedIntegrations
+        .filter((p) => p.integration.identifier?.startsWith('tiktok'))
+        .map((p) => p.integration.id),
+    [selectedIntegrations]
+  );
+
   const scheduleLabel = dummy
     ? t('create_output', 'Create output')
     : !existingData?.integration
@@ -1088,7 +1098,12 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             </div>
           </div>
         </div>
-        <div className="select-none h-[84px] py-[20px] border-t border-newBorder flex items-center mobile:hidden">
+        {!dummy && !addEditSets && !!tiktokChannels.length && (
+          <div className="border-t border-newBorder px-[20px] mobile:px-[16px] pt-[12px] mobile:pb-[12px] flex justify-end text-end mobile:text-start">
+            <TikTokDeclaration integrations={tiktokChannels} />
+          </div>
+        )}
+        <div className={clsx('select-none h-[84px] py-[20px] border-newBorder flex items-center mobile:hidden', !(!dummy && !addEditSets && tiktokChannels.length) && 'border-t')}>
           <div className="flex-1 flex ps-[20px] gap-[8px]">
             {/* keep a single tags component mounted, the tags sheet has its own */}
             {!dummy && mobileSheet !== 'tags' && (

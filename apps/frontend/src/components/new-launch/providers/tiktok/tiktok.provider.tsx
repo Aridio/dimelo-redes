@@ -79,6 +79,14 @@ const TikTokSettings: FC<{
       cancelled = true;
     };
   }, [integration?.id]);
+  // Publishing, scheduling and adding to the calendar are blocked while TikTok
+  // says this account can't post (drafts are still allowed)
+  useEffect(() => {
+    if (creator === undefined) return;
+    setValue('can_post', creator ? creator.canPost : undefined, {
+      shouldValidate: true,
+    });
+  }, [creator]);
 
   // Music and location come from the Business API (v1.3) - the legacy Content
   // Posting API used by the "tiktok" identifier has no such fields.
@@ -251,7 +259,7 @@ const TikTokSettings: FC<{
         <div className="bg-tableBorder p-[10px] mb-[18px] rounded-[10px] text-[13px] text-balance">
           {t(
             'tiktok_cannot_post_now',
-            'TikTok is not letting this account post right now. Please try again later.'
+            'TikTok is not letting this account post right now. You can save it as a draft and try again later.'
           )}
         </div>
       )}

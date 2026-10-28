@@ -259,7 +259,7 @@
   "farcaster_approval_timeout": "Se acabó el tiempo para aprobar en Farcaster; inténtalo de nuevo",
   "label_stitch": "Permitir Stitch",
   "tiktok_posting_to": "Se publicará en TikTok como",
-  "tiktok_cannot_post_now": "TikTok no deja publicar en esta cuenta ahora mismo. Vuelve a intentarlo más tarde.",
+  "tiktok_cannot_post_now": "TikTok no deja publicar en esta cuenta ahora mismo. Puedes guardarlo como borrador y volver a intentarlo más tarde.",
   "tiktok_creator_info_failed": "No pudimos leer tu cuenta de TikTok. Cierra y abre de nuevo esta publicación; si sigue igual, vuelve a conectar TikTok.",
   "tiktok_branded_cannot_be_private": "El contenido de marca no puede ser privado.",
   "tiktok_disabled_in_app": "Desactivado en la configuración de TikTok de esta cuenta",

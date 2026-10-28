@@ -190,6 +190,20 @@ export class TikTokDto {
   })
   brand_organic_toggle: boolean;
 
+  // TikTok Direct Post rules: no posting while creator_info says the account
+  // can't post. The posting screen sets it from creator_info; drafts skip it.
+  @ValidateIf(isDirectPost)
+  @IsOptional()
+  @IsIn([true], {
+    message:
+      'TikTok no deja publicar en esta cuenta ahora mismo. Guárdalo como borrador y vuelve a intentarlo más tarde.',
+  })
+  @JSONSchema({
+    description:
+      'Set by the posting screen from TikTok creator_info. Leave it out when posting through the API.',
+  })
+  can_post?: boolean;
+
   @IsBoolean()
   @IsOptional()
   @JSONSchema({

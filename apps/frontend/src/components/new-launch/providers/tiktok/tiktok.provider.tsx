@@ -66,6 +66,7 @@ const TikTokSettings: FC<{
   // (the Business API has no creator_info)
   useEffect(() => {
     if (!integration?.id || integration?.identifier === 'tiktok-business') return;
+    setCreator(undefined);
     let cancelled = false;
     customFunc
       .get('creatorInfo')
@@ -83,13 +84,13 @@ const TikTokSettings: FC<{
   // says this account can't post (drafts are still allowed)
   // (blocked until TikTok answers; not checked if TikTok can't be reached)
   useEffect(() => {
-    if (integration?.identifier === 'tiktok-business') return;
+    if (!integration?.id || integration?.identifier === 'tiktok-business') return;
     setValue(
       'can_post',
       creator === undefined ? false : creator ? creator.canPost : undefined,
       { shouldValidate: true }
     );
-  }, [creator, integration?.identifier]);
+  }, [creator, integration?.id, integration?.identifier]);
 
   // Music and location come from the Business API (v1.3) - the legacy Content
   // Posting API used by the "tiktok" identifier has no such fields.

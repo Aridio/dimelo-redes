@@ -304,7 +304,7 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
           )}
           {!!error && <div className="text-red-400 text-[12px]">{error}</div>}
           <div className="flex gap-[12px] justify-end">
-            <Button onClick={close} className="rounded-[4px]">
+            <Button secondary onClick={close} className="rounded-[4px]">
               {t('close', 'Close')}
             </Button>
             {info.supported && (

@@ -81,12 +81,15 @@ const TikTokSettings: FC<{
   }, [integration?.id]);
   // Publishing, scheduling and adding to the calendar are blocked while TikTok
   // says this account can't post (drafts are still allowed)
+  // (blocked until TikTok answers; not checked if TikTok can't be reached)
   useEffect(() => {
-    if (creator === undefined) return;
-    setValue('can_post', creator ? creator.canPost : undefined, {
-      shouldValidate: true,
-    });
-  }, [creator]);
+    if (integration?.identifier === 'tiktok-business') return;
+    setValue(
+      'can_post',
+      creator === undefined ? false : creator ? creator.canPost : undefined,
+      { shouldValidate: true }
+    );
+  }, [creator, integration?.identifier]);
 
   // Music and location come from the Business API (v1.3) - the legacy Content
   // Posting API used by the "tiktok" identifier has no such fields.

@@ -589,6 +589,7 @@ const ConfirmDeleteModal: FC<{
       </p>
       <div className="flex gap-[8px] justify-end">
         <Button
+          secondary
           onClick={() => {
             resolve(false);
             close();
@@ -601,7 +602,6 @@ const ConfirmDeleteModal: FC<{
             resolve(true);
             close();
           }}
-          className="bg-red-500 hover:bg-red-600"
         >
           {t('delete', 'Delete')}
         </Button>

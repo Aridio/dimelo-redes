@@ -354,7 +354,6 @@ export const DecisionModal: FC<{
   approveLabel,
   resolution,
   onlyApprove,
-  destructive,
 }) => {
   const { closeCurrent } = useModals();
   return (

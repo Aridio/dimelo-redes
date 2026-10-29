@@ -59,6 +59,11 @@ export class OrganizationService {
     return this._organizationRepository.getAccountOverview(orgId);
   }
 
+  async getApiKeyOfGenericOwner(email: string) {
+    return (await this._organizationRepository.getApiKeyOfGenericOwner(email))
+      ?.organization?.apiKey;
+  }
+
   getOrgByApiKey(api: string) {
     return this._organizationRepository.getOrgByApiKey(api);
   }

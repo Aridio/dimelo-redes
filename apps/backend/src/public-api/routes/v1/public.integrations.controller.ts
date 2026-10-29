@@ -59,6 +59,11 @@ import { GetOrgActivityDto } from '@gitroom/nestjs-libraries/dtos/analytics/get.
 import { ResetCreditsDto } from '@gitroom/nestjs-libraries/dtos/billing/reset.credits.dto';
 import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/subscription.service';
 import dayjs from 'dayjs';
+import {
+  editBlocked,
+  editBody,
+  EditError,
+} from '@gitroom/backend/dimelo/dw10';
 
 @ApiTags('Public API')
 @Controller('/public/v1')
@@ -236,6 +241,103 @@ export class PublicIntegrationsController {
     return this._postsService.deletePost(org.id, group);
   }
 
+  // dw10 (spec 050 de dimelo-web-admin): editar una publicación que aún no salió (fecha, texto, archivos) por el mismo
+  // camino que la pantalla: mismo grupo y mismos id, validada igual que POST /posts. 409 si ya salió o está saliendo.
+  @Put('/posts/group/:group')
+  async editPostByGroup(
+    @GetOrgFromRequest() org: Organization,
+    @Param('group') group: string,
+    @Body() rawBody: any
+  ) {
+    Sentry.metrics.count('public_api-request', 1);
+    let current: Awaited<ReturnType<PostsService['getPostsByGroup']>>;
+    try {
+      current = await this._postsService.getPostsByGroup(org.id, group);
+    } catch (err) {
+      throw new HttpException({ msg: 'Post not found' }, 404);
+    }
+
+    const blocked = editBlocked(current.posts as any[], new Date());
+    if (blocked) {
+      throw new HttpException(
+        {
+          msg:
+            blocked === 'publicada'
+              ? 'This post was already published'
+              : 'This post is being published',
+        },
+        409
+      );
+    }
+
+    let mapped: ReturnType<typeof editBody>;
+    try {
+      mapped = editBody(rawBody, current as any);
+    } catch (err) {
+      if (err instanceof EditError) {
+        throw new HttpException({ msg: err.message }, 400);
+      }
+      throw err;
+    }
+
+    const body = await this._postsService.mapTypeToPost(mapped as any, org.id);
+
+    if (
+      process.env.RESTRICT_UPLOAD_DOMAINS &&
+      body.posts.some((p) =>
+        p.value.some((a) =>
+          a.image.some(
+            (i) => i.path.indexOf(process.env.RESTRICT_UPLOAD_DOMAINS) === -1
+          )
+        )
+      )
+    ) {
+      throw new HttpException(
+        {
+          msg: `All media must be uploaded through our upload API route and contain the domain: ${process.env.RESTRICT_UPLOAD_DOMAINS}`,
+        },
+        400
+      );
+    }
+
+    const validation = await this._postsService.validatePosts(
+      org.id,
+      body.posts
+    );
+    const fail = (item: (typeof validation)[number], error: string) => {
+      throw new PostValidationException({
+        provider: item.identifier,
+        name: item.name,
+        error,
+      });
+    };
+    for (const item of validation) {
+      if (item.emptyContent) {
+        fail(
+          item,
+          'Your post should have at least one character or one image.'
+        );
+      }
+    }
+    if (body.type !== 'draft') {
+      for (const item of validation) {
+        if (!item.valid) {
+          fail(item, item.settingsError || 'Please fix your settings');
+        }
+        if (item.errors !== true) {
+          fail(item, item.errors as string);
+        }
+        if (item.tooLong) {
+          fail(item, 'post is too long, please fix it');
+        }
+      }
+    }
+
+    // keepGroup: el calendario y el panel siguen con el mismo grupo
+    await this._postsService.createPost(org.id, body, 'API', true);
+    return { group, date: body.date };
+  }
+
   @Get('/is-connected')
   async getActiveIntegrations(@GetOrgFromRequest() org: Organization) {
     Sentry.metrics.count('public_api-request', 1);
@@ -310,6 +412,9 @@ export class PublicIntegrationsController {
         picture: integration.picture,
         disabled: integration.disabled,
         profile: integration.profile,
+        // dw10: el panel de Dímelo Web avisa al cliente de la red que hay que volver a conectar
+        refreshNeeded: integration.refreshNeeded,
+        inBetweenSteps: integration.inBetweenSteps,
         customer: integration.customer
           ? {
               id: integration.customer.id,

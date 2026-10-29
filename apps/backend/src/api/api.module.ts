@@ -40,6 +40,7 @@ import { ThirdPartyController } from '@gitroom/backend/api/routes/third-party.co
 import { MonitorController } from '@gitroom/backend/api/routes/monitor.controller';
 import { NoAuthIntegrationsController } from '@gitroom/backend/api/routes/no.auth.integrations.controller';
 import { EnterpriseController } from '@gitroom/backend/api/routes/enterprise.controller';
+import { DimeloController } from '@gitroom/backend/api/routes/dimelo.controller';
 import { OAuthAppController } from '@gitroom/backend/api/routes/oauth-app.controller';
 import { ApprovedAppsController } from '@gitroom/backend/api/routes/approved-apps.controller';
 import {
@@ -96,6 +97,7 @@ const authenticatedController = [
         PublicController,
         MonitorController,
         EnterpriseController,
+        DimeloController,
         NoAuthIntegrationsController,
         OAuthController,
         MediaWidgetController,

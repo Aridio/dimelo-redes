@@ -53,6 +53,24 @@ export class OrganizationRepository {
     });
   }
 
+  // dw10: la clave del espacio que creó la entrada con Mi Dímelo (usuario GENERIC dueño del espacio, spec 039).
+  getApiKeyOfGenericOwner(email: string) {
+    return this._userOrg.model.userOrganization.findFirst({
+      where: {
+        role: Role.SUPERADMIN,
+        disabled: false,
+        user: {
+          email: { equals: email, mode: 'insensitive' },
+          providerName: 'GENERIC',
+          deletedAt: null,
+        },
+        organization: { deletedAt: null },
+      },
+      orderBy: { createdAt: 'asc' },
+      select: { organization: { select: { apiKey: true } } },
+    });
+  }
+
   getOrgByApiKey(api: string) {
     return this._organization.model.organization.findFirst({
       where: {

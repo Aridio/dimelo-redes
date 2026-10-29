@@ -47,7 +47,7 @@ export class EditError extends Error {}
 
 // El cuerpo de PUT /posts/group/:group (igual que POST /posts, una sola red) pasado a lo que guarda la pantalla al
 // editar: mismo grupo, mismos id de valor en orden, misma red. Lo que no llega se queda como estaba: fecha, texto,
-// fotos, retraso de cada comentario, etiquetas, repetición y ajustes. Para programar, la fecha tiene que ser futura
+// fotos, comentarios (con su retraso), etiquetas, repetición y ajustes. inter: 0 quita la repetición (null la deja). Para programar, la fecha tiene que ser futura
 // (nunca sale en el acto por editar una que falló o con una fecha vieja). Fechas con zona (Z u offset).
 export function editBody(
   raw: any,
@@ -92,8 +92,10 @@ export function editBody(
         integration: { id: current.integration },
         group: current.group,
         settings: post.settings ?? current.settings ?? {},
-        value: values.map((value: any, index: number) => {
+        // Los comentarios que no llegan se reenvían tal cual: si no, guardar con el mismo grupo los borra.
+        value: Array.from({ length: Math.max(values.length, ordered.length) }, (_, index) => {
           const before = ordered[index];
+          const value = values[index] ?? {};
           return {
             content: typeof value?.content === 'string' ? value.content : before?.content ?? '',
             image: Array.isArray(value?.image) ? value.image : before?.image ?? [],

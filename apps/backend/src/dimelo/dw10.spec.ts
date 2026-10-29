@@ -55,7 +55,10 @@ test('editar: mismo grupo, mismos id en orden; lo que no llega se queda (fecha, 
   assert.deepEqual(body.tags, [{ value: 'Oferta', label: 'Oferta' }]);
   assert.equal(body.posts[0].group, 'g1');
   assert.deepEqual(body.posts[0].settings, current.settings);
-  assert.deepEqual(body.posts[0].value, [{ content: 'Nuevo', image: [{ id: 'm0', path: 'https://x/0.jpg' }], id: 'p1' }]);
+  assert.deepEqual(body.posts[0].value, [
+    { content: 'Nuevo', image: [{ id: 'm0', path: 'https://x/0.jpg' }], id: 'p1' },
+    { content: '<p>comentario</p>', image: [], delay: 5, id: 'c1' },
+  ]);
   // Solo fotos: el texto se queda; fotos nuevas reemplazan.
   const fotos = editBody({ posts: [{ integration: { id: 'ig-1' }, value: [{ image: [{ id: 'm1', path: 'https://x/a.jpg' }] }] }] }, current, NOW);
   assert.deepEqual(fotos.posts[0].value[0], { content: '<p>antes</p>', image: [{ id: 'm1', path: 'https://x/a.jpg' }], id: 'p1' });

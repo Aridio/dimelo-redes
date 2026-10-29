@@ -1,6 +1,6 @@
 // dw10 (spec 050 de dimelo-web-admin): reglas de las dos rutas que usa el panel de Dímelo Web para publicar desde el
 // chat del cliente. Sin decoradores ni alias para poder probarlas con `node --test --experimental-strip-types`
-// (apps/backend/src/dimelo/dw10.test.ts).
+// (apps/backend/src/dimelo/dw10.spec.ts).
 import { createHash, timingSafeEqual } from 'node:crypto';
 
 // La clave compartida con el panel (DIMELO_PANEL_SECRET). Sin ella, o corta, la ruta no existe.
@@ -29,6 +29,11 @@ type ExistingPost = {
   state: string;
   publishDate: Date | string;
   parentPostId?: string | null;
+  content?: string;
+  image?: any[];
+  delay?: number;
+  intervalInDays?: number | null;
+  tags?: { tag: { name: string } }[];
 };
 
 // ¿Se puede editar el grupo? No si alguna parte ya salió o está saliendo (en cola con la hora ya pasada).
@@ -41,10 +46,13 @@ export function editBlocked(posts: ExistingPost[], now: Date): 'publicada' | 'en
 export class EditError extends Error {}
 
 // El cuerpo de PUT /posts/group/:group (igual que POST /posts, una sola red) pasado a lo que guarda la pantalla al
-// editar: mismo grupo, mismos id de valor en orden, misma red, fecha y ajustes de antes si no llegan.
+// editar: mismo grupo, mismos id de valor en orden, misma red. Lo que no llega se queda como estaba: fecha, texto,
+// fotos, retraso de cada comentario, etiquetas, repetición y ajustes. Para programar, la fecha tiene que ser futura
+// (nunca sale en el acto por editar una que falló o con una fecha vieja). Fechas con zona (Z u offset).
 export function editBody(
   raw: any,
-  current: { group: string; integration: string; settings: any; posts: ExistingPost[] }
+  current: { group: string; integration: string; settings: any; posts: ExistingPost[] },
+  now: Date = new Date()
 ) {
   const posts = Array.isArray(raw?.posts) ? raw.posts : [];
   if (posts.length !== 1) throw new EditError('Send exactly one post');
@@ -54,9 +62,7 @@ export function editBody(
   if (!values.length) throw new EditError('Post value is required');
   const type = raw?.type ?? (current.posts.every((item) => item.state === 'DRAFT') ? 'draft' : 'schedule');
   if (type !== 'draft' && type !== 'schedule') throw new EditError('type must be draft or schedule');
-  const date = raw?.date ?? new Date(current.posts[0].publishDate).toISOString();
-  if (Number.isNaN(Date.parse(date))) throw new EditError('Invalid date');
-  // Los id existentes, del primero (sin padre) a los comentarios, en el orden en que se guardaron.
+  // Los existentes, del primero (sin padre) a los comentarios, en el orden en que se guardaron.
   const ordered: ExistingPost[] = [];
   let parent: string | null = null;
   for (;;) {
@@ -65,21 +71,36 @@ export function editBody(
     ordered.push(next);
     parent = next.id;
   }
+  const root = ordered[0] ?? current.posts[0];
+  const date = raw?.date ?? new Date(root.publishDate).toISOString();
+  if (typeof date !== 'string' || !/(Z|[+-]\d{2}:?\d{2})$/.test(date) || Number.isNaN(Date.parse(date))) {
+    throw new EditError('Invalid date: use ISO 8601 with Z or an offset');
+  }
+  if (type === 'schedule' && Date.parse(date) <= now.getTime() + 60_000) {
+    throw new EditError('To schedule, send a date in the future');
+  }
   return {
     type,
     date,
     shortLink: Boolean(raw?.shortLink),
-    tags: Array.isArray(raw?.tags) ? raw.tags : [],
+    inter: raw?.inter ?? root.intervalInDays ?? undefined,
+    tags: Array.isArray(raw?.tags)
+      ? raw.tags
+      : (root.tags || []).map((t) => ({ value: t.tag.name, label: t.tag.name })),
     posts: [
       {
         integration: { id: current.integration },
         group: current.group,
         settings: post.settings ?? current.settings ?? {},
-        value: values.map((value: any, index: number) => ({
-          content: typeof value?.content === 'string' ? value.content : '',
-          image: Array.isArray(value?.image) ? value.image : [],
-          ...(ordered[index] ? { id: ordered[index].id } : {}),
-        })),
+        value: values.map((value: any, index: number) => {
+          const before = ordered[index];
+          return {
+            content: typeof value?.content === 'string' ? value.content : before?.content ?? '',
+            image: Array.isArray(value?.image) ? value.image : before?.image ?? [],
+            ...(typeof value?.delay === 'number' ? { delay: value.delay } : before?.delay ? { delay: before.delay } : {}),
+            ...(before ? { id: before.id } : {}),
+          };
+        }),
       },
     ],
   };

@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpException,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -254,7 +255,10 @@ export class PublicIntegrationsController {
     try {
       current = await this._postsService.getPostsByGroup(org.id, group);
     } catch (err) {
-      throw new HttpException({ msg: 'Post not found' }, 404);
+      if (err instanceof NotFoundException) {
+        throw new HttpException({ msg: 'Post not found' }, 404);
+      }
+      throw err;
     }
 
     const blocked = editBlocked(current.posts as any[], new Date());

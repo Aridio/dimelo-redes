@@ -33,8 +33,9 @@ export class DimeloController {
       throw new HttpException({ msg: 'Invalid email' }, 400);
     }
     const apiKey = await this._organizationService.getApiKeyOfGenericOwner(email);
+    // Sin espacio (el negocio nunca entró): 404 con { espacio: false }, distinto de la ruta apagada.
     if (!apiKey) {
-      throw new HttpException({ msg: 'Not found' }, 404);
+      throw new HttpException({ espacio: false }, 404);
     }
     return { apiKey };
   }

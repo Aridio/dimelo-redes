@@ -15,7 +15,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw5 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw5` (vuelve el fondo de Postiz; separación entre menú y contenido igual a la del borde) |
 | dw6 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw6` (métricas de Analíticas en español en todas las redes; sin número de versión a la vista; títulos de pestaña como el menú; 12:00 AM y fechas día/mes/año; nombre de archivo legible en Medios; vista previa de video que cabe; «Complementos» y «Plantillas»; botón de comentario en rojo de la marca) |
 | dw10 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw10` (para publicar desde el chat del cliente, spec 050 de dimelo-web-admin: `POST /dimelo/clave-espacio` para el panel y `PUT /public/v1/posts/group/:group` para editar una publicación que aún no salió) |
-| dw12 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw12` (sobre dw10, sin dw11; para la verificación de Google y Meta: al desconectar una red se borran sus llaves; cada 6 h se borran las de canales borrados o sin acceso desde hace 7 días, y los conectados a medias desde hace 7 días quedan sin llaves y con «Reconectar»; YouTube pide solo 5 permisos) |
+| dw12 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw12` (sobre dw10, sin dw11; para la verificación de Google y Meta: al desconectar una red se borran sus llaves; cada 6 h se borran las de canales borrados o sin acceso desde hace 7 días, y los conectados a medias desde hace 7 días quedan sin llaves y con «Reconectar» (o se borran si nunca terminaron de conectar); YouTube pide solo 5 permisos) |
 
 ## Qué cambia
 

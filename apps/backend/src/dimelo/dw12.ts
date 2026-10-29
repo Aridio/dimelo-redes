@@ -39,9 +39,10 @@ export const A_MEDIAS = { ...SIN_LLAVES, refreshNeeded: true };
 
 // Los que nunca terminaron de conectar (la fila guarda la cuenta, no un canal: rootInternalId igual a internalId) no se
 // pueden reconectar: se borran. Los que ya funcionaban (o sin rootInternalId, por si acaso) quedan para «Reconectar».
-type FilaAMedias = { id: string; internalId: string; rootInternalId: string | null };
+// Tumblr guarda el blog principal con el mismo id que la cuenta: también queda para «Reconectar».
+type FilaAMedias = { id: string; internalId: string; rootInternalId: string | null; providerIdentifier: string };
 export function repartirAMedias(filas: FilaAMedias[]) {
-  const nuncaTerminados = filas.filter((f) => f.rootInternalId === f.internalId).map((f) => f.id);
+  const nuncaTerminados = filas.filter((f) => f.rootInternalId === f.internalId && f.providerIdentifier !== 'tumblr').map((f) => f.id);
   const paraReconectar = filas.filter((f) => !nuncaTerminados.includes(f.id)).map((f) => f.id);
   return { nuncaTerminados, paraReconectar };
 }

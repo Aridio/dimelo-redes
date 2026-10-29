@@ -55,11 +55,12 @@ test('a medias desde hace más de 7 días: sin llaves y marcado para reconectar'
 test('a medias: los que nunca terminaron se borran, los que funcionaban quedan para reconectar', () => {
   assert.deepEqual(
     repartirAMedias([
-      { id: 'a', internalId: 'cuenta', rootInternalId: 'cuenta' },
-      { id: 'b', internalId: 'cuenta2', rootInternalId: null },
-      { id: 'c', internalId: 'canal', rootInternalId: 'cuenta' },
+      { id: 'a', internalId: 'cuenta', rootInternalId: 'cuenta', providerIdentifier: 'youtube' },
+      { id: 'b', internalId: 'cuenta2', rootInternalId: null, providerIdentifier: 'facebook' },
+      { id: 'c', internalId: 'canal', rootInternalId: 'cuenta', providerIdentifier: 'youtube' },
+      { id: 'd', internalId: 'blog', rootInternalId: 'blog', providerIdentifier: 'tumblr' },
     ]),
-    { nuncaTerminados: ['a'], paraReconectar: ['b', 'c'] }
+    { nuncaTerminados: ['a'], paraReconectar: ['b', 'c', 'd'] }
   );
   assert.deepEqual(repartirAMedias([]), { nuncaTerminados: [], paraReconectar: [] });
 });

@@ -30,7 +30,7 @@ export class LimpiezaLlaves implements OnModuleInit, OnModuleDestroy {
       });
       const filas = await this._integration.model.integration.findMany({
         where: filtroAMedias(ahora),
-        select: { id: true, internalId: true, rootInternalId: true },
+        select: { id: true, internalId: true, rootInternalId: true, providerIdentifier: true },
       });
       const { nuncaTerminados, paraReconectar } = repartirAMedias(filas);
       const sinTerminar = nuncaTerminados.length

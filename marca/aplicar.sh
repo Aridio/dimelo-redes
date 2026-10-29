@@ -217,18 +217,26 @@ literal "$PA" '<div className="text-[20px]">' '<div className="text-[20px] mobil
 # Mi Dímelo es el acceso propio (GENERIC) de Postiz: /auth/dimelo (marca/archivos) lanza el acceso; aquí, que esa página
 # empiece sin la sesión anterior y que la primera entrada cree el espacio del negocio sin pedir «Empresa».
 literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {" \
-"  // Dímelo Redes: entrar desde Mi Dímelo cierra la sesión anterior (puede ser de otro negocio)
+"  // Dímelo Redes: entrar desde Mi Dímelo cierra la sesión anterior (puede ser de otro negocio). dw11: en todas sus
+  // variantes. Con dos cookies del mismo nombre el navegador manda primero la más vieja y el servidor usa esa; por eso se
+  // borran la del dominio (.dimeloweb.com, la que pone el servidor), la de solo esta dirección (la que pone el navegador)
+  // y la de esta dirección con dominio.
   if (nextUrl.pathname === '/auth/dimelo') {
-    for (const name of ['auth', 'showorg']) {
-      topResponse.cookies.set(name, '', {
-        path: '/',
-        ...(!process.env.NOT_SECURED
-          ? { secure: true, httpOnly: true, sameSite: false }
-          : {}),
-        maxAge: -1,
-        domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
-      });
+    const variantes = [
+      getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      '',
+      new URL(process.env.FRONTEND_URL!).hostname,
+    ].filter((dominio, i, todos) => todos.indexOf(dominio) === i);
+    const seguro = !process.env.NOT_SECURED ? '; Secure' : '';
+    for (const name of ['auth', 'showorg', 'impersonate']) {
+      for (const dominio of variantes) {
+        topResponse.headers.append(
+          'Set-Cookie',
+          \`\${name}=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT\${dominio ? \`; Domain=\${dominio}\` : ''}\${seguro}\`
+        );
+      }
     }
+    topResponse.headers.set('Cache-Control', 'no-store');
     return topResponse;
   }
 
@@ -337,6 +345,44 @@ literal "$MC" "'absolute bottom-[10px] start-[10px] end-[10px] z-[100] truncate 
   "'absolute bottom-[6px] start-[6px] end-[6px] z-[100] truncate text-start text-[12px] leading-[18px] text-white bg-black/70 rounded-[4px] px-[6px] pointer-events-none',"
 # Vista previa a pantalla completa: el video o la imagen caben en el alto de la ventana, con controles en el video
 patron "$MC" 's~<div className="w-full h-full p-\[50px\]">\s*\{hasExtension\(media\.path, \x27mp4\x27\) \? \(\s*<VideoFrame\s*autoplay=\{true\}\s*url=\{mediaDirectory\.set\(media\.path\)\}\s*/>\s*\) : \(\s*<img\s*width="100%"\s*height="100%"\s*className="w-full h-full max-h-\[100%\] max-w-\[100%\] object-cover"~<div className="w-full h-full p-[50px] mobile:p-[12px] flex justify-center items-center">\n            {hasExtension(media.path, \x27mp4\x27) ? (\n              <video\n                className="block max-w-full max-h-[calc(100vh-180px)] rounded-[4px]"\n                src={mediaDirectory.set(media.path)}\n                autoPlay\n                controls\n              />\n            ) : (\n              <img\n                className="block max-w-full max-h-[calc(100vh-180px)] object-contain"~s'
+
+# 11. Quién está conectado y «Volver a Mi Dímelo» (dw11, spec 039 de dimelo-web-admin) -----------------------------
+# Mi Dímelo manda quién entra, si es del equipo y adónde volver (apps/backend/src/dimelo/dw11.ts). Va en la sesión,
+# no en el usuario del negocio (lo comparten varias personas). /user/self lo devuelve con el nombre del espacio y el
+# menú lateral lo pinta abajo (marca/archivos/.../components/marca/conectado.tsx).
+literal "$OP" "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string }> {" \
+  "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string; dimelo?: unknown }> {"
+literal "$OP" "    const { email, sub: id, name } = await response.json();
+    return { email, id, name };" "    const { email, sub: id, name, dimelo_persona, dimelo_equipo, dimelo_volver } = await response.json();
+    return { email, id, name, dimelo: { persona: dimelo_persona, equipo: dimelo_equipo, volver: dimelo_volver } };"
+literal "$AS" "    if (checkExists) {
+      return { jwt: await this.jwt(checkExists) };
+    }" "    if (checkExists) {
+      return { jwt: await this.jwt(checkExists, (user as unknown as { dimelo?: unknown }).dimelo) };
+    }"
+literal "$AS" "      return { jwt: await this.jwt(created) };" \
+  "      return { jwt: await this.jwt(created, (user as unknown as { dimelo?: unknown }).dimelo) };"
+literal "$AS" "  private async jwt(user: User) {" "  private async jwt(user: User, dimelo?: unknown) {"
+literal "$AS" "      return AuthChecker.signJWT({
+        ...user,
+        exp:" "      return AuthChecker.signJWT({
+        ...user,
+        dimelo: sesionDimelo(dimelo),
+        exp:"
+patron "$AS" 's{^}{import { sesionDimelo } from \x27\@gitroom/backend/dimelo/dw11\x27;\n}'
+UC=apps/backend/src/api/routes/users.controller.ts
+literal "$UC" "      admin: !!user.isSuperAdmin,
+      impersonate: !!impersonate," "      admin: !!user.isSuperAdmin,
+      impersonate: !!impersonate,
+      ...(user.providerName === 'GENERIC'
+        ? { dimelo: vistaDimelo(sesionDe(req), organization.name, process.env) }
+        : {}),"
+patron "$UC" 's{^}{import { vistaDimelo } from \x27\@gitroom/backend/dimelo/dw11\x27;\n// dw11: lo que Mi Dímelo puso en la sesión al entrar (la clave ya la comprobó el middleware)\nconst sesionDe = (req: Request): unknown => {\n  try {\n    const auth = String(req.headers.auth \|\| req.cookies.auth \|\| \x27\x27);\n    return (AuthChecker.verifyJWT(auth) as { dimelo?: unknown }).dimelo;\n  } catch {\n    return undefined;\n  }\n};\n}'
+literal "$L" "                          <TopMenu />
+                        </div>" "                          <TopMenu />
+                          <DimeloConectado />
+                        </div>"
+patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport { DimeloConectado } from \x27\@gitroom/frontend/components/marca/conectado\x27;}'
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

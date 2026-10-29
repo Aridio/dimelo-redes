@@ -1,7 +1,7 @@
 // dw12 (verificación de Google y Meta; dimelo-web-admin deploy/postiz/verificaciones.md): las llaves de una red no se
 // guardan más de lo necesario. Al desconectar se borran en el momento (integration.repository.ts, deleteChannel); esta
-// limpieza repasa además, cada 6 horas, los canales ya borrados y los que llevan 7 días sin poder entrar (la persona
-// quitó el acceso desde la red). Sin decoradores ni alias para probarlo con `node --test --experimental-strip-types`
+// limpieza repasa además, cada 6 horas, los canales ya borrados, los que llevan 7 días sin poder entrar (la persona
+// quitó el acceso desde la red) y los que se quedaron 7 días conectados a medias. Sin decoradores ni alias para probarlo con `node --test --experimental-strip-types`
 // (apps/backend/src/dimelo/dw12.spec.ts).
 
 const NADA: null = null;
@@ -17,7 +17,12 @@ export function filtroLimpieza(ahora: Date) {
     OR: [{ token: { not: '' } }, { refreshToken: { not: NADA } }],
     AND: [
       {
-        OR: [{ deletedAt: { not: NADA } }, { refreshNeeded: true, updatedAt: { lt: limite } }],
+        OR: [
+          { deletedAt: { not: NADA } },
+          { refreshNeeded: true, updatedAt: { lt: limite } },
+          // conectado a medias (no eligió canal o página)
+          { inBetweenSteps: true, updatedAt: { lt: limite } },
+        ],
       },
     ],
   };

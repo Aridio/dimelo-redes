@@ -394,6 +394,8 @@ export class IntegrationRepository {
             not: upsert.id,
           },
           rootInternalId: rootId,
+          // dw12: los canales borrados no recuperan llaves
+          deletedAt: null,
         },
         data: {
           token,

@@ -472,7 +472,13 @@ export class IntegrationService {
       throw new Error('Invalid integration');
     }
 
-    if (getIntegration.type !== 'social') {
+    // dw12: sin llaves (borrado, sin acceso o ya limpiado) no se pregunta a la red
+    if (
+      getIntegration.type !== 'social' ||
+      !getIntegration.token ||
+      getIntegration.refreshNeeded ||
+      getIntegration.deletedAt
+    ) {
       return [];
     }
 

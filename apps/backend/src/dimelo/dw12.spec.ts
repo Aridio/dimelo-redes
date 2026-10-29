@@ -4,7 +4,7 @@ import test from 'node:test';
 import { DIAS_SIN_ACCESO, SIN_LLAVES, filtroLimpieza } from './dw12.ts';
 
 // Evalúa el filtro de Prisma sobre un canal de prueba (solo los operadores que usa filtroLimpieza).
-type Canal = { token: string; refreshToken: string | null; deletedAt: Date | null; refreshNeeded: boolean; updatedAt: Date };
+type Canal = { token: string; refreshToken: string | null; deletedAt: Date | null; refreshNeeded: boolean; inBetweenSteps: boolean; updatedAt: Date };
 const cumple = (c: Canal, f: any): boolean => {
   const campo = (k: string, v: any): boolean => {
     const x = (c as any)[k];
@@ -21,7 +21,7 @@ const cumple = (c: Canal, f: any): boolean => {
 
 const AHORA = new Date('2026-10-30T12:00:00Z');
 const hace = (dias: number) => new Date(AHORA.getTime() - dias * 24 * 60 * 60 * 1000);
-const canal = (o: Partial<Canal>): Canal => ({ token: 't', refreshToken: 'r', deletedAt: null, refreshNeeded: false, updatedAt: hace(30), ...o });
+const canal = (o: Partial<Canal>): Canal => ({ token: 't', refreshToken: 'r', deletedAt: null, refreshNeeded: false, inBetweenSteps: false, updatedAt: hace(30), ...o });
 
 test('sin llaves: token vacío, sin refresco ni caducidad', () => {
   assert.deepEqual(SIN_LLAVES, { token: '', refreshToken: null, tokenExpiration: null });
@@ -39,6 +39,12 @@ test('limpia los que no pueden entrar desde hace más de 7 días, no antes', () 
   const f = filtroLimpieza(AHORA);
   assert.equal(cumple(canal({ refreshNeeded: true, updatedAt: hace(8) }), f), true);
   assert.equal(cumple(canal({ refreshNeeded: true, updatedAt: hace(6) }), f), false);
+});
+
+test('limpia los conectados a medias desde hace más de 7 días', () => {
+  const f = filtroLimpieza(AHORA);
+  assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(8) }), f), true);
+  assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(1) }), f), false);
 });
 
 test('no toca los canales que funcionan', () => {

@@ -222,10 +222,16 @@ literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !auth
   // borran la del dominio (.dimeloweb.com, la que pone el servidor), la de solo esta dirección (la que pone el navegador)
   // y la de esta dirección con dominio.
   if (nextUrl.pathname === '/auth/dimelo') {
+    let direccion = '';
+    try {
+      direccion = new URL(process.env.FRONTEND_URL!).hostname;
+    } catch {
+      direccion = '';
+    }
     const variantes = [
       getCookieUrlFromDomain(process.env.FRONTEND_URL!),
       '',
-      new URL(process.env.FRONTEND_URL!).hostname,
+      direccion,
     ].filter((dominio, i, todos) => todos.indexOf(dominio) === i);
     const seguro = !process.env.NOT_SECURED ? '; Secure' : '';
     for (const name of ['auth', 'showorg', 'impersonate']) {
@@ -374,7 +380,8 @@ UC=apps/backend/src/api/routes/users.controller.ts
 literal "$UC" "      admin: !!user.isSuperAdmin,
       impersonate: !!impersonate," "      admin: !!user.isSuperAdmin,
       impersonate: !!impersonate,
-      ...(user.providerName === 'GENERIC'
+      // Con «impersonate» la sesión es de otra cuenta: no se mezcla
+      ...(user.providerName === 'GENERIC' && !impersonate
         ? { dimelo: vistaDimelo(sesionDe(req), organization.name, process.env) }
         : {}),"
 patron "$UC" 's{^}{import { vistaDimelo } from \x27\@gitroom/backend/dimelo/dw11\x27;\n// dw11: lo que Mi Dímelo puso en la sesión al entrar (la clave ya la comprobó el middleware)\nconst sesionDe = (req: Request): unknown => {\n  try {\n    const auth = String(req.headers.auth \|\| req.cookies.auth \|\| \x27\x27);\n    return (AuthChecker.verifyJWT(auth) as { dimelo?: unknown }).dimelo;\n  } catch {\n    return undefined;\n  }\n};\n}'

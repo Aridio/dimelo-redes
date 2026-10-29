@@ -39,7 +39,7 @@ export const DimeloConectado: FC = () => {
     <div
       data-dimelo="conectado"
       className={clsx(
-        'flex flex-col gap-[8px] pt-[8px] border-t border-blockSeparator transition-opacity duration-300',
+        'flex flex-col gap-[8px] pt-[8px] border-t border-blockSeparator transition-opacity duration-300 blurMe',
         visible ? 'opacity-100' : 'opacity-0'
       )}
       // No cierra el menú del celular al tocar el nombre (solo el botón de volver sale de aquí)

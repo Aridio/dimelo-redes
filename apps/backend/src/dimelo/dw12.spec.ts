@@ -1,7 +1,7 @@
 // Pruebas de dw12 (sin Nest ni base): node --test --experimental-strip-types apps/backend/src/dimelo/dw12.spec.ts
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DIAS_SIN_ACCESO, SIN_LLAVES, filtroLimpieza } from './dw12.ts';
+import { A_MEDIAS, DIAS_SIN_ACCESO, SIN_LLAVES, filtroAMedias, filtroLimpieza } from './dw12.ts';
 
 // Evalúa el filtro de Prisma sobre un canal de prueba (solo los operadores que usa filtroLimpieza).
 type Canal = { token: string; refreshToken: string | null; deletedAt: Date | null; refreshNeeded: boolean; inBetweenSteps: boolean; updatedAt: Date };
@@ -41,10 +41,15 @@ test('limpia los que no pueden entrar desde hace más de 7 días, no antes', () 
   assert.equal(cumple(canal({ refreshNeeded: true, updatedAt: hace(6) }), f), false);
 });
 
-test('limpia los conectados a medias desde hace más de 7 días', () => {
-  const f = filtroLimpieza(AHORA);
+test('a medias desde hace más de 7 días: sin llaves y marcado para reconectar', () => {
+  const f = filtroAMedias(AHORA);
   assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(8) }), f), true);
   assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(1) }), f), false);
+  assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(8), deletedAt: hace(8) }), f), false, 'borrados: los lleva la otra regla');
+  assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(8), token: '', refreshToken: null }), f), false, 'ya limpio');
+  assert.equal(cumple(canal({ updatedAt: hace(8) }), f), false);
+  assert.deepEqual(A_MEDIAS, { ...SIN_LLAVES, refreshNeeded: true });
+  assert.equal(cumple(canal({ inBetweenSteps: true, updatedAt: hace(8) }), filtroLimpieza(AHORA)), false);
 });
 
 test('no toca los canales que funcionan', () => {

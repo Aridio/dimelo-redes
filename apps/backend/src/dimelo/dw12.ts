@@ -17,13 +17,22 @@ export function filtroLimpieza(ahora: Date) {
     OR: [{ token: { not: '' } }, { refreshToken: { not: NADA } }],
     AND: [
       {
-        OR: [
-          { deletedAt: { not: NADA } },
-          { refreshNeeded: true, updatedAt: { lt: limite } },
-          // conectado a medias (no eligió canal o página)
-          { inBetweenSteps: true, updatedAt: { lt: limite } },
-        ],
+        OR: [{ deletedAt: { not: NADA } }, { refreshNeeded: true, updatedAt: { lt: limite } }],
       },
     ],
   };
 }
+
+// Conectados a medias (no eligió canal o página, o la red pidió elegir de nuevo) desde hace DIAS_SIN_ACCESO días.
+// Además de quitar las llaves se marcan para reconectar: sin eso, el canal se quedaría sin botón «Reconectar».
+export function filtroAMedias(ahora: Date) {
+  const limite = new Date(ahora.getTime() - DIAS_SIN_ACCESO * 24 * 60 * 60 * 1000);
+  return {
+    deletedAt: NADA,
+    inBetweenSteps: true,
+    updatedAt: { lt: limite },
+    OR: [{ token: { not: '' } }, { refreshToken: { not: NADA } }],
+  };
+}
+
+export const A_MEDIAS = { ...SIN_LLAVES, refreshNeeded: true };

@@ -15,6 +15,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw5 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw5` (vuelve el fondo de Postiz; separación entre menú y contenido igual a la del borde) |
 | dw6 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw6` (métricas de Analíticas en español en todas las redes; sin número de versión a la vista; títulos de pestaña como el menú; 12:00 AM y fechas día/mes/año; nombre de archivo legible en Medios; vista previa de video que cabe; «Complementos» y «Plantillas»; botón de comentario en rojo de la marca) |
 | dw10 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw10` (para publicar desde el chat del cliente, spec 050 de dimelo-web-admin: `POST /dimelo/clave-espacio` para el panel y `PUT /public/v1/posts/group/:group` para editar una publicación que aún no salió) |
+| dw12 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw12` (sobre dw10, sin dw11; para la verificación de Google y Meta: al desconectar una red se borran sus llaves; cada 6 h se borran las de canales borrados o sin acceso desde hace 7 días; YouTube pide solo 5 permisos) |
 
 ## Qué cambia
 
@@ -33,6 +34,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Pantalla de entrada con frase propia (sin testimonios de Postiz) y bienvenida solo con «Conectar canales» | `marca/aplicar.sh` § Ocultar a mano |
 | Ajustes visuales: separación entre menú y contenido igual a la del borde, menú más ancho, sin globo en botones con texto, filas de Configuración y Analíticas sin aplastarse en celular | `marca/aplicar.sh` § Ajustes visuales |
 | Entrar con Mi Dímelo (acceso propio `GENERIC`; spec 039 de dimelo-web-admin) | `marca/archivos/.../app/(app)/auth/dimelo/page.tsx` y `marca/aplicar.sh` § 9 |
+| dw12: llaves fuera al desconectar y limpieza cada 6 h; YouTube con 5 permisos | `apps/backend/src/dimelo/dw12.ts` (pruebas `dw12.spec.ts`), `dw12.limpieza.ts` (en `api.module.ts`), `integration.repository.ts` (`deleteChannel`), `youtube.provider.ts` (`scopes`) |
 | Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |
 | Enlace «Código fuente» a este repositorio (entrada y Ajustes) | `marca/archivos/.../components/marca/codigo.fuente.tsx` |
 

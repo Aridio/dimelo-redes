@@ -453,6 +453,15 @@ export class IntegrationService {
       inBetweenSteps: false,
       token: getIntegrationInformation.access_token,
       profile: getIntegrationInformation.username,
+      // dw14: al reconectar un canal que ya existía, sus llaves nuevas de renovación pasan con él (si no, se queda con
+      // las viejas, que la red ya no acepta, y pide reconectar una y otra vez).
+      refreshNeeded: false,
+      ...(getIntegration.refreshToken
+        ? {
+            refreshToken: getIntegration.refreshToken,
+            tokenExpiration: getIntegration.tokenExpiration,
+          }
+        : {}),
     });
 
     return { success: true };

@@ -117,7 +117,7 @@ A="$FRONT/app/(app)/auth/layout.tsx"
 patron "$A" 's{<div className="text-center">\s*Over .*?<TestimonialComponent />}{<div className="text-center max-w-[520px] leading-[1.25]">\n            Programa y publica en tus redes\n            <br />\n            <span className="text-[#ff7a8c]">desde un solo lugar</span>\n          </div>}s'
 # dw14: «Código fuente» pequeño al pie de la columna, no dentro del cuadro de entrada
 literal "$A" 'mx-auto justify-center gap-[20px] h-full flex flex-col' 'mx-auto justify-center gap-[20px] flex-1 flex flex-col'
-patron "$A" 's{(<div className="flex">\{children\}</div>\s*</div>)}{$1\n          <div className="flex justify-center pt-[16px] text-[11px]">\n            <CodigoFuente />\n          </div>}'
+patron "$A" 's{(<div className="flex">\{children\}</div>\s*</div>)}{$1\n          <div className="flex justify-center pt-[16px]">\n            <CodigoFuente />\n          </div>}'
 patron "$A" 's{^}{import { CodigoFuente } from \x27\@gitroom/frontend/components/marca/codigo.fuente\x27;\n}'
 
 # Ajustes: enlace al código fuente al pie de la lista de pestañas
@@ -402,12 +402,20 @@ literal "$LP" "import { Login } from '@gitroom/frontend/components/auth/login';"
 literal "$LP" "  return <Login />;" "  return <EntrarConMiDimelo />;"
 RP="$FRONT/app/(app)/auth/page.tsx"
 literal "$RP" "  const t = await getT();
-  if (process.env.DISABLE_REGISTRATION === 'true') {" "  if (!(await params?.searchParams)?.provider) {
+  if (process.env.DISABLE_REGISTRATION === 'true') {" "  const consulta = await params?.searchParams;
+  if (!consulta?.provider || !consulta?.code) {
     redirect('/auth/login');
   }
   const t = await getT();
   if (process.env.DISABLE_REGISTRATION === 'true') {"
 patron "$RP" 's{^}{import { redirect } from \x27next/navigation\x27;\n}'
+literal "$RP" "params: {searchParams: Promise<{provider: string}>}" "params: {searchParams: Promise<{provider?: string; code?: string}>}"
+# Recuperar clave y activar cuenta tampoco existen para los negocios: a la entrada
+literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {" "  if (/^\/auth\/(forgot|activate)(\/|$)/.test(nextUrl.pathname)) {
+    return NextResponse.redirect(new URL('/auth/login', nextUrl.href));
+  }
+
+  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {"
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

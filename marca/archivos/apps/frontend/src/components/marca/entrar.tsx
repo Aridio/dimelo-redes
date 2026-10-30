@@ -42,19 +42,15 @@ export const EntrarConMiDimelo = () => {
       <Button
         onClick={entrar}
         loading={cargando}
-        className="w-full h-[48px] rounded-[8px] text-[16px] font-semibold mt-[8px]"
+        className="w-full !h-[48px] rounded-[8px] text-[16px] font-semibold mt-[8px]"
       >
         Iniciar sesión con Mi Dímelo
       </Button>
-      <p
-        role="alert"
-        className={clsx(
-          'text-[14px] text-[#ff7a8c] transition-opacity duration-300',
-          fallo ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'
-        )}
-      >
-        No se pudo abrir Mi Dímelo ahora. Inténtalo en un momento.
-      </p>
+      {fallo && (
+        <p role="alert" className="text-[14px] text-[#ff7a8c] animate-fadeIn">
+          No se pudo abrir Mi Dímelo ahora. Inténtalo en un momento.
+        </p>
+      )}
     </div>
   );
 };

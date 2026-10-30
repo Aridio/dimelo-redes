@@ -20,7 +20,7 @@ const texto = (value: unknown, max: number): string | null => {
 // Lo que llega de Mi Dímelo (datos del usuario de OAuth), limpio para guardarlo en la sesión.
 export function sesionDimelo(datos: unknown): SesionDimelo {
   const d = (datos && typeof datos === 'object' ? datos : {}) as Record<string, unknown>;
-  const volver = typeof d.volver === 'string' && RUTA.test(d.volver) && !d.volver.includes('..') ? d.volver : '/panel';
+  const volver = typeof d.volver === 'string' && RUTA.test(d.volver) && !/\.\.|%2e/i.test(d.volver) ? d.volver : '/panel';
   return { persona: texto(d.persona, 80), equipo: d.equipo === true, volver };
 }
 

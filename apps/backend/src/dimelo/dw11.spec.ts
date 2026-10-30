@@ -16,7 +16,7 @@ test('sesión: persona limpia, equipo solo si es true, vuelta solo a páginas de
     equipo: false,
     volver: '/panel?negocio=cliente-a',
   });
-  for (const volver of ['//malo.example/panel', 'https://malo.example/panel', '/panel/../x', '/panelx', '/otra', '/panel\\x', '/panel/a b', 'javascript:alert(1)', 42]) {
+  for (const volver of ['//malo.example/panel', 'https://malo.example/panel', '/panel/../x', '/panel/.%2e/x', '/panel/%2E%2E/x', '/panelx', '/otra', '/panel\\x', '/panel/a b', 'javascript:alert(1)', 42]) {
     assert.equal(sesionDimelo({ volver }).volver, '/panel', String(volver));
   }
   assert.deepEqual(sesionDimelo(undefined), { persona: null, equipo: false, volver: '/panel' });

@@ -1,3 +1,4 @@
+import { SIN_LLAVES } from '@gitroom/backend/dimelo/dw12';
 import { PrismaRepository } from '@gitroom/nestjs-libraries/database/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { createHash } from 'crypto';
@@ -393,6 +394,8 @@ export class IntegrationRepository {
             not: upsert.id,
           },
           rootInternalId: rootId,
+          // dw12: los canales borrados no recuperan llaves
+          deletedAt: null,
         },
         data: {
           token,
@@ -788,8 +791,10 @@ export class IntegrationRepository {
         id,
         organizationId: org,
       },
+      // dw12: al desconectar se borran las llaves de la red en el momento (lo piden Google y Meta).
       data: {
         deletedAt: new Date(),
+        ...SIN_LLAVES,
       },
     });
   }

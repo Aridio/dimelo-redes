@@ -41,6 +41,7 @@ import { MonitorController } from '@gitroom/backend/api/routes/monitor.controlle
 import { NoAuthIntegrationsController } from '@gitroom/backend/api/routes/no.auth.integrations.controller';
 import { EnterpriseController } from '@gitroom/backend/api/routes/enterprise.controller';
 import { DimeloController } from '@gitroom/backend/api/routes/dimelo.controller';
+import { LimpiezaLlaves } from '@gitroom/backend/dimelo/dw12.limpieza';
 import { OAuthAppController } from '@gitroom/backend/api/routes/oauth-app.controller';
 import { ApprovedAppsController } from '@gitroom/backend/api/routes/approved-apps.controller';
 import {
@@ -127,6 +128,7 @@ const authenticatedController = [
     FarcasterProvider,
     WalletProvider,
     OauthProvider,
+    LimpiezaLlaves,
   ],
   get exports() {
     return [...this.imports, ...this.providers];

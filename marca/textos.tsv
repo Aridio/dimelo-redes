@@ -3,7 +3,7 @@
 # Después de esta lista, aplicar.sh cambia cualquier «Postiz»/«Gitroom» que quede por «Dímelo Redes» (aplicar.sh § Reglas generales).
 # Títulos de pestaña
 apps/frontend/src/app/(app)/auth/login/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Login	Entrar · Dímelo Redes
-apps/frontend/src/app/(app)/auth/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Register	Crear cuenta · Dímelo Redes
+apps/frontend/src/app/(app)/auth/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Register	Entrando · Dímelo Redes
 apps/frontend/src/app/(app)/auth/forgot/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Forgot Password	Recuperar clave · Dímelo Redes
 apps/frontend/src/app/(app)/auth/forgot/[token]/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Forgot Password	Nueva clave · Dímelo Redes
 apps/frontend/src/app/(app)/(preview)/p/[id]/page.tsx	${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Preview	Vista previa · Dímelo Redes

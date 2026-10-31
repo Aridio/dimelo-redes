@@ -112,10 +112,12 @@ patron libraries/nestjs-libraries/src/integrations/integration.manager.ts \
 literal "$FRONT/components/new-layout/layout.component.tsx" "<ChromeExtensionComponent />" "{/* Dímelo Redes: sin extensión del navegador */}"
 
 # Pantalla de entrada: frase propia en vez de «20.000 emprendedores usan Postiz» y testimonios de Postiz,
-# y enlace al código fuente bajo el formulario
+# y enlace al código fuente al pie
 A="$FRONT/app/(app)/auth/layout.tsx"
 patron "$A" 's{<div className="text-center">\s*Over .*?<TestimonialComponent />}{<div className="text-center max-w-[520px] leading-[1.25]">\n            Programa y publica en tus redes\n            <br />\n            <span className="text-[#ff7a8c]">desde un solo lugar</span>\n          </div>}s'
-patron "$A" 's{(<div className="flex">\{children\}</div>)}{$1\n            <div className="flex justify-center">\n              <CodigoFuente />\n            </div>}'
+# dw14: «Código fuente» pequeño al pie de la columna, no dentro del cuadro de entrada
+literal "$A" 'mx-auto justify-center gap-[20px] h-full flex flex-col' 'mx-auto justify-center gap-[20px] flex-1 flex flex-col'
+patron "$A" 's{(<div className="flex">\{children\}</div>\s*</div>)}{$1\n          <div className="flex justify-center pt-[16px]">\n            <CodigoFuente />\n          </div>}'
 patron "$A" 's{^}{import { CodigoFuente } from \x27\@gitroom/frontend/components/marca/codigo.fuente\x27;\n}'
 
 # Ajustes: enlace al código fuente al pie de la lista de pestañas
@@ -391,6 +393,29 @@ literal "$L" "                          <TopMenu />
                         </div>"
 patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport { DimeloConectado } from \x27\@gitroom/frontend/components/marca/conectado\x27;}'
 
+# 12. Entrada solo con Mi Dímelo (dw14, Aridio 2026-10-29) ---------------------------------------------------------
+# Los negocios entran siempre por Mi Dímelo: /auth/login solo muestra «Iniciar sesión con Mi Dímelo»
+# (marca/archivos/.../components/marca/entrar.tsx), sin correo, contraseña, registro ni «¿Olvidaste tu contraseña?».
+# /auth (registro) lleva a /auth/login; solo se queda la vuelta de Mi Dímelo (/auth?provider=GENERIC&code=…).
+LP="$FRONT/app/(app)/auth/login/page.tsx"
+literal "$LP" "import { Login } from '@gitroom/frontend/components/auth/login';" "import { EntrarConMiDimelo } from '@gitroom/frontend/components/marca/entrar';"
+literal "$LP" "  return <Login />;" "  return <EntrarConMiDimelo />;"
+RP="$FRONT/app/(app)/auth/page.tsx"
+literal "$RP" "  const t = await getT();
+  if (process.env.DISABLE_REGISTRATION === 'true') {" "  const consulta = await params?.searchParams;
+  if (!consulta?.provider || !consulta?.code) {
+    redirect('/auth/login');
+  }
+  const t = await getT();
+  if (process.env.DISABLE_REGISTRATION === 'true') {"
+patron "$RP" 's{^}{import { redirect } from \x27next/navigation\x27;\n}'
+literal "$RP" "params: {searchParams: Promise<{provider: string}>}" "params: {searchParams: Promise<{provider?: string; code?: string}>}"
+# Recuperar clave y activar cuenta tampoco existen para los negocios: a la entrada
+literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {" "  if (/^\/auth\/(forgot|activate)(\/|$)/.test(nextUrl.pathname)) {
+    return NextResponse.redirect(new URL('/auth/login', nextUrl.href));
+  }
+
+  if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {"
 # 13. dw15 (ticket de Autory, 2026-10-31): vista previa con sonido, fechas y subidor en español ---------------------
 # La vista previa del video lleva botón de sonido (marca/archivos/.../helpers/video.or.image.tsx). Textos en inglés que
 # quedaban: textos.tsv § dw15. Aquí, los que no caben en una línea y el idioma de fechas y subidor (marca/.../espanol.ts).

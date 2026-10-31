@@ -18,7 +18,10 @@ import {
 import { TikTokDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/tiktok.dto';
 import { timer } from '@gitroom/helpers/utils/timer';
 import { hasExtension } from '@gitroom/helpers/utils/has.extension';
-import { createReadStream } from 'fs';
+import { createReadStream, statSync, unlinkSync } from 'fs';
+import { execFile } from 'child_process';
+import { tmpdir } from 'os';
+import { join } from 'path';
 import { getSsrfSafeDispatcher } from '@gitroom/nestjs-libraries/dtos/webhooks/ssrf.safe.dispatcher';
 import { Integration } from '@prisma/client';
 import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
@@ -27,7 +30,7 @@ import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorato
   [
     'TikTok can have one video or one picture or multiple pictures, it cannot be without an attachment.',
     'content_posting_method=DIRECT_POST publishes the post to the account. content_posting_method=UPLOAD does NOT publish: it only sends the media to the user inbox of the TikTok app, where the user must manually complete and publish it within 24 hours or it is discarded. Use DIRECT_POST unless the user explicitly asks to review or edit the post inside the TikTok app first.',
-    'With content_posting_method=UPLOAD, TikTok ignores every setting except the title / post content. Never tell the user that video_made_with_ai, privacy_level, duet, stitch, comment, autoAddMusic, brand_content_toggle or brand_organic_toggle will be applied in UPLOAD mode - they are silently discarded. If the user asks for any of those settings, tell them it requires DIRECT_POST.',
+    'With content_posting_method=UPLOAD, TikTok ignores every setting and, for videos, the post text too: tell the user to paste the text in the TikTok app before publishing. Never tell the user that video_made_with_ai, privacy_level, duet, stitch, comment, autoAddMusic, brand_content_toggle or brand_organic_toggle will be applied in UPLOAD mode - they are silently discarded. If the user asks for any of those settings, tell them it requires DIRECT_POST.',
     'video_made_with_ai, duet and stitch apply to video posts only. TikTok has no equivalent field for photo posts, so those settings are discarded when the attachment is a picture.',
   ].join(' ')
 )
@@ -750,6 +753,44 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   private static readonly TIKTOK_MAX_SINGLE_CHUNK = 64 * 1024 * 1024;
   private static readonly TIKTOK_CHUNK_SIZE = 10 * 1024 * 1024;
 
+  private static readonly TIKTOK_LIGHTEN_ABOVE = 30 * 1024 * 1024;
+
+  // Re-encodes the video at ~2.5 Mbps / 1080p max into a temp file. Returns
+  // undefined (send the original) if ffmpeg is missing, fails or takes over
+  // 3 minutes, so lightening never blocks a post.
+  private lightenVideo(source: string): Promise<string | undefined> {
+    const out = join(tmpdir(), `tiktok-${makeSecureId(12)}.mp4`);
+    return new Promise((resolve) => {
+      execFile(
+        'ffmpeg',
+        [
+          '-y', '-loglevel', 'error', '-i', source,
+          '-vf', "scale='min(1080,iw)':-2",
+          '-c:v', 'libx264', '-preset', 'veryfast',
+          '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k',
+          '-pix_fmt', 'yuv420p',
+          '-c:a', 'aac', '-b:a', '128k',
+          '-movflags', '+faststart',
+          out,
+        ],
+        { timeout: 3 * 60 * 1000 },
+        (err) => {
+          if (err) {
+            this.removeQuietly(out);
+            return resolve(undefined);
+          }
+          resolve(out);
+        }
+      );
+    });
+  }
+
+  private removeQuietly(path: string) {
+    try {
+      unlinkSync(path);
+    } catch {}
+  }
+
   private tiktokChunkPlan(videoSize: number) {
     if (videoSize <= TiktokProvider.TIKTOK_MAX_SINGLE_CHUNK) {
       return { chunkSize: videoSize, totalChunkCount: 1 };
@@ -885,14 +926,25 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   ): Promise<PostResponse[]> {
     const [firstPost] = postDetails;
     const isPhoto = !hasExtension(firstPost?.media?.[0]?.path, 'mp4');
-    const videoPath = firstPost?.media?.[0]?.path!;
 
     // For videos we only need the total size up front (HEAD / statSync) so we
     // can init the upload; the bytes themselves are streamed later, never fully
     // loaded into memory.
-    const videoSize = isPhoto
+    const originalSize = isPhoto
       ? undefined
-      : await this.mediaSize(videoPath, 'tiktok-error-upload');
+      : await this.mediaSize(
+          firstPost?.media?.[0]?.path!,
+          'tiktok-error-upload'
+        );
+
+    // Heavy videos land in the inbox but the TikTok app fails to open them
+    // (a 75MB draft errored, the same video at 22MB opened): lighten first.
+    const light =
+      !isPhoto && originalSize! > TiktokProvider.TIKTOK_LIGHTEN_ABOVE
+        ? await this.lightenVideo(firstPost.media![0].path)
+        : undefined;
+    const videoPath = light || firstPost?.media?.[0]?.path!;
+    const videoSize = light ? statSync(light).size : originalSize;
 
     const {
       data: { publish_id, upload_url },
@@ -926,6 +978,9 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
           'video/mp4'
         );
       } catch (err) {
+        if (light) {
+          this.removeQuietly(light);
+        }
         // An explicit rejection from TikTok: the post won't publish, fail it
         if (err instanceof BadBody) {
           throw err;
@@ -936,6 +991,10 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
         // deliver TikTok's own verdict instead of letting the caller retry
         // the publish.
       }
+    }
+
+    if (light) {
+      this.removeQuietly(light);
     }
 
     // The publish is now irreversible on TikTok's side: return `pending` so the

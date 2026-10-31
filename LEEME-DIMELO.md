@@ -21,6 +21,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw14 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw14` (sobre dw13: la entrada solo con «Iniciar sesión con Mi Dímelo», «Código fuente» al pie; registro, recuperar clave y activar llevan a la entrada; reconectar un canal pasa sus llaves de renovación nuevas) |
 | dw15 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw15` (sobre dw13, sin dw14; ticket de Autory: vista previa del video con botón de sonido, textos en inglés que quedaban, fechas y subidor de archivos en español) |
 | dw16 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw16` (dw14 y dw15 juntas) |
+| dw17 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw17` (sobre dw16: TikTok sale por defecto como borrador a la app de TikTok, «Subir sin publicar», mientras TikTok no apruebe la publicación directa en público) |
 
 ## Qué cambia
 

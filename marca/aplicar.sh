@@ -395,6 +395,9 @@ patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport { DimeloConectado } from \x2
 # La vista previa del video lleva botón de sonido (marca/archivos/.../helpers/video.or.image.tsx). Textos en inglés que
 # quedaban: textos.tsv § dw15. Aquí, los que no caben en una línea y el idioma de fechas y subidor (marca/.../espanol.ts).
 patron "$FRONT/components/new-layout/layout.component.tsx" 's{^(\x27use client\x27;\n)}{$1\nimport \x27\@gitroom/frontend/components/marca/espanol\x27;}'
+# La vista previa pública no pasa por ese diseño: también ahí
+patron "$FRONT/components/preview/comments.components.tsx" 's{^((?:\x27use client\x27;\n)?)}{$1import \x27\@gitroom/frontend/components/marca/espanol\x27;\n}'
+patron "$FRONT/components/preview/render.preview.date.tsx" 's{^((?:\x27use client\x27;\n)?)}{$1import \x27\@gitroom/frontend/components/marca/espanol\x27;\n}'
 NU="$FRONT/components/media/new.uploader.tsx"
 literal "$NU" "    const uppy2 = new Uppy({
       autoProceed: true," "    const uppy2 = new Uppy({

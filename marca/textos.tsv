@@ -186,7 +186,7 @@ apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	l
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Tags"	label="Etiquetas"
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Thumbnail"	label="Miniatura"
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	Thumbnail picture (optional)	Imagen de miniatura (opcional)
-apps/frontend/src/components/new-launch/providers/youtube/youtube.preview.tsx	16.7M subscribers	16,7 M suscriptores
+apps/frontend/src/components/new-launch/providers/youtube/youtube.preview.tsx	16.7M subscribers	16.7 M suscriptores
 apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	label: 'Post',	label: 'Publicación',
 apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	label: 'Story',	label: 'Historia',
 apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	Background (applies to text-only posts shorter than 130 characters)	Fondo (solo en publicaciones de texto de menos de 130 caracteres)
@@ -199,10 +199,10 @@ apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborat
 apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	Collaborators (max 3) - accounts can't be private	Colaboradores (máximo 3; las cuentas no pueden ser privadas)
 apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	label="Graduation Strategy"	label="Cuándo pasa a tus seguidores"
 apps/frontend/src/components/new-launch/providers/tiktok/tiktok.provider.tsx	<Input label="Title"	<Input label="Título"
-apps/frontend/src/components/new-launch/providers/tiktok/tiktok.provider.tsx	After posting you fill find a notification inside your Inbox about your post (not content studio)	Después de enviarlo te llegará un aviso a la bandeja de entrada de TikTok para terminar la publicación (no en TikTok Studio).
+apps/frontend/src/components/new-launch/providers/tiktok/tiktok.provider.tsx	After posting you fill find a notification inside your Inbox about your post (not content studio)	Después de enviarlo te llegará un aviso en tu bandeja de entrada de TikTok para terminar la publicación (no en TikTok Studio).
 apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	label: 'Everyone',	label: 'Todos',
 apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	label: 'Subscribers',	label: 'Suscriptores',
-apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	2,871 followers	2.871 seguidores
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	2,871 followers	2,871 seguidores
 apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	<div>4 Comments</div>	<div>4 comentarios</div>
 apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	<div>8 Reposts</div>	<div>8 veces compartido</div>
 apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	• 1st	• 1.er
@@ -283,7 +283,7 @@ apps/frontend/src/components/launches/separate.post.tsx	Are you sure you want to
 apps/frontend/src/components/launches/comments/comment.component.tsx	Are you sure you want to delete this comment?	¿Borrar este comentario?
 apps/frontend/src/components/launches/helpers/pick.platform.component.tsx	Are you sure you want to remove this platform?	¿Quitar esta red?
 apps/frontend/src/components/launches/polonto/polonto.picture.generation.tsx	Something went wrong, please try again later...	Algo salió mal. Inténtalo más tarde.
-apps/frontend/src/components/new-launch/manage.modal.tsx	Save Set	Guardar conjunto
+apps/frontend/src/components/new-launch/manage.modal.tsx	Save Set	Guardar plantilla
 apps/frontend/src/components/launches/bot.picture.tsx	Bot Picture	Foto del bot
 # dw15: mensajes de error de las redes (se ven en la publicación que no salió)
 libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Additional permissions required, please re-authenticate	Faltan permisos: vuelve a conectar la cuenta de TikTok
@@ -357,3 +357,27 @@ libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The video
 libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	Please re-authenticate your YouTube account	Vuelve a conectar tu cuenta de YouTube
 libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts	Unable to obtain activity	LinkedIn no devolvió la publicación
 libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts	Resource is forbidden	LinkedIn no dio permiso para esto
+# dw15, revisión 1
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Capturing...'	'Tomando la imagen...'
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Select This Frame'	'Usar este momento'
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Current Thumbnail:	Miniatura actual:
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Edit Thumbnail'	'Cambiar miniatura'
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Create Thumbnail'	'Crear miniatura'
+apps/frontend/src/components/media/new.uploader.tsx	`File type "${fileType}" is not allowed for file "${file.name}". Allowed types: ${allowedFileTypes}`	`El tipo de archivo «${fileType}» de «${file.name}» no se admite. Se admiten: ${allowedFileTypes}`
+apps/frontend/src/components/media/new.uploader.tsx	`File type "${fileType}" is not allowed. Allowed types: ${allowedFileTypes}`	`El tipo de archivo «${fileType}» no se admite. Se admiten: ${allowedFileTypes}`
+apps/frontend/src/components/media/new.uploader.tsx	`Image file "${file.name}" is too large. Maximum size allowed is 30MB.`	`La imagen «${file.name}» pesa demasiado. El máximo es 30 MB.`
+apps/frontend/src/components/media/new.uploader.tsx	`Image file is too large. Maximum size allowed is 30MB.`	`La imagen pesa demasiado. El máximo es 30 MB.`
+apps/frontend/src/components/media/new.uploader.tsx	`Video file "${file.name}" is too large. Maximum size allowed is 1GB.`	`El video «${file.name}» pesa demasiado. El máximo es 1 GB.`
+apps/frontend/src/components/media/new.uploader.tsx	`Video file is too large. Maximum size allowed is 1GB.`	`El video pesa demasiado. El máximo es 1 GB.`
+apps/frontend/src/components/settings/signatures.component.tsx	'Edit Signature' : 'Add Signature'	'Editar firma' : 'Agregar firma'
+apps/frontend/src/components/new-launch/bold.text.tsx	data-tooltip-content="Bold Text"	data-tooltip-content="Negrita"
+apps/frontend/src/components/launches/helpers/linkedin.component.tsx	data-tooltip-content="Add a LinkedIn Company"	data-tooltip-content="Agregar una empresa de LinkedIn"
+apps/frontend/src/components/launches/helpers/linkedin.component.tsx	'Failed to load profile'	'No se pudo cargar el perfil'
+apps/frontend/src/components/launches/helpers/linkedin.component.tsx	title={'Select Company'}	title={'Elige la empresa'}
+apps/frontend/src/components/launches/general.preview.component.tsx	This text will be cropped	Este texto se cortará
+apps/frontend/src/components/new-launch/providers/pinterest/pinterest.preview.tsx	This text will be cropped	Este texto se cortará
+apps/frontend/src/components/new-launch/providers/youtube/youtube.preview.tsx	This text will be cropped	Este texto se cortará
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	This text will be cropped	Este texto se cortará
+apps/frontend/src/components/new-launch/providers/tiktok/tiktok.preview.tsx	This text will be cropped	Este texto se cortará
+apps/frontend/src/components/new-launch/providers/instagram/instagram.preview.tsx	This text will be cropped	Este texto se cortará
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	This text will be cropped	Este texto se cortará

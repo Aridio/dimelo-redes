@@ -2,7 +2,7 @@
 
 // Dímelo Redes (dw15): la vista previa del video arranca sin sonido (los navegadores no dejan reproducir solos
 // los videos con sonido) y lleva un botón para oírlo. Sin él parecía que el video no tenía audio.
-import { FC, MouseEvent, useRef, useState } from 'react';
+import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { clsx } from 'clsx';
 import { hasExtension } from '@gitroom/helpers/utils/has.extension';
 export const VideoOrImage: FC<{
@@ -15,6 +15,20 @@ export const VideoOrImage: FC<{
   const { src, autoplay, isContain, imageClassName, videoClassName } = props;
   const video = useRef<HTMLVideoElement>(null);
   const [conSonido, setConSonido] = useState(false);
+  // Otro video cambia: vuelve sin sonido. Solo suena una vista previa a la vez.
+  useEffect(() => {
+    setConSonido(false);
+    if (video.current) video.current.muted = true;
+  }, [src]);
+  useEffect(() => {
+    const callar = (event: Event) => {
+      if ((event as CustomEvent).detail === video.current || !video.current) return;
+      video.current.muted = true;
+      setConSonido(false);
+    };
+    window.addEventListener('dimelo-sonido', callar);
+    return () => window.removeEventListener('dimelo-sonido', callar);
+  }, []);
   if (hasExtension(src, 'mp4')) {
     // Dentro de un enlace: el botón no abre el archivo
     const cambiarSonido = (event: MouseEvent) => {
@@ -24,7 +38,10 @@ export const VideoOrImage: FC<{
       if (!actual) return;
       const nuevo = !conSonido;
       actual.muted = !nuevo;
-      if (nuevo) actual.play().catch(() => undefined);
+      if (nuevo) {
+        window.dispatchEvent(new CustomEvent('dimelo-sonido', { detail: actual }));
+        actual.play().catch(() => undefined);
+      }
       setConSonido(nuevo);
     };
     return (

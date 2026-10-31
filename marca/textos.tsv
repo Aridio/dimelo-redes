@@ -285,3 +285,75 @@ apps/frontend/src/components/launches/helpers/pick.platform.component.tsx	Are yo
 apps/frontend/src/components/launches/polonto/polonto.picture.generation.tsx	Something went wrong, please try again later...	Algo salió mal. Inténtalo más tarde.
 apps/frontend/src/components/new-launch/manage.modal.tsx	Save Set	Guardar conjunto
 apps/frontend/src/components/launches/bot.picture.tsx	Bot Picture	Foto del bot
+# dw15: mensajes de error de las redes (se ven en la publicación que no salió)
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Additional permissions required, please re-authenticate	Faltan permisos: vuelve a conectar la cuenta de TikTok
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	TikTok API rate limit exceeded, please try again later	TikTok recibió demasiadas solicitudes. Inténtalo más tarde
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	File format is invalid, please check video specifications	El formato del archivo no es válido para TikTok
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Video duration is invalid, please check video specifications	La duración del video no es válida para TikTok
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Video frame rate is invalid, please check video specifications	Los cuadros por segundo del video no son válidos para TikTok
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Failed to pull video from URL, please check the URL	TikTok no pudo descargar el video
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Failed to pull photo from URL, please check the URL	TikTok no pudo descargar la foto
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	TikTok detected potential spam in the post text	TikTok marcó el texto como posible spam
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	TikTok detected potential spam	TikTok marcó la publicación como posible spam
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	App not approved for public posting, contact support	TikTok todavía no aprueba a Dímelo Redes para publicar en cuentas públicas. Mientras, envíalo como borrador a la app de TikTok y termínalo ahí
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Privacy level mismatch, please check privacy settings	Esa opción de «¿Quién puede ver este video?» no está disponible en esta cuenta
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Invalid file format or specifications not met	El archivo no cumple lo que pide TikTok
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	Invalid request parameters, please check content format	TikTok no aceptó los datos de la publicación
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	There is a problem with TikTok servers, please try again later	TikTok tiene problemas ahora mismo. Inténtalo más tarde
+libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	TikTok API error, please try again	TikTok dio un error. Inténtalo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	An unknown error occurred, please try again later	Ocurrió un error. Inténtalo más tarde
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	This account doesn't support Trial Reels	Esta cuenta no admite reels de prueba
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Instagram user is restricted	La cuenta de Instagram está restringida
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Timeout downloading media, please try again	Instagram tardó demasiado en descargar el archivo. Inténtalo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Media expired, please upload again	El archivo venció. Súbelo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Failed to create media, please try again	Instagram no pudo preparar el archivo. Inténtalo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Unknown upload error, please try again	Falló la subida. Inténtalo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Media fetch failed, please try again	Instagram no pudo descargar el archivo. Inténtalo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Invalid thumbnail offset for video	El momento elegido para la miniatura no es válido
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Unsupported video format	Formato de video no admitido
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Unknown media type	Tipo de archivo no reconocido
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Media not found, please upload again	No se encontró el archivo. Súbelo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Media builder expired, please try again	La preparación del archivo venció. Inténtalo de nuevo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Carousel validation failed	Instagram no aceptó el carrusel
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Caption is too long	El texto es demasiado largo
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Product tag positions not supported for videos	Las etiquetas de productos no se pueden ubicar en videos
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Product tag positions required for photos	Las etiquetas de productos necesitan una ubicación en la foto
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Product tag validation failed	Instagram no aceptó las etiquetas de productos
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Too many product tags	Demasiadas etiquetas de productos
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Image is too large	La imagen es demasiado grande
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Unsupported image format	Formato de imagen no admitido
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Aspect ratio not supported, must be between 4:5 to 1.91:1	Proporción no admitida: debe estar entre 4:5 y 1,91:1
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Page posting for today is limited, please try again tomorrow	Llegaste al límite de publicaciones de hoy. Inténtalo mañana
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Not enough permissions to post	Faltan permisos para publicar
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Invalid Instagram image resolution max: 1920x1080px	Resolución de imagen no válida para Instagram (máximo 1920x1080 px)
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Instagram blocked your request	Instagram bloqueó la solicitud
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Instagram Video download failed	Instagram no pudo descargar el video
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Instagram carousel should have between 2 and 10 media attachments	El carrusel de Instagram debe tener entre 2 y 10 archivos
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Unknown error, please try again later or contact support	Ocurrió un error. Inténtalo más tarde o escríbenos
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	Collaborators are not allowed for carousel	Los carruseles no admiten colaboradores
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Please re-authenticate your Facebook account	Vuelve a conectar tu cuenta de Facebook
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Access token has been revoked, please re-authenticate	Se retiró el acceso: vuelve a conectar tu cuenta de Facebook
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Photos should be smaller than 4 MB and saved as JPG, PNG	Las fotos deben pesar menos de 4 MB y ser JPG o PNG
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	You are posting too fast, please slow down	Estás publicando muy seguido. Espera un poco
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Content flagged as abusive by Facebook	Facebook marcó el contenido como abusivo
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	value: 'Invalid file',	value: 'Archivo no válido',
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Content violates Facebook Community Standards	El contenido no cumple las normas comunitarias de Facebook
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Page publishing authorization required, please re-authenticate	Falta el permiso para publicar en la página: vuelve a conectarla
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	These photos were already posted.	Estas fotos ya se publicaron.
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Cannot post Facebook.com links	No se pueden publicar enlaces de facebook.com
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Invalid URL format in post content	Hay un enlace no válido en el texto
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Invalid content format	Formato de contenido no válido
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Post content is too long	El texto es demasiado largo
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Facebook service temporarily unavailable	Facebook no está disponible ahora mismo
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Facebook return: No permission to publish the video	Facebook no dio permiso para publicar el video
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Facebook is temporarily unavailable, please try again later	Facebook no está disponible ahora mismo. Inténtalo más tarde
+libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts	Access token expired, please re-authenticate	El acceso venció: vuelve a conectar tu cuenta de Facebook
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The maximum allowed is 500 characters in total.	Las etiquetas pueden sumar como máximo 500 caracteres.
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The selected video category is invalid.	La categoría del video no es válida.
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The scheduled publishing time is invalid.	La hora programada no es válida.
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The recording details for the video are invalid.	Los datos de grabación del video no son válidos.
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The video game rating is invalid.	La clasificación del videojuego no es válida.
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	The video file name is invalid.	El nombre del archivo de video no es válido.
+libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts	Please re-authenticate your YouTube account	Vuelve a conectar tu cuenta de YouTube
+libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts	Unable to obtain activity	LinkedIn no devolvió la publicación
+libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts	Resource is forbidden	LinkedIn no dio permiso para esto

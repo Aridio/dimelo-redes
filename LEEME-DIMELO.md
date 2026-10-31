@@ -18,6 +18,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw11 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw11` (entrar desde Mi Dímelo borra la sesión anterior en todas sus variantes: al recargar no vuelve otro negocio; abajo del menú, «Volver a Mi Dímelo» y quién está conectado) |
 | dw12 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw12` (sobre dw10, sin dw11; para la verificación de Google y Meta: al desconectar una red se borran sus llaves; cada 6 h se borran las de canales borrados o sin acceso desde hace 7 días, y los conectados a medias desde hace 7 días quedan sin llaves y con «Reconectar» (o se borran si nunca terminaron de conectar); YouTube pide solo 5 permisos) |
 | dw13 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw13` (dw11 y dw12 juntas) |
+| dw15 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw15` (sobre dw13, sin dw14; ticket de Autory: vista previa del video con botón de sonido, textos en inglés que quedaban, fechas y subidor de archivos en español) |
 
 ## Qué cambia
 
@@ -38,6 +39,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Entrar con Mi Dímelo (acceso propio `GENERIC`; spec 039 de dimelo-web-admin) | `marca/archivos/.../app/(app)/auth/dimelo/page.tsx` y `marca/aplicar.sh` § 9 |
 | dw11: quién está conectado (negocio y persona) y «Volver a Mi Dímelo» (o a DWA para el equipo) abajo del menú; borrar la sesión anterior también la de solo esta dirección | `apps/backend/src/dimelo/dw11.ts` (pruebas `dw11.spec.ts`), `marca/archivos/.../components/marca/conectado.tsx` y `marca/aplicar.sh` § 9 y § 11 |
 | dw12: llaves fuera al desconectar y limpieza cada 6 h; YouTube con 5 permisos | `apps/backend/src/dimelo/dw12.ts` (pruebas `dw12.spec.ts`), `dw12.limpieza.ts` (en `api.module.ts`), `integration.repository.ts` (`deleteChannel`), `youtube.provider.ts` (`scopes`) |
+| dw15: vista previa del video con botón de sonido; fechas y subidor (Uppy) en español; textos en inglés que quedaban | `marca/archivos/libraries/react-shared-libraries/src/helpers/video.or.image.tsx`, `marca/archivos/.../components/marca/espanol.ts`, `marca/aplicar.sh` § 13 y `textos.tsv` § dw15 |
 | Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |
 | Enlace «Código fuente» a este repositorio (entrada y Ajustes) | `marca/archivos/.../components/marca/codigo.fuente.tsx` |
 

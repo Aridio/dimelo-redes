@@ -391,6 +391,20 @@ literal "$L" "                          <TopMenu />
                         </div>"
 patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport { DimeloConectado } from \x27\@gitroom/frontend/components/marca/conectado\x27;}'
 
+# 13. dw15 (ticket de Autory, 2026-10-31): vista previa con sonido, fechas y subidor en español ---------------------
+# La vista previa del video lleva botón de sonido (marca/archivos/.../helpers/video.or.image.tsx). Textos en inglés que
+# quedaban: textos.tsv § dw15. Aquí, los que no caben en una línea y el idioma de fechas y subidor (marca/.../espanol.ts).
+patron "$FRONT/components/new-layout/layout.component.tsx" 's{^(\x27use client\x27;\n)}{$1\nimport \x27\@gitroom/frontend/components/marca/espanol\x27;}'
+NU="$FRONT/components/media/new.uploader.tsx"
+literal "$NU" "    const uppy2 = new Uppy({
+      autoProceed: true," "    const uppy2 = new Uppy({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      locale: uppyEs as any,
+      autoProceed: true,"
+patron "$NU" 's{^((?:\x27use client\x27;\n)?)}{$1import { uppyEs } from \x27\@gitroom/frontend/components/marca/espanol\x27;\n}'
+patron "$FRONT/components/new-launch/providers/linkedin/linkedin.preview.tsx" 's{>\s*Founder\s*<}{>\n                      Fundador\n                    <}'
+patron "$FRONT/components/new-launch/providers/pinterest/pinterest.preview.tsx" 's{>\s*Save\s*</div>}{>\n          Guardar\n        </div>}'
+
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2
   exit 1

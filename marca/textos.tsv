@@ -176,3 +176,112 @@ apps/frontend/src/components/launches/helpers/date.picker.tsx	'MMM D, h:mm A'	'D
 apps/frontend/src/components/preview/render.preview.date.tsx	'MMMM D, YYYY h:mm A'	'D MMMM YYYY, h:mm A'
 apps/frontend/src/components/notifications/notification.component.tsx	'MMM D, YYYY h:mm A'	'D MMM YYYY, h:mm A'
 apps/frontend/src/components/preview/comments.components.tsx	'MMM D, YYYY HH:mm'	'D MMM YYYY, HH:mm'
+# dw15 (ticket de Autory, 2026-10-31): textos que seguían en inglés
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Public',	label: 'Público',
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Private',	label: 'Privado',
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Unlisted',	label: 'No listado',
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Yes',	label: 'Sí',
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Title"	label="Título"
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Type"	label="Visibilidad"
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Tags"	label="Etiquetas"
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Thumbnail"	label="Miniatura"
+apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	Thumbnail picture (optional)	Imagen de miniatura (opcional)
+apps/frontend/src/components/new-launch/providers/youtube/youtube.preview.tsx	16.7M subscribers	16,7 M suscriptores
+apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	label: 'Post',	label: 'Publicación',
+apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	label: 'Story',	label: 'Historia',
+apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	Background (applies to text-only posts shorter than 130 characters)	Fondo (solo en publicaciones de texto de menos de 130 caracteres)
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	You & 12 other	Tú y 12 personas más
+apps/frontend/src/components/new-launch/providers/facebook/facebook.preview.tsx	20 Comments	20 comentarios
+apps/frontend/src/components/new-launch/providers/instagram/instagram.preview.tsx	8 Likes	8 Me gusta
+apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	label: 'Post / Reel',	label: 'Publicación / Reel',
+apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	label: 'Story',	label: 'Historia',
+apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	label: 'Auto (based on performance)',	label: 'Automático (según cómo le vaya)',
+apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	Collaborators (max 3) - accounts can't be private	Colaboradores (máximo 3; las cuentas no pueden ser privadas)
+apps/frontend/src/components/new-launch/providers/instagram/instagram.collaborators.tsx	label="Graduation Strategy"	label="Cuándo pasa a tus seguidores"
+apps/frontend/src/components/new-launch/providers/tiktok/tiktok.provider.tsx	<Input label="Title"	<Input label="Título"
+apps/frontend/src/components/new-launch/providers/tiktok/tiktok.provider.tsx	After posting you fill find a notification inside your Inbox about your post (not content studio)	Después de enviarlo te llegará un aviso a la bandeja de entrada de TikTok para terminar la publicación (no en TikTok Studio).
+apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	label: 'Everyone',	label: 'Todos',
+apps/frontend/src/components/new-launch/providers/x/x.provider.tsx	label: 'Subscribers',	label: 'Suscriptores',
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	2,871 followers	2.871 seguidores
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	<div>4 Comments</div>	<div>4 comentarios</div>
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	<div>8 Reposts</div>	<div>8 veces compartido</div>
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	• 1st	• 1.er
+apps/frontend/src/components/new-launch/providers/linkedin/linkedin.preview.tsx	<div>1 reply</div>	<div>1 respuesta</div>
+apps/frontend/src/components/new-launch/providers/pinterest/pinterest.board.tsx	No boards found, you have to create a board first	No hay tableros: crea uno primero en Pinterest
+apps/frontend/src/components/new-launch/providers/pinterest/pinterest.board.tsx	Select board	Elige un tablero
+apps/frontend/src/components/new-launch/providers/pinterest/pinterest.provider.tsx	Select Pin Color	Elige el color del pin
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	label: 'Event',	label: 'Evento',
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	label: 'Offer',	label: 'Oferta',
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	label: 'None',	label: 'Ninguno',
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	label: 'Book',	label: 'Reservar',
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	label: 'Shop',	label: 'Comprar',
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	label: 'Call',	label: 'Llamar',
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	Start Time (optional)	Hora de inicio (opcional)
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	End Time (optional)	Hora de fin (opcional)
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	Coupon Code (optional)	Código de cupón (opcional)
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	Redeem Online URL (optional)	Enlace para canjear (opcional)
+apps/frontend/src/components/new-launch/providers/gmb/gmb.provider.tsx	Terms & Conditions (optional)	Términos y condiciones (opcional)
+apps/frontend/src/components/new-launch/providers/reddit/reddit.provider.tsx	Please add at least one Subreddit from the settings	Agrega al menos un subreddit en los ajustes
+apps/frontend/src/components/new-launch/providers/reddit/reddit.provider.tsx	'Please add at least one Subreddit'	'Agrega al menos un subreddit'
+apps/frontend/src/components/new-launch/providers/reddit/subreddit.tsx	label="Title"	label="Título"
+apps/frontend/src/components/new-launch/providers/reddit/subreddit.tsx	Search Subreddit	Buscar subreddit
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Chat Message',	label: 'Mensaje en el chat',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Announcement',	label: 'Anuncio',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Primary (Default)',	label: 'Principal (por defecto)',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Blue',	label: 'Azul',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Green',	label: 'Verde',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Orange',	label: 'Naranja',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label: 'Purple',	label: 'Morado',
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label="Message Type"	label="Tipo de mensaje"
+apps/frontend/src/components/new-launch/providers/twitch/twitch.provider.tsx	label="Announcement Color"	label="Color del anuncio"
+apps/frontend/src/components/new-launch/providers/mewe/mewe.provider.tsx	label="Post To"	label="Publicar en"
+apps/frontend/src/components/new-launch/providers/mewe/mewe.provider.tsx	>My Timeline<	>Mi muro<
+apps/frontend/src/components/new-launch/providers/mewe/mewe.provider.tsx	>Group<	>Grupo<
+apps/frontend/src/components/new-launch/providers/mewe/mewe.group.select.tsx	Select Group	Elige un grupo
+apps/frontend/src/components/new-launch/providers/skool/skool.group.select.tsx	Select Group	Elige un grupo
+apps/frontend/src/components/new-launch/providers/skool/skool.label.select.tsx	Select Label	Elige una etiqueta
+apps/frontend/src/components/new-launch/providers/skool/skool.provider.tsx	label="Title"	label="Título"
+apps/frontend/src/components/new-launch/providers/slack/slack.channel.select.tsx	Select Channel	Elige un canal
+apps/frontend/src/components/new-launch/providers/discord/discord.channel.select.tsx	Select Channel	Elige un canal
+apps/frontend/src/components/new-launch/providers/warpcast/subreddit.tsx	Search Channel	Buscar canal
+apps/frontend/src/components/new-launch/providers/warpcast/subreddit.tsx	"Channel"	"Canal"
+apps/frontend/src/components/new-launch/providers/lemmy/subreddit.tsx	Search Community	Buscar comunidad
+apps/frontend/src/components/new-launch/providers/lemmy/subreddit.tsx	"Community"	"Comunidad"
+apps/frontend/src/components/new-launch/providers/lemmy/subreddit.tsx	label="Title"	label="Título"
+apps/frontend/src/components/new-launch/providers/listmonk/select.list.tsx	Select List	Elige una lista
+apps/frontend/src/components/new-launch/providers/listmonk/select.templates.tsx	Select Template	Elige una plantilla
+apps/frontend/src/components/new-launch/providers/listmonk/listmonk.provider.tsx	label="Subject"	label="Asunto"
+apps/frontend/src/components/new-launch/providers/listmonk/listmonk.provider.tsx	label="Preview"	label="Vista previa"
+apps/frontend/src/components/new-launch/providers/dribbble/dribbble.teams.tsx	Select a team	Elige un equipo
+apps/frontend/src/components/new-launch/providers/whop/whop.company.select.tsx	Select Company	Elige una empresa
+apps/frontend/src/components/new-launch/providers/whop/whop.experience.select.tsx	Select Forum	Elige un foro
+apps/frontend/src/components/new-launch/providers/whop/whop.provider.tsx	Title (optional)	Título (opcional)
+apps/frontend/src/components/new-launch/providers/medium/medium.publications.tsx	Select publication	Elige una publicación
+apps/frontend/src/components/new-launch/providers/hashnode/hashnode.publications.tsx	Select publication	Elige una publicación
+apps/frontend/src/components/new-launch/providers/devto/select.organization.tsx	Select organization	Elige una organización
+apps/frontend/src/components/new-launch/providers/wordpress/wordpress.post.type.tsx	Select type	Elige un tipo
+apps/frontend/src/components/launches/internal.channels.tsx	name: 'Immediately',	name: 'De inmediato',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '1 hour',	name: '1 hora',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '2 hours',	name: '2 horas',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '3 hours',	name: '3 horas',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '8 hours',	name: '8 horas',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '12 hours',	name: '12 horas',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '15 hours',	name: '15 horas',
+apps/frontend/src/components/launches/internal.channels.tsx	name: '24 hours',	name: '24 horas',
+apps/frontend/src/components/launches/internal.channels.tsx	label="Delay"	label="Espera"
+apps/frontend/src/components/settings/teams.component.tsx	name: 'User',	name: 'Usuario',
+apps/frontend/src/components/settings/teams.component.tsx	name: 'Admin',	name: 'Administrador',
+apps/frontend/src/components/settings/teams.component.tsx	label="Role"	label="Rol"
+apps/frontend/src/components/settings/teams.component.tsx	label="Email"	label="Correo"
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Alt Text (for accessibility)	Texto alternativo (accesibilidad)
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Describe the image/video content...	Describe lo que se ve en la imagen o el video...
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Current thumbnail	Miniatura actual
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Unable to capture frame. This might be due to CORS restrictions on the video source.	No se pudo tomar la imagen del video. Inténtalo de nuevo.
+apps/frontend/src/components/new-launch/mention.component.tsx	Loading...	Cargando...
+apps/frontend/src/components/launches/merge.post.tsx	Are you sure you want to merge all comments into one post? This action is not reversible.	¿Unir todos los comentarios en una sola publicación? No se puede deshacer.
+apps/frontend/src/components/launches/separate.post.tsx	Are you sure you want to separate all posts? This action is not reversible.	¿Separar todas las publicaciones? No se puede deshacer.
+apps/frontend/src/components/launches/comments/comment.component.tsx	Are you sure you want to delete this comment?	¿Borrar este comentario?
+apps/frontend/src/components/launches/helpers/pick.platform.component.tsx	Are you sure you want to remove this platform?	¿Quitar esta red?
+apps/frontend/src/components/launches/polonto/polonto.picture.generation.tsx	Something went wrong, please try again later...	Algo salió mal. Inténtalo más tarde.
+apps/frontend/src/components/new-launch/manage.modal.tsx	Save Set	Guardar conjunto
+apps/frontend/src/components/launches/bot.picture.tsx	Bot Picture	Foto del bot

@@ -23,6 +23,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw16 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw16` (dw14 y dw15 juntas) |
 | dw17 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw17` (sobre dw16: TikTok sale por defecto como borrador a la app de TikTok, «Subir sin publicar», mientras TikTok no apruebe la publicación directa en público) |
 | dw18 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw18` (sobre dw17: los videos de TikTok de más de 30 MB se aligeran antes de mandarlos, porque la app de TikTok no abría borradores pesados; la imagen trae ffmpeg) |
+| dw19 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw19` (sobre dw18: menú de la persona arriba a la derecha, solo un círculo con las iniciales, con Configuración, Volver a Mi Dímelo o a DWA y Cerrar sesión; sin el bloque de abajo del menú lateral ni el botón suelto de Configuración; «Cerrar sesión» a secas; el logo lleva al calendario) |
 
 ## Qué cambia
 
@@ -41,10 +42,11 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | Pantalla de entrada con frase propia (sin testimonios de Postiz) y bienvenida solo con «Conectar canales» | `marca/aplicar.sh` § Ocultar a mano |
 | Ajustes visuales: separación entre menú y contenido igual a la del borde, menú más ancho, sin globo en botones con texto, filas de Configuración y Analíticas sin aplastarse en celular | `marca/aplicar.sh` § Ajustes visuales |
 | Entrar con Mi Dímelo (acceso propio `GENERIC`; spec 039 de dimelo-web-admin) | `marca/archivos/.../app/(app)/auth/dimelo/page.tsx` y `marca/aplicar.sh` § 9 |
-| dw11: quién está conectado (negocio y persona) y «Volver a Mi Dímelo» (o a DWA para el equipo) abajo del menú; borrar la sesión anterior también la de solo esta dirección | `apps/backend/src/dimelo/dw11.ts` (pruebas `dw11.spec.ts`), `marca/archivos/.../components/marca/conectado.tsx` y `marca/aplicar.sh` § 9 y § 11 |
+| dw11: quién está conectado (negocio y persona) y «Volver a Mi Dímelo» (o a DWA para el equipo) abajo del menú; borrar la sesión anterior también la de solo esta dirección | `apps/backend/src/dimelo/dw11.ts` (pruebas `dw11.spec.ts`), `marca/aplicar.sh` § 9 y § 11 (desde dw19 lo pinta el menú de arriba, § 14) |
 | dw12: llaves fuera al desconectar y limpieza cada 6 h; YouTube con 5 permisos | `apps/backend/src/dimelo/dw12.ts` (pruebas `dw12.spec.ts`), `dw12.limpieza.ts` (en `api.module.ts`), `integration.repository.ts` (`deleteChannel`), `youtube.provider.ts` (`scopes`) |
 | dw14: entrada solo con Mi Dímelo; reconectar un canal con sus llaves nuevas | `marca/archivos/.../components/marca/entrar.tsx`, `marca/aplicar.sh` § 4 y § 12 (y `textos.tsv`), `integration.service.ts` (`saveProviderPage`) |
 | dw15: vista previa del video con botón de sonido; fechas y subidor (Uppy) en español; textos en inglés que quedaban | `marca/archivos/libraries/react-shared-libraries/src/helpers/video.or.image.tsx`, `marca/archivos/.../components/marca/espanol.ts`, `marca/aplicar.sh` § 13 y `textos.tsv` § dw15 |
+| dw19: menú de la persona arriba a la derecha (Configuración, Volver, Cerrar sesión); el logo lleva al calendario | `marca/archivos/.../components/marca/menu.usuario.tsx`, `marca/aplicar.sh` § 14, `textos.tsv` (cerrar sesión) y `es.json` |
 | Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |
 | Enlace «Código fuente» a este repositorio (entrada y Ajustes) | `marca/archivos/.../components/marca/codigo.fuente.tsx` |
 

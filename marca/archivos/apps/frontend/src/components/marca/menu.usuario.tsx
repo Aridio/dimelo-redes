@@ -12,6 +12,7 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { setCookie } from '@gitroom/frontend/components/layout/layout.context';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
 
 type Dimelo = { negocio: string | null; persona: string | null; equipo: boolean; volver: string };
 
@@ -33,6 +34,8 @@ export const MenuUsuario: FC = () => {
   const { isSecured } = useVariables();
   const [abierto, setAbierto] = useState(false);
   const caja = useRef<HTMLDivElement>(null);
+  const boton = useRef<HTMLButtonElement>(null);
+  const t = useT();
 
   useEffect(() => {
     if (!abierto) return;
@@ -40,7 +43,10 @@ export const MenuUsuario: FC = () => {
       if (!caja.current?.contains(event.target as Node)) setAbierto(false);
     };
     const tecla = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setAbierto(false);
+      if (event.key === 'Escape') {
+        setAbierto(false);
+        boton.current?.focus();
+      }
     };
     document.addEventListener('mousedown', fuera);
     document.addEventListener('keydown', tecla);
@@ -52,25 +58,36 @@ export const MenuUsuario: FC = () => {
 
   const salir = useCallback(async () => {
     setAbierto(false);
-    if (!(await deleteDialog('¿Seguro que quieres cerrar sesión?', 'Sí, cerrar sesión'))) return;
+    if (!(await deleteDialog(
+        t('are_you_sure_you_want_to_logout', 'Are you sure you want to logout?'),
+        t('yes_logout', 'Yes logout')
+      ))) return;
     if (!isSecured) {
       setCookie('auth', '', -10);
     } else {
       await fetch('/user/logout', { method: 'POST' });
     }
     window.location.href = '/';
-  }, [isSecured]);
+  }, [isSecured, t]);
 
   if (!user) return null;
   const dimelo = user.dimelo;
   const nombre = dimelo?.negocio || user.name || user.email || '';
 
   return (
-    <div ref={caja} className="relative flex items-center">
+    <div
+      ref={caja}
+      className="relative flex items-center"
+      // Se cierra cuando el foco sale del menú con el tabulador
+      onBlur={(event) => {
+        if (!caja.current?.contains(event.relatedTarget as Node)) setAbierto(false);
+      }}
+    >
       <button
+        ref={boton}
         type="button"
         onClick={() => setAbierto((valor) => !valor)}
-        aria-haspopup="menu"
+        aria-haspopup="true"
         aria-expanded={abierto}
         aria-label={nombre ? `Menú de ${nombre}` : 'Menú'}
         className={clsx(
@@ -81,10 +98,9 @@ export const MenuUsuario: FC = () => {
         {iniciales(nombre) || '·'}
       </button>
       <div
-        role="menu"
         aria-hidden={!abierto}
         className={clsx(
-          'absolute end-0 top-[calc(100%+8px)] z-[500] w-[240px] max-w-[calc(100vw-24px)] p-[6px] rounded-[12px] bg-newBgColorInner border border-blockSeparator shadow-lg origin-top-right transition duration-150 ease-out',
+          'absolute end-0 top-[calc(100%+8px)] z-[500] w-[240px] max-w-[calc(100vw-24px)] p-[6px] rounded-[12px] bg-newBgColorInner border border-blockSeparator shadow-lg origin-top-right transition-[opacity,transform,visibility] duration-150 ease-out',
           abierto ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible pointer-events-none'
         )}
       >
@@ -93,7 +109,7 @@ export const MenuUsuario: FC = () => {
             {nombre}
           </div>
         )}
-        <Link href="/settings" role="menuitem" tabIndex={abierto ? 0 : -1} className={opcion} onClick={() => setAbierto(false)}>
+        <Link href="/settings" tabIndex={abierto ? 0 : -1} className={opcion} onClick={() => setAbierto(false)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" strokeWidth="1.8" />
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
@@ -101,14 +117,14 @@ export const MenuUsuario: FC = () => {
           Configuración
         </Link>
         {dimelo?.volver && (
-          <a href={dimelo.volver} role="menuitem" tabIndex={abierto ? 0 : -1} className={opcion}>
+          <a href={dimelo.volver} tabIndex={abierto ? 0 : -1} className={opcion}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             {dimelo.equipo ? 'Volver a DWA' : 'Volver a Mi Dímelo'}
           </a>
         )}
-        <button type="button" role="menuitem" tabIndex={abierto ? 0 : -1} className={clsx(opcion, '!text-red-400')} onClick={salir}>
+        <button type="button" tabIndex={abierto ? 0 : -1} className={clsx(opcion, '!text-red-400')} onClick={salir}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

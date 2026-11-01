@@ -24,6 +24,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw17 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw17` (sobre dw16: TikTok sale por defecto como borrador a la app de TikTok, «Subir sin publicar», mientras TikTok no apruebe la publicación directa en público) |
 | dw18 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw18` (sobre dw17: los videos de TikTok de más de 30 MB se aligeran antes de mandarlos, porque la app de TikTok no abría borradores pesados; la imagen trae ffmpeg) |
 | dw19 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw19` (sobre dw18: menú de la persona arriba a la derecha, solo un círculo con las iniciales, con Configuración, Volver a Mi Dímelo o a DWA y Cerrar sesión; sin el bloque de abajo del menú lateral ni el botón suelto de Configuración; «Cerrar sesión» a secas; el logo lleva al calendario) |
+| dw20 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw20` (sobre dw19: el círculo con el mismo alto y centro que el sol y la campana, con separador; hover del menú legible en claro y oscuro y foco con teclado; Configuración vuelve al menú lateral) |
 
 ## Qué cambia
 

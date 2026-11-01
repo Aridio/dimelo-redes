@@ -430,10 +430,11 @@ patron "$FRONT/components/new-launch/providers/pinterest/pinterest.preview.tsx" 
 
 # 14. Menú de la persona arriba a la derecha (dw19, Aridio 2026-11-01) ----------------------------------------------
 # Solo el círculo con las iniciales; al pulsarlo, Configuración, Volver a Mi Dímelo (o a DWA) y Cerrar sesión
-# (marca/archivos/.../components/marca/menu.usuario.tsx). Sustituye al bloque de abajo del menú lateral de dw11 y
-# al botón suelto de Configuración. El logo de arriba a la izquierda lleva al calendario.
+# (marca/archivos/.../components/marca/menu.usuario.tsx). Sustituye al bloque de abajo del menú lateral de dw11;
+# Configuración sigue también en el menú lateral. El logo de arriba a la izquierda lleva al calendario.
 literal "$L" "                          <NotificationComponent />
                         </div>" "                          <NotificationComponent />
+                          <div className=\"w-[1px] h-[20px] bg-blockSeparator mobile:hidden\" />
                           <MenuUsuario />
                         </div>"
 literal "$L" "                          <div className=\"flex justify-center\">
@@ -443,11 +444,9 @@ literal "$L" "                          <div className=\"flex justify-center\">
                               <Logo />
                             </Link>
                           </div>"
+# Sol, campana, separadores y círculo centrados a la misma altura (en celular ya lo estaban)
+literal "$L" '<div className="flex gap-[20px] mobile:gap-[14px] mobile:items-center text-textItemBlur">' '<div className="flex gap-[20px] mobile:gap-[14px] items-center text-textItemBlur">'
 patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport Link from \x27next/link\x27;\nimport { MenuUsuario } from \x27\@gitroom/frontend/components/marca/menu.usuario\x27;}'
-literal "$FRONT/components/layout/top.menu.tsx" "      path: '/settings',
-      role: ['ADMIN', 'USER', 'SUPERADMIN']," "      path: '/settings',
-      hide: true,
-      role: ['ADMIN', 'USER', 'SUPERADMIN'],"
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

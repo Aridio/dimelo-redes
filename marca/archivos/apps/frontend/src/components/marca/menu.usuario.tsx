@@ -2,7 +2,7 @@
 
 // Dímelo Redes (dw19, Aridio 2026-11-01): arriba a la derecha, solo un círculo con las iniciales del negocio. Al pulsarlo
 // se abre un menú con el nombre una vez, «Configuración», «Volver a Mi Dímelo» (o a DWA si entra alguien del equipo de
-// Dímelo Web) y «Cerrar sesión». Sustituye al bloque de abajo del menú lateral (dw11) y al botón suelto de Configuración.
+// Dímelo Web) y «Cerrar sesión». Sustituye al bloque de abajo del menú lateral (dw11). Mismo alto que el sol y la campana.
 // «Volver» solo sale con la entrada de Mi Dímelo (el servidor manda `dimelo` en /user/self).
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -26,7 +26,7 @@ const iniciales = (nombre: string) =>
     .toUpperCase();
 
 const opcion =
-  'flex items-center gap-[10px] w-full px-[12px] h-[40px] rounded-[8px] text-[14px] font-[500] text-start text-newTextColor hover:bg-boxFocused transition-colors';
+  'flex items-center gap-[10px] w-full px-[12px] h-[40px] rounded-[8px] text-[14px] font-[500] text-start text-newTextColor hover:bg-newBgLineColor focus-visible:bg-newBgLineColor focus-visible:outline-none transition-colors';
 
 export const MenuUsuario: FC = () => {
   const user = useUser() as unknown as { name?: string; email?: string; dimelo?: Dimelo } | undefined;
@@ -77,7 +77,7 @@ export const MenuUsuario: FC = () => {
   return (
     <div
       ref={caja}
-      className="relative flex items-center"
+      className="relative flex items-center h-[24px] self-center"
       // Se cierra cuando el foco sale del menú con el tabulador
       onBlur={(event) => {
         if (!caja.current?.contains(event.relatedTarget as Node)) setAbierto(false);
@@ -91,7 +91,7 @@ export const MenuUsuario: FC = () => {
         aria-expanded={abierto}
         aria-label={nombre ? `Menú de ${nombre}` : 'Menú'}
         className={clsx(
-          'w-[36px] h-[36px] shrink-0 rounded-full bg-boxFocused text-textItemFocused flex items-center justify-center text-[13px] font-[700] transition-shadow',
+          'w-[24px] h-[24px] shrink-0 rounded-full bg-boxFocused text-textItemFocused flex items-center justify-center text-[10px] leading-none font-[700] transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-btnPrimary',
           abierto ? 'ring-2 ring-btnPrimary' : 'hover:ring-2 hover:ring-blockSeparator'
         )}
       >

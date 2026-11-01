@@ -41,19 +41,27 @@ export const MenuUsuario: FC = () => {
   const [sitio, setSitio] = useState<{ top: number; right: number } | null>(null);
   const dentro = (nodo: Node | null) => !!nodo && (!!caja.current?.contains(nodo) || !!panel.current?.contains(nodo));
 
-  // Debajo del círculo, alineado a su borde derecho; se recoloca si cambia el tamaño de la ventana o se desplaza
+  // Debajo del círculo, alineado a su borde derecho. Se coloca al cargar (así la primera apertura ya tiene transición)
+  // y, solo con el menú abierto, se recoloca si cambia el tamaño de la ventana o se desplaza la página
+  const conUsuario = !!user;
   useLayoutEffect(() => {
     const colocar = () => {
       const r = boton.current?.getBoundingClientRect();
       if (r) setSitio({ top: r.bottom + 8, right: Math.max(12, window.innerWidth - r.right) });
     };
     colocar();
+    if (!abierto) return;
     window.addEventListener('resize', colocar);
     window.addEventListener('scroll', colocar, true);
     return () => {
       window.removeEventListener('resize', colocar);
       window.removeEventListener('scroll', colocar, true);
     };
+  }, [abierto, conUsuario]);
+
+  // El menú está al final de la página: al abrirlo, el foco pasa a la primera opción para poder seguir con el teclado
+  useEffect(() => {
+    if (abierto) panel.current?.querySelector<HTMLElement>('a,button')?.focus({ preventScroll: true });
   }, [abierto]);
   const t = useT();
 
@@ -122,13 +130,24 @@ export const MenuUsuario: FC = () => {
         ref={panel}
         aria-hidden={!abierto}
         style={{ top: sitio.top, right: sitio.right }}
+        // Tab después de la última opción (o Shift+Tab antes de la primera) vuelve al círculo y cierra
+        onKeyDown={(event) => {
+          if (event.key !== 'Tab') return;
+          const opciones = Array.from(panel.current?.querySelectorAll<HTMLElement>('a,button') ?? []);
+          const fin = event.shiftKey ? opciones[0] : opciones[opciones.length - 1];
+          if (document.activeElement === fin) {
+            event.preventDefault();
+            setAbierto(false);
+            boton.current?.focus();
+          }
+        }}
         className={clsx(
           'fixed z-[1000] w-[240px] max-w-[calc(100vw-24px)] p-[6px] rounded-[12px] bg-newBgColorInner border border-blockSeparator shadow-lg origin-top-right transition-[opacity,transform,visibility] duration-150 ease-out',
           abierto ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible pointer-events-none'
         )}
       >
         {nombre && (
-          <div className="px-[12px] pt-[8px] pb-[10px] mb-[4px] border-b border-blockSeparator text-[14px] font-[600] text-newTextColor break-words">
+          <div tabIndex={-1} className="outline-none px-[12px] pt-[8px] pb-[10px] mb-[4px] border-b border-blockSeparator text-[14px] font-[600] text-newTextColor break-words">
             {nombre}
           </div>
         )}
@@ -163,9 +182,19 @@ export const MenuUsuario: FC = () => {
 // Botón «Volver a Mi Dímelo» (o «Volver a DWA») abajo del menú lateral, igual que en dw11
 export const VolverEnMenu: FC = () => {
   const dimelo = (useUser() as unknown as { dimelo?: Dimelo } | undefined)?.dimelo;
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
   if (!dimelo?.volver) return null;
   return (
-    <div className="flex flex-col pt-[8px] border-t border-blockSeparator blurMe">
+    <div
+      className={clsx(
+        'flex flex-col pt-[8px] border-t border-blockSeparator blurMe transition-opacity duration-300',
+        visible ? 'opacity-100' : 'opacity-0'
+      )}
+    >
       <a
         href={dimelo.volver}
         className="group w-full minCustom:h-[54px] custom:h-[44px] py-[8px] px-[4px] minCustom:gap-[4px] custom:gap-[2px] flex flex-col font-[600] items-center justify-center rounded-[12px] text-textItemBlur hover:text-textItemFocused hover:bg-boxFocused transition-colors"

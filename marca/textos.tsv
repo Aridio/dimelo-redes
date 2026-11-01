@@ -23,8 +23,8 @@ apps/frontend/src/app/(app)/oauth/authorize/layout.tsx	title: 'Authorize Applica
 apps/frontend/src/app/(app)/auth/activate/page.tsx	} - Activate your account	} · Activa tu cuenta
 apps/frontend/src/app/(app)/auth/activate/[code]/page.tsx	} - Activate your account	} · Activa tu cuenta
 # Salir de la cuenta
-apps/frontend/src/components/layout/logout.component.tsx	${isGeneral ? ' Postiz' : ' Gitroom'}	 Dímelo Redes
-apps/frontend/src/components/layout/logout.component.tsx	{isGeneral ? ' Postiz' : ' Gitroom'}	{' Dímelo Redes'}
+apps/frontend/src/components/layout/logout.component.tsx	${isGeneral ? ' Postiz' : ' Gitroom'}	${''}
+apps/frontend/src/components/layout/logout.component.tsx	{isGeneral ? ' Postiz' : ' Gitroom'}	{''}
 # Enlaces de la pantalla de registro
 apps/frontend/src/components/auth/register.tsx	https://postiz.com/terms	https://dimeloweb.com/terminos/
 apps/frontend/src/components/auth/register.tsx	https://postiz.com/privacy	https://dimeloweb.com/privacidad/

@@ -272,5 +272,7 @@
   "tiktok_and_the": "y la",
   "tiktok_music_usage_confirmation": "Confirmación de uso de música",
   "tiktok_declaration_end": " de TikTok.",
-  "select_channel": "Elige el canal de YouTube:"
+  "select_channel": "Elige el canal de YouTube:",
+  "logout_from": "Cerrar sesión",
+  "are_you_sure_you_want_to_logout": "¿Seguro que quieres cerrar sesión?"
 }

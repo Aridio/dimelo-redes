@@ -357,7 +357,7 @@ patron "$MC" 's~<div className="w-full h-full p-\[50px\]">\s*\{hasExtension\(med
 # 11. Quién está conectado y «Volver a Mi Dímelo» (dw11, spec 039 de dimelo-web-admin) -----------------------------
 # Mi Dímelo manda quién entra, si es del equipo y adónde volver (apps/backend/src/dimelo/dw11.ts). Va en la sesión,
 # no en el usuario del negocio (lo comparten varias personas). /user/self lo devuelve con el nombre del espacio y el
-# menú lateral lo pinta abajo (marca/archivos/.../components/marca/conectado.tsx).
+# menú de arriba a la derecha lo pinta (§ 14).
 literal "$OP" "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string }> {" \
   "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string; dimelo?: unknown }> {"
 literal "$OP" "    const { email, sub: id, name } = await response.json();
@@ -387,11 +387,6 @@ literal "$UC" "      admin: !!user.isSuperAdmin,
         ? { dimelo: vistaDimelo(sesionDe(req), organization.name, process.env) }
         : {}),"
 patron "$UC" 's{^}{import { vistaDimelo } from \x27\@gitroom/backend/dimelo/dw11\x27;\n// dw11: lo que Mi Dímelo puso en la sesión al entrar (la clave ya la comprobó el middleware)\nconst sesionDe = (req: Request): unknown => {\n  try {\n    const auth = String(req.headers.auth \|\| req.cookies.auth \|\| \x27\x27);\n    return (AuthChecker.verifyJWT(auth) as { dimelo?: unknown }).dimelo;\n  } catch {\n    return undefined;\n  }\n};\n}'
-literal "$L" "                          <TopMenu />
-                        </div>" "                          <TopMenu />
-                          <DimeloConectado />
-                        </div>"
-patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport { DimeloConectado } from \x27\@gitroom/frontend/components/marca/conectado\x27;}'
 
 # 12. Entrada solo con Mi Dímelo (dw14, Aridio 2026-10-29) ---------------------------------------------------------
 # Los negocios entran siempre por Mi Dímelo: /auth/login solo muestra «Iniciar sesión con Mi Dímelo»
@@ -432,6 +427,27 @@ literal "$NU" "    const uppy2 = new Uppy({
 patron "$NU" 's{^((?:\x27use client\x27;\n)?)}{$1import { uppyEs } from \x27\@gitroom/frontend/components/marca/espanol\x27;\n}'
 patron "$FRONT/components/new-launch/providers/linkedin/linkedin.preview.tsx" 's{>\s*Founder\s*<}{>\n                      Fundador\n                    <}'
 patron "$FRONT/components/new-launch/providers/pinterest/pinterest.preview.tsx" 's{>\s*Save\s*</div>}{>\n          Guardar\n        </div>}'
+
+# 14. Menú de la persona arriba a la derecha (dw19, Aridio 2026-11-01) ----------------------------------------------
+# Solo el círculo con las iniciales; al pulsarlo, Configuración, Volver a Mi Dímelo (o a DWA) y Cerrar sesión
+# (marca/archivos/.../components/marca/menu.usuario.tsx). Sustituye al bloque de abajo del menú lateral de dw11 y
+# al botón suelto de Configuración. El logo de arriba a la izquierda lleva al calendario.
+literal "$L" "                          <NotificationComponent />
+                        </div>" "                          <NotificationComponent />
+                          <MenuUsuario />
+                        </div>"
+literal "$L" "                          <div className=\"flex justify-center\">
+                            <Logo />
+                          </div>" "                          <div className=\"flex justify-center\">
+                            <Link href=\"/launches\" aria-label=\"Ir al calendario\" className=\"rounded-[12px]\">
+                              <Logo />
+                            </Link>
+                          </div>"
+patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport Link from \x27next/link\x27;\nimport { MenuUsuario } from \x27\@gitroom/frontend/components/marca/menu.usuario\x27;}'
+literal "$FRONT/components/layout/top.menu.tsx" "      path: '/settings',
+      role: ['ADMIN', 'USER', 'SUPERADMIN']," "      path: '/settings',
+      hide: true,
+      role: ['ADMIN', 'USER', 'SUPERADMIN'],"
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

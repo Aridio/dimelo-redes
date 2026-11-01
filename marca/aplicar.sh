@@ -446,7 +446,12 @@ literal "$L" "                          <div className=\"flex justify-center\">
                           </div>"
 # Sol, campana, separadores y círculo centrados a la misma altura (en celular ya lo estaban)
 literal "$L" '<div className="flex gap-[20px] mobile:gap-[14px] mobile:items-center text-textItemBlur">' '<div className="flex gap-[20px] mobile:gap-[14px] items-center text-textItemBlur">'
-patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport Link from \x27next/link\x27;\nimport { MenuUsuario } from \x27\@gitroom/frontend/components/marca/menu.usuario\x27;}'
+# «Volver a Mi Dímelo» / «Volver a DWA» sigue abajo del menú lateral, como en dw11 (dw21)
+literal "$L" "                          <TopMenu />
+                        </div>" "                          <TopMenu />
+                          <VolverEnMenu />
+                        </div>"
+patron "$L" 's{^(\x27use client\x27;\n)}{$1\nimport Link from \x27next/link\x27;\nimport { MenuUsuario, VolverEnMenu } from \x27\@gitroom/frontend/components/marca/menu.usuario\x27;}'
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "La marca NO quedó aplicada: $FALLOS cambio(s) fallaron (arriba). Corrige textos.tsv, ocultar.txt o aplicar.sh." >&2

@@ -19,6 +19,7 @@ import { PostValidationExceptionFilter } from '@gitroom/backend/api/routes/posts
 import { HttpExceptionFilter } from '@gitroom/nestjs-libraries/services/exception.filter';
 import { ConfigurationChecker } from '@gitroom/helpers/configuration/configuration.checker';
 import { startMcp } from '@gitroom/nestjs-libraries/chat/start.mcp';
+import { cerrarOculto } from '@gitroom/backend/dimelo/oculto';
 
 async function start() {
   const app = await NestFactory.create(AppModule, {
@@ -59,7 +60,12 @@ async function start() {
     },
   });
 
-  await startMcp(app);
+  // Dímelo Redes (RED-08): lo oculto en la pantalla también se cierra aquí, antes que cualquier ruta; y sin MCP
+  // (no se ofrece), salvo que se pida con DIMELO_MCP=on
+  app.use(cerrarOculto);
+  if (process.env.DIMELO_MCP === 'on') {
+    await startMcp(app);
+  }
 
   app.useGlobalPipes(
     new ValidationPipe({

@@ -114,13 +114,9 @@ export class UsersController {
         : organization?.isTrailing,
       allowTrial: organization?.allowTrial,
       streakSince: organization?.streakSince || null,
-      publicApi:
-        // @ts-ignore
-        organization?.users[0]?.role === 'SUPERADMIN' ||
-        // @ts-ignore
-        organization?.users[0]?.role === 'ADMIN'
-          ? organization?.apiKey
-          : '',
+      // Dímelo Redes (RED-08): la clave de la API del espacio no llega al navegador. Solo la usa el panel de Dímelo
+      // Web, de servidor a servidor (POST /dimelo/clave-espacio); la pantalla que la mostraba está oculta.
+      publicApi: '',
     };
   }
 

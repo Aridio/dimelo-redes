@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { fetchPublicHttps } from '@gitroom/nestjs-libraries/dtos/webhooks/ssrf.safe.dispatcher';
 import { AutopostRepository } from '@gitroom/nestjs-libraries/database/prisma/autopost/autopost.repository';
 import { AutopostDto } from '@gitroom/nestjs-libraries/dtos/autopost/autopost.dto';
 import dayjs from 'dayjs';
@@ -139,7 +140,10 @@ export class AutopostService {
 
   async loadXML(url: string) {
     try {
-      const { items } = await parser.parseURL(url);
+      // Dímelo Redes (RED-06): parseURL descargaba sin protección de red y seguía redirecciones
+      const { items } = await parser.parseString(
+        await (await fetchPublicHttps(url, {}, 30_000)).text()
+      );
       const findLast = items.reduce(
         (all: any, current: any) => {
           if (dayjs(current.pubDate).isAfter(all.pubDate)) {
@@ -189,7 +193,10 @@ export class AutopostService {
 
   async loadUrl(url: string) {
     try {
-      const loadDom = new JSDOM(await (await fetch(url)).text());
+      // Dímelo Redes (RED-06): la dirección la da el cliente; solo https público, cada salto revisado, con tope de tiempo
+      const loadDom = new JSDOM(
+        await (await fetchPublicHttps(url, {}, 30_000)).text()
+      );
       loadDom.window.document
         .querySelectorAll('script')
         .forEach((s) => s.remove());

@@ -11,6 +11,7 @@ import {
 import { HttpForbiddenException } from '@gitroom/nestjs-libraries/services/exception.filter';
 import { MastraService } from '@gitroom/nestjs-libraries/chat/mastra.service';
 import { setSentryUserContext } from '@gitroom/nestjs-libraries/sentry/initialize.sentry';
+import { sesionConVencimiento } from '@gitroom/backend/dimelo/sesion';
 
 export const removeAuth = (res: Response) => {
   res.cookie('auth', '', {
@@ -54,6 +55,13 @@ export class AuthMiddleware implements NestMiddleware {
       const orgHeader = req.cookies.showorg || req.headers.showorg;
 
       if (!payload?.id || typeof payload.id !== 'string') {
+        throw new HttpForbiddenException();
+      }
+
+      // Dímelo Redes (RED-12): una sesión siempre vence. Sin exp no es una sesión: así ni una sesión vieja que no
+      // vencía, ni el enlace de cambiar la clave ({ id, expires }) ni el de activar la cuenta (firmados con la misma
+      // clave y con un id de usuario) sirven para entrar.
+      if (!sesionConVencimiento(payload)) {
         throw new HttpForbiddenException();
       }
 

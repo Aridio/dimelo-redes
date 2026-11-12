@@ -297,8 +297,9 @@ literal apps/backend/src/api/routes/auth.controller.ts "      state,
       String(req.headers['user-agent'] || '')
     );"
 
-# La sesión que abre Mi Dímelo dura un día (no un año): quitar Dímelo Redes en DWA corta el acceso en menos de un día
-patron apps/backend/src/api/routes/auth.controller.ts 's{(return response\.json\(\{ token \}\);.*?expires: new Date\(Date\.now\(\) \+ )1000 \* 60 \* 60 \* 24 \* 365}{${1}1000 * 60 * 60 * (provider.toUpperCase() === "GENERIC" ? 24 : 24 * 365)}s'
+# La sesión que abre Mi Dímelo dura un día (no un año): quitar Dímelo Redes en DWA corta el acceso en menos de un día.
+# RED-12: la de una cuenta LOCAL (correo y clave, solo administración) dura 7 días, no un año
+patron apps/backend/src/api/routes/auth.controller.ts 's{(return response\.json\(\{ token \}\);.*?expires: new Date\(Date\.now\(\) \+ )1000 \* 60 \* 60 \* 24 \* 365}{${1}1000 * 60 * 60 * (provider.toUpperCase() === "GENERIC" ? 24 : 24 * 7)}s'
 # Y la clave de esa sesión vence al día también en el servidor (aunque alguien la copie del navegador)
 literal "$AS" "      delete user.password;
     }
@@ -310,7 +311,8 @@ literal "$AS" "      delete user.password;
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
       });
     }
-    return AuthChecker.signJWT(user);"
+    // RED-12: también vence la de una cuenta LOCAL (antes no vencía nunca); el middleware exige exp
+    return AuthChecker.signJWT({ ...user, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7 });"
 # Si el acceso con Mi Dímelo no se completa (código vencido), a la entrada en vez de «cargando» sin fin
 literal "$FRONT/components/auth/register.tsx" "    const { token } = await (
       await fetch(\`/auth/oauth/\${provider?.toUpperCase() || 'LOCAL'}/exists\`, {

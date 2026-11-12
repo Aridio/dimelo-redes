@@ -19,7 +19,7 @@ test('clave compartida: sin variable o corta, no hay ruta; compara exacto', () =
 test('correo: solo correos de negocio de Mi Dímelo', () => {
   assert.equal(businessEmail('cliente-a-org@redes.dimeloweb.com'), 'cliente-a-org@redes.dimeloweb.com');
   assert.equal(businessEmail(' Negocio-1@Redes.DimeloWeb.com '), 'negocio-1@redes.dimeloweb.com');
-  assert.equal(businessEmail('aridio89@gmail.com'), null);
+  assert.equal(businessEmail('alguien@gmail.com'), null);
   assert.equal(businessEmail('a@redes.dimeloweb.com.evil.com'), null);
   assert.equal(businessEmail("x'@redes.dimeloweb.com"), null);
   assert.equal(businessEmail(null), null);

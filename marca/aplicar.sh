@@ -418,7 +418,7 @@ literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !auth
   }
 
   if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {"
-# 13. dw15 (ticket de Autory, 2026-10-31): vista previa con sonido, fechas y subidor en español ---------------------
+# 13. dw15 (ticket de un cliente, 2026-10-31): vista previa con sonido, fechas y subidor en español ---------------------
 # La vista previa del video lleva botón de sonido (marca/archivos/.../helpers/video.or.image.tsx). Textos en inglés que
 # quedaban: textos.tsv § dw15. Aquí, los que no caben en una línea y el idioma de fechas y subidor (marca/.../espanol.ts).
 patron "$FRONT/components/new-layout/layout.component.tsx" 's{^(\x27use client\x27;\n)}{$1\nimport \x27\@gitroom/frontend/components/marca/espanol\x27;}'

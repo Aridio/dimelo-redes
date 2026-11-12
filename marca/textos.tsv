@@ -174,7 +174,7 @@ apps/frontend/src/components/launches/helpers/date.picker.tsx	'MMM D, h:mm A'	'D
 apps/frontend/src/components/preview/render.preview.date.tsx	'MMMM D, YYYY h:mm A'	'D MMMM YYYY, h:mm A'
 apps/frontend/src/components/notifications/notification.component.tsx	'MMM D, YYYY h:mm A'	'D MMM YYYY, h:mm A'
 apps/frontend/src/components/preview/comments.components.tsx	'MMM D, YYYY HH:mm'	'D MMM YYYY, HH:mm'
-# dw15 (ticket de Autory, 2026-10-31): textos que seguían en inglés
+# dw15 (ticket de un cliente, 2026-10-31): textos que seguían en inglés
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Public',	label: 'Público',
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Private',	label: 'Privado',
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label: 'Unlisted',	label: 'No listado',

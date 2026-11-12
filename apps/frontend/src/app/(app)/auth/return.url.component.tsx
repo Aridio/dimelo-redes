@@ -3,22 +3,13 @@
 import { useSearchParams } from 'next/navigation';
 import { FC, useCallback, useEffect } from 'react';
 
+import { rutaInterna } from './ruta.interna';
+
 // Only an address on this app, so signing in can never send someone to
-// another site or run a javascript: URL
-const sameOriginUrl = (url: string | null) => {
-  if (!url) {
-    return null;
-  }
-  try {
-    const parsed = new URL(url);
-    return parsed.origin === window.location.origin &&
-      parsed.protocol === window.location.protocol
-      ? parsed.toString()
-      : null;
-  } catch {
-    return null;
-  }
-};
+// another site or run a javascript: URL. Dímelo Redes (RED-03): always kept
+// as a relative path of this site (ruta.interna.ts)
+const sameOriginUrl = (url: string | null) =>
+  rutaInterna(url, window.location.origin);
 
 const ReturnUrlComponent: FC = () => {
   const params = useSearchParams();

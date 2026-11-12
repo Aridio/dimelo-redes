@@ -581,7 +581,6 @@ export class OrganizationRepository {
         users: {
           select: {
             role: true,
-            disabled: true,
             user: {
               select: {
                 email: true,

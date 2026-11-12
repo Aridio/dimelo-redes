@@ -67,7 +67,6 @@ apps/frontend/src/components/launches/ai.video.tsx	'Video generation failed'	'No
 apps/frontend/src/components/launches/ai.video.tsx	Generate	Generar
 apps/frontend/src/components/launches/general.preview.component.tsx	"Verified account"	"Cuenta verificada"
 apps/frontend/src/components/launches/helpers/date.picker.tsx	"Pick time"	"Elige la hora"
-apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Clear Thumbnail	Quitar miniatura
 apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Save Changes	Guardar cambios
 apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Cancel	Cancelar
 apps/frontend/src/components/launches/helpers/media.settings.component.tsx	>Back<	>Atrás<
@@ -88,7 +87,7 @@ apps/frontend/src/components/new-launch/editor.tsx	'Upload current in progress, 
 apps/frontend/src/components/new-launch/finisher/thread.finisher.tsx	>Add a thread finisher<	>Añadir cierre del hilo<
 apps/frontend/src/components/new-launch/manage.modal.tsx	'Save Set'	'Guardar plantilla'
 apps/frontend/src/components/new-launch/mention.component.tsx	We don't have autocomplete for this social media	No hay sugerencias para esta red
-apps/frontend/src/components/new-launch/mention.component.tsx	>No results found<	>Sin resultados<
+apps/frontend/src/components/new-launch/mention.component.tsx	No results found	Sin resultados
 apps/frontend/src/components/new-launch/providers/continue-provider/facebook/facebook.continue.tsx	'We recommend you to connect all the pages and all the businesses.'	'Te recomendamos conectar todas las páginas y todos los negocios.'
 apps/frontend/src/components/new-launch/providers/continue-provider/facebook/facebook.continue.tsx	"We couldn't find any business connected to the selected pages."	"No encontramos ningún negocio conectado a las páginas elegidas."
 apps/frontend/src/components/new-launch/providers/continue-provider/gmb/gmb.continue.tsx	"We couldn't find any business locations connected to your account."	"No encontramos ningún negocio conectado a tu cuenta."
@@ -148,7 +147,6 @@ apps/frontend/src/components/sets/sets.tsx	'Failed to save set'	'No se pudo guar
 apps/frontend/src/components/sets/sets.tsx	'Save as Set'	'Guardar como plantilla'
 apps/frontend/src/components/sets/sets.tsx	Add a set	Añadir plantilla
 apps/frontend/src/components/sets/sets.tsx	"Set Name"	"Nombre de la plantilla"
-apps/frontend/src/components/settings/metric.component.tsx	>Current Timezone<	>Zona horaria<
 apps/frontend/src/components/settings/signatures.component.tsx	'Signature deleted successfully'	'Firma borrada'
 apps/frontend/src/components/settings/signatures.component.tsx	"Write your signature..."	"Escribe tu firma..."
 apps/frontend/src/components/settings/signatures.component.tsx	"Auto add signature?"	"¿Añadir la firma sola?"
@@ -184,8 +182,6 @@ apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	l
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Title"	label="Título"
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Type"	label="Visibilidad"
 apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Tags"	label="Etiquetas"
-apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	label="Thumbnail"	label="Miniatura"
-apps/frontend/src/components/new-launch/providers/youtube/youtube.provider.tsx	Thumbnail picture (optional)	Imagen de miniatura (opcional)
 apps/frontend/src/components/new-launch/providers/youtube/youtube.preview.tsx	16.7M subscribers	16.7 M suscriptores
 apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	label: 'Post',	label: 'Publicación',
 apps/frontend/src/components/new-launch/providers/facebook/facebook.provider.tsx	label: 'Story',	label: 'Historia',
@@ -307,7 +303,9 @@ libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 
 libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Timeout downloading media, please try again'	value: 'Instagram tardó demasiado en descargar el archivo. Inténtalo de nuevo'
 libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Media expired, please upload again'	value: 'El archivo venció. Súbelo de nuevo'
 libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Failed to create media, please try again'	value: 'Instagram no pudo preparar el archivo. Inténtalo de nuevo'
-libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Unknown upload error, please try again'	value: 'Falló la subida. Inténtalo de nuevo'
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	"Instagram failed to upload the video. If it exceeds Instagram's limits (300MB, 1920px width, 25Mbps bitrate), export a smaller version and try again"	"Instagram no pudo subir el video. Si pasa de sus límites (300 MB, 1920 px de ancho, 25 Mbps), exporta una versión más ligera y vuelve a intentarlo"
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	'Instagram did not add the comment, the post itself was published. Please try again with different comment text'	'Instagram no agregó el comentario; la publicación sí salió. Inténtalo con otro texto'
+libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	"One of the collaborators could not be tagged, please check the username is correct, the account is public, and that it allows collaborator invites"	"No se pudo etiquetar a un colaborador: revisa que el usuario esté bien escrito, que la cuenta sea pública y que acepte invitaciones de colaboración"
 libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Media fetch failed, please try again'	value: 'Instagram no pudo descargar el archivo. Inténtalo de nuevo'
 libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Invalid thumbnail offset for video'	value: 'El momento elegido para la miniatura no es válido'
 libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts	value: 'Unsupported video format'	value: 'Formato de video no admitido'
@@ -360,9 +358,10 @@ libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts	value: '
 # dw15, revisión 1
 apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Capturing...'	'Tomando la imagen...'
 apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Select This Frame'	'Usar este momento'
-apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Current Thumbnail:	Miniatura actual:
-apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Edit Thumbnail'	'Cambiar miniatura'
-apps/frontend/src/components/launches/helpers/media.settings.component.tsx	'Create Thumbnail'	'Crear miniatura'
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	>Thumbnail:<	>Miniatura:<
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	Select Frame	Elegir un momento
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	From Gallery	De la biblioteca
+apps/frontend/src/components/launches/helpers/media.settings.component.tsx	title: 'Media Library',	title: 'Biblioteca de medios',
 apps/frontend/src/components/media/new.uploader.tsx	`File type "${fileType}" is not allowed for file "${file.name}". Allowed types: ${allowedFileTypes}`	`El tipo de archivo «${fileType}» de «${file.name}» no se admite. Se admiten: ${allowedFileTypes}`
 apps/frontend/src/components/media/new.uploader.tsx	`File type "${fileType}" is not allowed. Allowed types: ${allowedFileTypes}`	`El tipo de archivo «${fileType}» no se admite. Se admiten: ${allowedFileTypes}`
 apps/frontend/src/components/media/new.uploader.tsx	`Image file "${file.name}" is too large. Maximum size allowed is 30MB.`	`La imagen «${file.name}» pesa demasiado. El máximo es 30 MB.`

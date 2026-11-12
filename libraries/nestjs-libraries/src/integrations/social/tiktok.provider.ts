@@ -23,6 +23,10 @@ import { execFile } from 'child_process';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { getSsrfSafeDispatcher } from '@gitroom/nestjs-libraries/dtos/webhooks/ssrf.safe.dispatcher';
+import {
+  argumentosFfmpeg,
+  descargarConTope,
+} from '@gitroom/nestjs-libraries/integrations/social/tiktok.ligero';
 import { Integration } from '@prisma/client';
 import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
 
@@ -758,27 +762,38 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   // Re-encodes the video at ~2.5 Mbps / 1080p max into a temp file. Returns
   // undefined (send the original) if ffmpeg is missing, fails or takes over
   // 3 minutes, so lightening never blocks a post.
-  private lightenVideo(source: string): Promise<string | undefined> {
+  // RED-07: ffmpeg only ever reads a local file (tiktok.ligero.ts): a remote
+  // video is downloaded first through the SSRF-safe path, a local one must be
+  // inside UPLOAD_DIRECTORY.
+  private readonly lightened = new Set<string>();
+
+  private async lightenVideo(source: string): Promise<string | undefined> {
     const out = join(tmpdir(), `tiktok-${makeSecureId(12)}.mp4`);
+    const download = join(tmpdir(), `tiktok-${makeSecureId(12)}-original.mp4`);
+    let input: string;
+    try {
+      if (source.indexOf('http') === 0) {
+        await descargarConTope(source, download);
+        input = download;
+      } else {
+        input = this.localMediaPath(source, 'tiktok-error-upload');
+      }
+    } catch {
+      this.removeQuietly(download);
+      return undefined;
+    }
     return new Promise((resolve) => {
       execFile(
         'ffmpeg',
-        [
-          '-y', '-loglevel', 'error', '-i', source,
-          '-vf', "scale='min(1080,iw)':-2",
-          '-c:v', 'libx264', '-preset', 'veryfast',
-          '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k',
-          '-pix_fmt', 'yuv420p',
-          '-c:a', 'aac', '-b:a', '128k',
-          '-movflags', '+faststart',
-          out,
-        ],
+        argumentosFfmpeg(input, out),
         { timeout: 3 * 60 * 1000 },
         (err) => {
+          this.removeQuietly(download);
           if (err) {
             this.removeQuietly(out);
             return resolve(undefined);
           }
+          this.lightened.add(out);
           resolve(out);
         }
       );
@@ -786,6 +801,7 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   }
 
   private removeQuietly(path: string) {
+    this.lightened.delete(path);
     try {
       unlinkSync(path);
     } catch {}
@@ -832,10 +848,16 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
       return response.body;
     }
 
-    return createReadStream(this.localMediaPath(path, 'tiktok-error-upload'), {
-      start,
-      end,
-    });
+    // the lightened copy is our own temp file, outside UPLOAD_DIRECTORY
+    return createReadStream(
+      this.lightened.has(path)
+        ? path
+        : this.localMediaPath(path, 'tiktok-error-upload'),
+      {
+        start,
+        end,
+      }
+    );
   }
 
   // Streams the video bytes to the upload_url returned by the init call.

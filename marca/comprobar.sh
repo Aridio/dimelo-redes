@@ -18,7 +18,8 @@ ALCANCE=(apps/frontend/src libraries/react-shared-libraries/src libraries/nestjs
          libraries/helpers/src apps/backend/src apps/orchestrator/src)
 
 # Nombres internos que no llegan a la pantalla. Se borran de cada línea antes de buscar.
-PERMITIDO='@gitroom/[A-Za-z0-9_./-]+|@postiz/[A-Za-z0-9_./-]+|\b[A-Z0-9_]*POSTIZ[A-Z0-9_]*\b|gitroomhq/postiz-[a-z-]+'
+# Y la frase del enlace al código fuente, que dice de qué programa sale (RED-13, licencia AGPL)
+PERMITIDO='@gitroom/[A-Za-z0-9_./-]+|@postiz/[A-Za-z0-9_./-]+|\b[A-Z0-9_]*POSTIZ[A-Z0-9_]*\b|gitroomhq/postiz-[a-z-]+|basado en Postiz \(AGPL-3\.0\)'
 
 # 0. Que existe todo lo que se revisa (si Postiz mueve una carpeta, que no salga un 0 falso)
 for ruta in "${ALCANCE[@]}" libraries/react-shared-libraries/src/translation/locales/{es,en}/translation.json \
@@ -28,7 +29,7 @@ done
 
 # 1. El nombre con mayúscula, en cualquier parte del código (también lo oculto)
 while IFS= read -r linea; do resto "$linea"; done < <(
-  grep -rIn -E '\b(Postiz|Gitroom)\b' "${ALCANCE[@]}" 2>/dev/null)
+  grep -rIn -E '\b(Postiz|Gitroom)\b' "${ALCANCE[@]}" 2>/dev/null | perl -ne "s{\Qbasado en Postiz (AGPL-3.0)\E}{}g; print if /\\b(Postiz|Gitroom)\\b/")
 
 # 2. Enlaces y direcciones de Postiz
 while IFS= read -r linea; do resto "$linea"; done < <(

@@ -134,7 +134,9 @@ patron libraries/nestjs-libraries/src/database/prisma/users/users.service.ts \
 # a aparecer en otra versión): nombre, enlaces y direcciones de Postiz.
 ALCANCE=(apps/frontend/src libraries/react-shared-libraries/src libraries/nestjs-libraries/src
          libraries/helpers/src apps/backend/src apps/orchestrator/src)
-find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' -o -name '*.html' \) -print0 |
+# (menos el enlace al código fuente, que dice de qué programa sale: RED-13, licencia AGPL)
+find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' -o -name '*.html' \) \
+  -not -path '*/components/marca/codigo.fuente.tsx' -print0 |
   xargs -0 perl -i -pe '
     s{isGeneral(ServerSide\(\))? \? \x27Postiz\x27 : \x27Gitroom\x27}{\x27Dímelo Redes\x27}g;
     s{\x27Postiz/1\.0 \(\+https://postiz\.com\)\x27}{\x27DimeloRedes/1.0 (+https://dimeloweb.com)\x27}g;

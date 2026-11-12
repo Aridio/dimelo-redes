@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getCookieUrlFromDomain } from '@gitroom/helpers/subdomain/subdomain.management';
+import {
+  getCookieUrlFromDomain,
+  getLegacyCookieDomain,
+} from '@gitroom/helpers/subdomain/subdomain.management';
 import { internalFetch } from '@gitroom/helpers/utils/internal.fetch';
 import acceptLanguage from 'accept-language';
 import {
@@ -79,6 +82,15 @@ export async function proxy(request: NextRequest) {
       maxAge: -1,
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
     });
+    // Dímelo Redes (RED-09): también las cookies viejas de todo el dominio (si no, el navegador seguiría mandándolas)
+    for (const name of ['auth', 'showorg', 'impersonate']) {
+      response.headers.append(
+        'Set-Cookie',
+        `${name}=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=${getLegacyCookieDomain(
+          process.env.FRONTEND_URL!
+        )}${!process.env.NOT_SECURED ? '; Secure' : ''}`
+      );
+    }
     return response;
   }
 

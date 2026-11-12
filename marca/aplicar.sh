@@ -230,8 +230,9 @@ literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !auth
     } catch {
       direccion = '';
     }
+    // RED-09: la del dominio ya no la pone el servidor, pero el navegador puede tenerla de antes
     const variantes = [
-      getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+      getLegacyCookieDomain(process.env.FRONTEND_URL!),
       '',
       direccion,
     ].filter((dominio, i, todos) => todos.indexOf(dominio) === i);

@@ -59,7 +59,7 @@ while IFS=$'\t' read -r archivo viejo nuevo; do
   literal "$archivo" "$viejo" "$nuevo"
 done < "$MARCA/textos.tsv"
 
-# Idioma: solo español, también por defecto; sin selector de idioma (Aridio, 2026-10-25; inglés y francés, más adelante)
+# Idioma: solo español, también por defecto; sin selector de idioma (decisión del 2026-10-25; inglés y francés, más adelante)
 patron libraries/react-shared-libraries/src/translation/i18n.config.ts 's{export const fallbackLng = \x27en\x27;}{export const fallbackLng = \x27es\x27;}'
 patron libraries/react-shared-libraries/src/translation/i18n.config.ts 's{export const languages = \[.*?\];}{export const languages = [fallbackLng];}s'
 patron "$FRONT/components/new-layout/layout.component.tsx" 's{<div className="w-\[1px\] h-\[20px\] bg-blockSeparator mobile:hidden" />\s*<LanguageComponent />}{{/* Dímelo Redes: solo español */}}'
@@ -185,7 +185,7 @@ actual.update(nuevos)
 open(ruta, "w", encoding="utf-8").write(json.dumps(actual, ensure_ascii=False, indent=2) + "\n")
 PY
 
-# 8. Ajustes visuales (Aridio, 2026-10-27) ---------------------------------------------------------------
+# 8. Ajustes visuales (decisión del 2026-10-27) ---------------------------------------------------------------
 L="$FRONT/components/new-layout/layout.component.tsx"
 # Separación entre menú y contenido igual a la del borde de la ventana (12 px); el fondo se queda como en Postiz
 literal "$L" '<div className="flex-1 flex gap-[8px] mobile:gap-0">' '<div className="flex-1 flex gap-[12px] mobile:gap-0">'
@@ -338,7 +338,7 @@ literal "$FRONT/components/auth/register.tsx" "    const { token } = await (
     }
     const { token } = await res.json();"
 
-# 10. Detalles de dw6 (Aridio, 2026-10-27) -----------------------------------------------------------------------
+# 10. Detalles de dw6 (decisión del 2026-10-27) -----------------------------------------------------------------------
 # Analíticas: nombres de las métricas en español para todas las redes (marca/archivos/.../marca/metricas.ts),
 # también para lo que ya estaba guardado en la memoria intermedia
 IS=libraries/nestjs-libraries/src/database/prisma/integrations/integration.service.ts
@@ -396,7 +396,7 @@ literal "$UC" "      admin: !!user.isSuperAdmin,
         : {}),"
 patron "$UC" 's{^}{import { vistaDimelo } from \x27\@gitroom/backend/dimelo/dw11\x27;\n// dw11: lo que Mi Dímelo puso en la sesión al entrar (la clave ya la comprobó el middleware)\nconst sesionDe = (req: Request): unknown => {\n  try {\n    const auth = String(req.headers.auth \|\| req.cookies.auth \|\| \x27\x27);\n    return (AuthChecker.verifyJWT(auth) as { dimelo?: unknown }).dimelo;\n  } catch {\n    return undefined;\n  }\n};\n}'
 
-# 12. Entrada solo con Mi Dímelo (dw14, Aridio 2026-10-29) ---------------------------------------------------------
+# 12. Entrada solo con Mi Dímelo (dw14, 2026-10-29) ---------------------------------------------------------
 # Los negocios entran siempre por Mi Dímelo: /auth/login solo muestra «Iniciar sesión con Mi Dímelo»
 # (marca/archivos/.../components/marca/entrar.tsx), sin correo, contraseña, registro ni «¿Olvidaste tu contraseña?».
 # /auth (registro) lleva a /auth/login; solo se queda la vuelta de Mi Dímelo (/auth?provider=GENERIC&code=…).
@@ -436,7 +436,7 @@ patron "$NU" 's{^((?:\x27use client\x27;\n)?)}{$1import { uppyEs } from \x27\@gi
 patron "$FRONT/components/new-launch/providers/linkedin/linkedin.preview.tsx" 's{>\s*Founder\s*<}{>\n                      Fundador\n                    <}'
 patron "$FRONT/components/new-launch/providers/pinterest/pinterest.preview.tsx" 's{>\s*Save\s*</div>}{>\n          Guardar\n        </div>}'
 
-# 14. Menú de la persona arriba a la derecha (dw19, Aridio 2026-11-01) ----------------------------------------------
+# 14. Menú de la persona arriba a la derecha (dw19, 2026-11-01) ----------------------------------------------
 # Solo el círculo con las iniciales; al pulsarlo, Configuración, Volver a Mi Dímelo (o a DWA) y Cerrar sesión
 # (marca/archivos/.../components/marca/menu.usuario.tsx). Sustituye al bloque de abajo del menú lateral de dw11;
 # Configuración sigue también en el menú lateral. El logo de arriba a la izquierda lleva al calendario.

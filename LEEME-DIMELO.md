@@ -59,7 +59,7 @@ Además, al instalar: `EMAIL_FROM_NAME=Dímelo Redes` y, para quitar del todo re
 
 ## Seguridad propia (dw22, auditoría del 2026-11-11)
 
-Pruebas sin Nest ni base: `node --test --experimental-strip-types apps/backend/src/dimelo/*.spec.ts 'apps/frontend/src/app/(app)/auth/ruta.interna.spec.ts'` y, las que importan paquetes, `node --require @swc-node/register --test <archivo>.spec.ts` (después de `pnpm install`).
+Pruebas sin Nest ni base: `node --test --experimental-strip-types apps/backend/src/dimelo/{dw10,dw11,dw12,oculto,sesion}.spec.ts 'apps/frontend/src/app/(app)/auth/ruta.interna.spec.ts'` y, las que importan paquetes (entre ellas `apps/backend/src/dimelo/estado.spec.ts`), `node --require @swc-node/register --test <archivo>.spec.ts` (después de `pnpm install`).
 
 | Qué | Dónde (pruebas) |
 |---|---|

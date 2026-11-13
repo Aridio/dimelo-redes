@@ -1,6 +1,6 @@
 'use client';
 
-// Dímelo Redes (dw19, Aridio 2026-11-01): arriba a la derecha, solo un círculo con las iniciales del negocio. Al pulsarlo
+// Dímelo Redes (dw19, 2026-11-01): arriba a la derecha, solo un círculo con las iniciales del negocio. Al pulsarlo
 // se abre un menú con el nombre una vez, «Configuración», «Volver a Mi Dímelo» (o a DWA si entra alguien del equipo de
 // Dímelo Web) y «Cerrar sesión». Sustituye al bloque de abajo del menú lateral (dw11). Mismo alto que el sol y la campana.
 // «Volver» solo sale con la entrada de Mi Dímelo (el servidor manda `dimelo` en /user/self); también va en el menú lateral

@@ -165,7 +165,7 @@ libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts	name = 'Ti
 libraries/nestjs-libraries/src/integrations/social/gmb.provider.ts	name = 'Google My Business';	name = 'Google Business';
 # Vista previa pública en español
 apps/frontend/src/app/(provider)/layout.tsx	language="en"	language="es"
-# Detalles de dw6 (Aridio, 2026-10-27)
+# Detalles de dw6 (decisión del 2026-10-27)
 apps/frontend/src/components/launches/general.preview.component.tsx	'Global Edit'	'Para todos los canales'
 apps/frontend/src/components/launches/calendar.tsx	${time === 12 ? 12 : time % 12}:00	${time % 12 || 12}:00
 apps/frontend/src/components/launches/calendar.tsx	'dddd, MMMM D, YYYY'	'dddd, D MMMM YYYY'

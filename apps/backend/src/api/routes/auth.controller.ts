@@ -54,7 +54,7 @@ export class AuthController {
     @UserAgent() userAgent: string
   ) {
     // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     try {
       const getOrgFromCookie = this._authService.getOrgFromCookie(
         req?.cookies?.org
@@ -130,7 +130,7 @@ export class AuthController {
     @UserAgent() userAgent: string
   ) {
     // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     try {
       const getOrgFromCookie = this._authService.getOrgFromCookie(
         req?.cookies?.org
@@ -190,7 +190,7 @@ export class AuthController {
   @Post('/forgot')
   async forgot(@Body() body: ForgotPasswordDto) {
     // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     try {
       await this._authService.forgot(body.email);
       return {
@@ -206,7 +206,7 @@ export class AuthController {
   @Post('/forgot-return')
   async forgotReturn(@Body() body: ForgotReturnPasswordDto) {
     // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     const reset = await this._authService.forgotReturn(body);
     return {
       reset: !!reset,
@@ -255,7 +255,7 @@ export class AuthController {
     @Res({ passthrough: false }) response: Response
   ) {
     // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     const activate = await this._authService.activate(
       code,
       datafast_visitor_id
@@ -287,7 +287,7 @@ export class AuthController {
 
   @Post('/resend-activation')
   async resendActivation(@Body() body: ResendActivationDto) {
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     try {
       await this._authService.resendActivationEmail(body.email);
       return {

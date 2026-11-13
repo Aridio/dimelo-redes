@@ -250,7 +250,7 @@ export class UsersController {
   @CheckPolicies([AuthorizationActions.Create, Sections.ADMIN])
   async rotateApiKey(@GetOrgFromRequest() organization: Organization) {
     // La clave de la API no se entrega al navegador.
-    throw new NotFoundException();
+    if (process.env.DIMELO_ENTRADA_LOCAL !== 'si') throw new NotFoundException();
     return this._orgService.updateApiKey(organization.id);
   }
 

@@ -396,7 +396,8 @@
       "ws@>=7 <7.5.11": "^7.5.11",
       "vite@>=6 <6.4.4": "^6.4.4",
       "browserslist@<4.28.7": "^4.28.7",
-      "vitest@>=3 <3.2.6": "^3.2.6"
+      "vitest@>=3 <3.2.6": "^3.2.6",
+      "prosemirror-model": "^1.25.13"
     },
     "onlyBuiltDependencies": [
       "bcrypt"

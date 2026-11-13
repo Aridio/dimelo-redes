@@ -1,0 +1,78 @@
+# Dímelo Redes (RED-11): cada lunes compara este fork con Postiz (gitroomhq/postiz-app) y, si hay una versión estable
+# nueva, arreglos de seguridad que no están aquí, avisos de seguridad publicados o dependencias con avisos altos o
+# críticos, abre (o actualiza) un aviso en Issues. No construye ni publica nada. Procedimiento: LEEME-DIMELO.md
+# § «Pasar a una versión nueva de Postiz». También se puede lanzar a mano desde la pestaña Actions.
+name: Vigilar Postiz
+
+on:
+  schedule:
+    - cron: '17 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  comparar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Comparar con Postiz
+        id: comparar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git remote add original https://github.com/gitroomhq/postiz-app.git
+          git fetch --quiet --tags original main
+          base="$(git merge-base HEAD original/main)"
+          base_etiqueta="$(git describe --tags --abbrev=0 "$base" 2>/dev/null || echo "$base")"
+          ultima="$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --merged original/main --sort=-v:refname | grep -v -- '-' | head -1)"
+          detras="$(git rev-list --count "$base..original/main")"
+          arreglos="$(git log --no-merges --format='- `%h` %ad %s' --date=short "$base..original/main" \
+            | grep -i -E 'secur|ssrf|xss|csrf|cve|ghsa|bypass|inject|traversal|vulnerab|sanitiz|escape|auth' || true)"
+          avisos="$(gh api 'repos/gitroomhq/postiz-app/security-advisories?per_page=20' \
+            --jq '.[] | "- \(.published_at[0:10]) \(.severity) \(.ghsa_id): \(.summary)"' 2>/dev/null)" || avisos='- (no se pudieron leer)'
+          corepack enable >/dev/null 2>&1 || npm install -g pnpm@10.6.1 >/dev/null
+          auditoria="$({ pnpm audit --prod --json 2>/dev/null || true; } | python3 -c 'import json,sys; m=json.load(sys.stdin).get("metadata",{}).get("vulnerabilities",{}); print("críticos %d, altos %d, moderados %d" % (m.get("critical",0), m.get("high",0), m.get("moderate",0)))')" || auditoria='no se pudo calcular'
+          {
+            echo "## Postiz va por delante"
+            echo
+            echo "- Base de este fork: \`$base_etiqueta\` (\`${base:0:8}\`)"
+            echo "- Última versión estable de Postiz: \`$ultima\`"
+            echo "- Commits de Postiz que no están aquí: **$detras**"
+            echo "- \`pnpm audit --prod\` de esta rama: $auditoria"
+            echo
+            echo "### Commits del original que parecen de seguridad"
+            echo "${arreglos:-- ninguno}"
+            echo
+            echo "### Avisos de seguridad publicados por Postiz (últimos 20)"
+            echo "$avisos"
+            echo
+            echo "Qué hacer: LEEME-DIMELO.md, «Pasar a una versión nueva de Postiz»."
+          } > aviso.md
+          avisar=no
+          if [ "$base_etiqueta" != "$ultima" ] || [ -n "$arreglos" ] || ! echo "$auditoria" | grep -q 'críticos 0, altos 0'; then
+            avisar=si
+          fi
+          echo "avisar=$avisar" >> "$GITHUB_OUTPUT"
+          cat aviso.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Abrir o actualizar el aviso
+        if: steps.comparar.outputs.avisar == 'si'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          titulo='Postiz va por delante: revisar y subir la base'
+          numero="$(gh issue list --state open --search "\"$titulo\" in:title" --json number --jq '.[0].number // empty')"
+          if [ -n "$numero" ]; then
+            gh issue comment "$numero" --body-file aviso.md
+          else
+            gh issue create --title "$titulo" --body-file aviso.md
+          fi

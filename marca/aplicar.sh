@@ -239,7 +239,8 @@ literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !auth
       direccion,
     ].filter((dominio, i, todos) => todos.indexOf(dominio) === i);
     const seguro = !process.env.NOT_SECURED ? '; Secure' : '';
-    for (const name of ['auth', 'showorg', 'impersonate']) {
+    // RR-01: también el state y la invitación que dw21 dejaba en .dimeloweb.com (con dos, el servidor leía la vieja)
+    for (const name of ['auth', 'showorg', 'impersonate', 'oauth_state', 'org']) {
       for (const dominio of variantes) {
         topResponse.headers.append(
           'Set-Cookie',
@@ -292,9 +293,9 @@ literal "$AS" "    if (checkExists) {
 
     return { token };"
 literal apps/backend/src/api/routes/auth.controller.ts "      state,
-      req?.cookies?.oauth_state
+      req?.cookies?.[getOauthStateCookieName()]
     );" "      state,
-      req?.cookies?.oauth_state,
+      req?.cookies?.[getOauthStateCookieName()],
       req.ip,
       String(req.headers['user-agent'] || '')
     );"

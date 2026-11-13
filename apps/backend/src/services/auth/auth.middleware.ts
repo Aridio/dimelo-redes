@@ -5,6 +5,7 @@ import { User } from '@prisma/client';
 import { OrganizationService } from '@gitroom/nestjs-libraries/database/prisma/organizations/organization.service';
 import { UsersService } from '@gitroom/nestjs-libraries/database/prisma/users/users.service';
 import {
+  countCookie,
   getCookieUrlFromDomain,
   getLegacyCookieDomain,
 } from '@gitroom/helpers/subdomain/subdomain.management';
@@ -26,13 +27,24 @@ export const removeAuth = (res: Response) => {
     expires: new Date(0),
     maxAge: -1,
   });
-  // Dímelo Redes (RED-09): también la cookie vieja de todo el dominio
-  res.cookie('auth', '', {
-    domain: getLegacyCookieDomain(process.env.FRONTEND_URL!),
-    ...(!process.env.NOT_SECURED ? { secure: true, httpOnly: true } : {}),
-    expires: new Date(0),
-    maxAge: -1,
-  });
+  // Dímelo Redes (RED-09): también la cookie vieja de todo el dominio y (RR-04) la de esta dirección con Domain (dw11)
+  let hostname = '';
+  try {
+    hostname = new URL(process.env.FRONTEND_URL!).hostname;
+  } catch {
+    hostname = '';
+  }
+  const legacy = getLegacyCookieDomain(process.env.FRONTEND_URL!);
+  for (const domain of [legacy, hostname].filter(
+    (d, i, all) => d && all.indexOf(d) === i
+  )) {
+    res.cookie('auth', '', {
+      domain,
+      ...(!process.env.NOT_SECURED ? { secure: true, httpOnly: true } : {}),
+      expires: new Date(0),
+      maxAge: -1,
+    });
+  }
   res.header('logout', 'true');
 };
 
@@ -45,6 +57,12 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     const auth = req.headers.auth || req.cookies.auth;
     if (!auth) {
+      throw new HttpForbiddenException();
+    }
+    // Dímelo Redes (RR-04): con dos cookies auth (la de esta dirección y una de todo el dominio, quizá de otro negocio)
+    // no se sabe cuál es cuál y cookie-parser daría la primera, la vieja. No se usa ninguna: se borran las dos (removeAuth)
+    // y se vuelve a entrar por Mi Dímelo, que deja solo la de esta dirección.
+    if (!req.headers.auth && countCookie(req.headers.cookie, 'auth') > 1) {
       throw new HttpForbiddenException();
     }
     try {

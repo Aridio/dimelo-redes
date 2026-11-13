@@ -20,7 +20,11 @@ import { ForgotReturnPasswordDto } from '@gitroom/nestjs-libraries/dtos/auth/for
 import { ForgotPasswordDto } from '@gitroom/nestjs-libraries/dtos/auth/forgot.password.dto';
 import { ResendActivationDto } from '@gitroom/nestjs-libraries/dtos/auth/resend-activation.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { getCookieUrlFromDomain } from '@gitroom/helpers/subdomain/subdomain.management';
+import {
+  getCookieUrlFromDomain,
+  getLegacyCookieDomain,
+  getOauthStateCookieName,
+} from '@gitroom/helpers/subdomain/subdomain.management';
 import { EmailService } from '@gitroom/nestjs-libraries/services/email.service';
 import { RealIP } from 'nestjs-real-ip';
 import { UserAgent } from '@gitroom/nestjs-libraries/user/user.agent';
@@ -224,7 +228,15 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response
   ) {
     const state = `login-${makeSecureId(16)}`;
-    response.cookie('oauth_state', state, {
+    // Dímelo Redes (RR-01): la vieja de todo el dominio (dw21) fuera; la nueva solo de esta dirección (__Host-)
+    if (!process.env.NOT_SECURED) {
+      response.clearCookie('oauth_state', {
+        domain: getLegacyCookieDomain(process.env.FRONTEND_URL!),
+        secure: true,
+        httpOnly: true,
+      });
+    }
+    response.cookie(getOauthStateCookieName(), state, {
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
       ...(!process.env.NOT_SECURED
         ? {
@@ -353,7 +365,7 @@ export class AuthController {
       code,
       redirect_uri,
       state,
-      req?.cookies?.oauth_state
+      req?.cookies?.[getOauthStateCookieName()]
     );
 
     if (token) {

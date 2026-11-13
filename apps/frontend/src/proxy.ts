@@ -83,7 +83,7 @@ export async function proxy(request: NextRequest) {
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
     });
     // Dímelo Redes (RED-09): también las cookies viejas de todo el dominio (si no, el navegador seguiría mandándolas)
-    for (const name of ['auth', 'showorg', 'impersonate']) {
+    for (const name of ['auth', 'showorg', 'impersonate', 'oauth_state', 'org']) {
       response.headers.append(
         'Set-Cookie',
         `${name}=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=${getLegacyCookieDomain(

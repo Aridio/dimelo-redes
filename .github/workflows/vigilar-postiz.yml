@@ -1,0 +1,54 @@
+# Dímelo Redes se hace sobre Postiz. Cada lunes mira si Postiz (main) trae cambios
+# que parecen arreglos de seguridad y aún no están aquí. Si hay alguno, abre o
+# actualiza una sola issue en este repositorio con el recuento y la lista.
+name: Vigilar Postiz
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  vigilar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Buscar arreglos de seguridad pendientes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch https://github.com/gitroomhq/postiz-app.git main
+          BASE=$(git merge-base HEAD FETCH_HEAD)
+          TOTAL=$(git rev-list --count $BASE..FETCH_HEAD)
+          LISTA=$(git log --oneline $BASE..FETCH_HEAD | grep -iE 'secur|ssrf|xss|jwt|cve|vuln|bypass|inject|redirect|travers' || true)
+          if [ -z "$LISTA" ]; then
+            echo "Sin arreglos de seguridad pendientes."
+            exit 0
+          fi
+          CUERPO="$RUNNER_TEMP/cuerpo.md"
+          {
+            echo "Postiz tiene $TOTAL cambios nuevos desde nuestra base. Estos parecen arreglos de seguridad y aún no están aquí:"
+            echo
+            echo '```'
+            echo "$LISTA"
+            echo '```'
+            echo
+            echo "Revisar y traer lo que aplique: https://github.com/gitroomhq/postiz-app/commits/main"
+            echo
+            echo "Esta issue se actualiza cada lunes."
+          } > "$CUERPO"
+          TITULO="Postiz: arreglos de seguridad por traer"
+          NUM=$(gh issue list --state open --limit 200 --json number,title -q ".[] | select(.title==\"$TITULO\") | .number" | head -n 1)
+          if [ -n "$NUM" ]; then
+            gh issue edit "$NUM" --body-file "$CUERPO"
+          else
+            gh issue create --title "$TITULO" --body-file "$CUERPO"
+          fi

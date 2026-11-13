@@ -304,9 +304,11 @@ export class AuthService {
   ) {
     // the mobile app passes redirect_uri and keeps no cookies, the web flow
     // never passes it, so the state nonce is only enforced for the web flow
+    // GENERIC (Dimelo Redes) always checks the state, even with redirect_uri
+    const alwaysState = provider.toUpperCase() === 'GENERIC';
     if (
       !process.env.NOT_SECURED &&
-      !redirectUri &&
+      (alwaysState || !redirectUri) &&
       (!state || state !== stateCookie)
     ) {
       throw new Error('Invalid state');

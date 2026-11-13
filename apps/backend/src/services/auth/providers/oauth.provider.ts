@@ -37,12 +37,15 @@ export class OauthProvider extends AuthProviderAbstract {
   }
 
   generateLink(query?: { state?: string }): string {
+    if (!query?.state) {
+      throw new Error('Missing state');
+    }
     const { authUrl, clientId, frontendUrl } = this.getConfig();
     const params = new URLSearchParams({
       client_id: clientId,
       scope: 'openid profile email',
       response_type: 'code',
-      state: query?.state || 'login',
+      state: query.state,
       redirect_uri: `${frontendUrl}/settings`,
     });
 

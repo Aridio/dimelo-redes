@@ -18,7 +18,7 @@ ALCANCE=(apps/frontend/src libraries/react-shared-libraries/src libraries/nestjs
          libraries/helpers/src apps/backend/src apps/orchestrator/src)
 
 # Nombres internos que no llegan a la pantalla. Se borran de cada línea antes de buscar.
-PERMITIDO='@gitroom/[A-Za-z0-9_./-]+|@postiz/[A-Za-z0-9_./-]+|\b[A-Z0-9_]*POSTIZ[A-Z0-9_]*\b|gitroomhq/postiz-[a-z-]+'
+PERMITIDO='@gitroom/[A-Za-z0-9_./-]+|@postiz/[A-Za-z0-9_./-]+|\b[A-Z0-9_]*POSTIZ[A-Z0-9_]*\b|gitroomhq/postiz-[a-z-]+|basado en Postiz'
 
 # 0. Que existe todo lo que se revisa (si Postiz mueve una carpeta, que no salga un 0 falso)
 for ruta in "${ALCANCE[@]}" libraries/react-shared-libraries/src/translation/locales/{es,en}/translation.json \

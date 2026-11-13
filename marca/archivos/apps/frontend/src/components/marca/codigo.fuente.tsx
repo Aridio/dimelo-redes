@@ -1,5 +1,10 @@
+
 // Dímelo Redes: enlace discreto al código fuente (licencia AGPL-3.0 de Postiz).
-export const CODIGO_FUENTE_URL = 'https://github.com/Aridio/dimelo-redes';
+// Si hay versión publicada, el enlace va a esa etiqueta del repositorio.
+const VERSION = process.env.NEXT_PUBLIC_VERSION;
+export const CODIGO_FUENTE_URL = VERSION
+  ? `https://github.com/Aridio/dimelo-redes/tree/${VERSION}`
+  : 'https://github.com/Aridio/dimelo-redes';
 
 export const CodigoFuente = () => {
   return (
@@ -9,7 +14,7 @@ export const CodigoFuente = () => {
       rel="noopener noreferrer"
       className="text-[12px] opacity-60 hover:opacity-100 hover:underline transition-opacity"
     >
-      Código fuente
+      Código fuente (basado en Postiz, AGPL-3.0)
     </a>
   );
 };

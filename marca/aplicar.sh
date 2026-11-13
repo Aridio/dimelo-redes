@@ -234,6 +234,7 @@ literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !auth
       getCookieUrlFromDomain(process.env.FRONTEND_URL!),
       '',
       direccion,
+      direccion ? '.' + direccion.split('.').slice(-2).join('.') : '',
     ].filter((dominio, i, todos) => todos.indexOf(dominio) === i);
     const seguro = !process.env.NOT_SECURED ? '; Secure' : '';
     for (const name of ['auth', 'showorg', 'impersonate']) {
@@ -296,9 +297,9 @@ literal apps/backend/src/api/routes/auth.controller.ts "      state,
       String(req.headers['user-agent'] || '')
     );"
 
-# La sesión que abre Mi Dímelo dura un día (no un año): quitar Dímelo Redes en DWA corta el acceso en menos de un día
-patron apps/backend/src/api/routes/auth.controller.ts 's{(return response\.json\(\{ token \}\);.*?expires: new Date\(Date\.now\(\) \+ )1000 \* 60 \* 60 \* 24 \* 365}{${1}1000 * 60 * 60 * (provider.toUpperCase() === "GENERIC" ? 24 : 24 * 365)}s'
-# Y la clave de esa sesión vence al día también en el servidor (aunque alguien la copie del navegador)
+# La sesión que abre Mi Dímelo dura ocho horas (no un año): quitar Dímelo Redes en DWA corta el acceso en menos de un día
+patron apps/backend/src/api/routes/auth.controller.ts 's{(return response\.json\(\{ token \}\);.*?expires: new Date\(Date\.now\(\) \+ )1000 \* 60 \* 60 \* 24 \* 365}{${1}1000 * 60 * 60 * (provider.toUpperCase() === "GENERIC" ? 8 : 24 * 365)}s'
+# Y la clave de esa sesión vence a las ocho horas también en el servidor (aunque alguien la copie del navegador)
 literal "$AS" "      delete user.password;
     }
     return AuthChecker.signJWT(user);" "      delete user.password;
@@ -306,7 +307,7 @@ literal "$AS" "      delete user.password;
     if (user.providerName === Provider.GENERIC) {
       return AuthChecker.signJWT({
         ...user,
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 8,
       });
     }
     return AuthChecker.signJWT(user);"
@@ -411,7 +412,7 @@ literal "$FRONT/proxy.ts" "  if (nextUrl.pathname.startsWith('/modal/') && !auth
   }
 
   if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {"
-# 13. dw15 (ticket de Autory, 2026-10-31): vista previa con sonido, fechas y subidor en español ---------------------
+# 13. dw15 (ticket de un cliente, 2026-10-31): vista previa con sonido, fechas y subidor en español ---------------------
 # La vista previa del video lleva botón de sonido (marca/archivos/.../helpers/video.or.image.tsx). Textos en inglés que
 # quedaban: textos.tsv § dw15. Aquí, los que no caben en una línea y el idioma de fechas y subidor (marca/.../espanol.ts).
 patron "$FRONT/components/new-layout/layout.component.tsx" 's{^(\x27use client\x27;\n)}{$1\nimport \x27\@gitroom/frontend/components/marca/espanol\x27;}'

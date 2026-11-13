@@ -6,8 +6,8 @@ import { panelOrigen, sesionDimelo, vistaDimelo } from './dw11.ts';
 const ENV = { POSTIZ_OAUTH_AUTH_URL: 'https://admin.dimeloweb.com/panel/redes/autorizar' };
 
 test('sesión: persona limpia, equipo solo si es true, vuelta solo a páginas del panel', () => {
-  assert.deepEqual(sesionDimelo({ persona: '  Aridio \n Santana ', equipo: true, volver: '/panel/clients/cliente-a' }), {
-    persona: 'Aridio Santana',
+  assert.deepEqual(sesionDimelo({ persona: '  Ana \n Pérez ', equipo: true, volver: '/panel/clients/cliente-a' }), {
+    persona: 'Ana Pérez',
     equipo: true,
     volver: '/panel/clients/cliente-a',
   });
@@ -31,9 +31,9 @@ test('origen del panel: el del acceso de Mi Dímelo; si falta o es raro, el de s
 });
 
 test('vista del menú: negocio, persona y dirección completa; sesión vieja sin datos', () => {
-  assert.deepEqual(vistaDimelo({ persona: 'Aridio Santana', equipo: true, volver: '/panel/clients/c1' }, 'Christopher Ventura', ENV), {
-    negocio: 'Christopher Ventura',
-    persona: 'Aridio Santana',
+  assert.deepEqual(vistaDimelo({ persona: 'Ana Pérez', equipo: true, volver: '/panel/clients/c1' }, 'Negocio Prueba', ENV), {
+    negocio: 'Negocio Prueba',
+    persona: 'Ana Pérez',
     equipo: true,
     volver: 'https://admin.dimeloweb.com/panel/clients/c1',
   });

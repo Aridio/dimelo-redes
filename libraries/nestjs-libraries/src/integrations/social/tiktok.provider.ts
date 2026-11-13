@@ -759,12 +759,20 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   // undefined (send the original) if ffmpeg is missing, fails or takes over
   // 3 minutes, so lightening never blocks a post.
   private lightenVideo(source: string): Promise<string | undefined> {
+    // solo videos de nuestro almacenamiento; el resto se manda original
+    const bucket = process.env.CLOUDFLARE_BUCKET_URL;
+    if (!bucket || !source.startsWith(bucket)) {
+      return Promise.resolve(undefined);
+    }
     const out = join(tmpdir(), `tiktok-${makeSecureId(12)}.mp4`);
     return new Promise((resolve) => {
       execFile(
         'ffmpeg',
         [
-          '-y', '-loglevel', 'error', '-i', source,
+          '-y', '-loglevel', 'error',
+          '-protocol_whitelist', 'https,tls,tcp',
+          '-format_whitelist', 'mov,mp4,m4a,3gp,3g2,mj2,matroska,webm',
+          '-i', source,
           '-vf', "scale='min(1080,iw)':-2",
           '-c:v', 'libx264', '-preset', 'veryfast',
           '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k',

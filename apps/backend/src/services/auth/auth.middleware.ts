@@ -16,7 +16,7 @@ export const removeAuth = (res: Response) => {
       ? {
           secure: true,
           httpOnly: true,
-          sameSite: 'none',
+          sameSite: 'lax',
         }
       : {}),
     expires: new Date(0),

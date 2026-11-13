@@ -130,13 +130,8 @@ export class UsersController {
         : organization?.isTrailing,
       allowTrial: organization?.allowTrial,
       streakSince: organization?.streakSince || null,
-      publicApi:
-        // @ts-ignore
-        organization?.users[0]?.role === 'SUPERADMIN' ||
-        // @ts-ignore
-        organization?.users[0]?.role === 'ADMIN'
-          ? organization?.apiKey
-          : '',
+      // Dimelo Redes: la clave de la API no llega al navegador; el panel la pide por dentro
+      publicApi: '',
     };
   }
 
@@ -173,7 +168,7 @@ export class UsersController {
         ? {
             secure: true,
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
           }
         : {}),
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
@@ -319,7 +314,7 @@ export class UsersController {
         ? {
             secure: true,
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
           }
         : {}),
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
@@ -378,7 +373,7 @@ export class UsersController {
         ? {
             secure: true,
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
           }
         : {}),
       maxAge: -1,
@@ -391,7 +386,7 @@ export class UsersController {
         ? {
             secure: true,
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
           }
         : {}),
       maxAge: -1,
@@ -404,7 +399,7 @@ export class UsersController {
         ? {
             secure: true,
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
           }
         : {}),
       maxAge: -1,
@@ -442,7 +437,7 @@ export class UsersController {
           ? {
               secure: true,
               httpOnly: true,
-              sameSite: 'none',
+              sameSite: 'lax',
             }
           : {}),
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),

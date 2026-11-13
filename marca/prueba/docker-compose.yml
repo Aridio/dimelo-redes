@@ -32,7 +32,7 @@ services:
       redes-redis: { condition: service_healthy }
       temporal: { condition: service_healthy }
   redes-postgres:
-    image: postgres:17-alpine
+    image: postgres:17-alpine@sha256:e5d2edd28b1f8d40a0a6c0c9cdc545b19b56a0d5d88f94bc11a97d970d4700d0
     environment:
       POSTGRES_USER: prueba
       POSTGRES_PASSWORD: prueba
@@ -42,13 +42,13 @@ services:
       interval: 5s
       retries: 20
   redes-redis:
-    image: redis:7.2
+    image: redis:7.2@sha256:5b816bb37d9707a70f10ef5002ecf8ee431750d397010fc4314c93dca887962f
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep -q PONG"]
       interval: 5s
       retries: 20
   temporal-postgres:
-    image: postgres:16
+    image: postgres:16@sha256:f9a7b9ebf6f56201f949db745e47bc423c0f0f8294bafe991cc10bf74b029657
     environment:
       POSTGRES_USER: temporal
       POSTGRES_PASSWORD: temporal
@@ -58,7 +58,7 @@ services:
       retries: 20
   temporal-elasticsearch:
     # Postiz registra más campos de búsqueda de los que Temporal admite sin Elasticsearch
-    image: elasticsearch:7.17.27
+    image: elasticsearch:7.17.27@sha256:9a6443f55243f6acbfeb4a112d15eb3b9aac74bf25e0e39fa19b3ddd3a6879d0
     environment:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
@@ -69,7 +69,7 @@ services:
       interval: 10s
       retries: 30
   temporal:
-    image: temporalio/auto-setup:1.28.1
+    image: temporalio/auto-setup:1.28.1@sha256:607d68caa111338d754771efb876c92dfcdae06d056e4530bb31cd0f37406e6a
     depends_on:
       temporal-postgres: { condition: service_healthy }
       temporal-elasticsearch: { condition: service_healthy }

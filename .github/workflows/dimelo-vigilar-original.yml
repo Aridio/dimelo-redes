@@ -1,6 +1,7 @@
-# Dímelo Redes (RED-11): cada lunes compara este fork con Postiz (gitroomhq/postiz-app) y, si hay una versión estable
-# nueva, arreglos de seguridad que no están aquí, avisos de seguridad publicados o dependencias con avisos altos o
-# críticos, abre (o actualiza) un aviso en Issues. No construye ni publica nada. Procedimiento: LEEME-DIMELO.md
+# Dímelo Redes (RED-11): cada lunes compara este fork con Postiz (gitroomhq/postiz-app) y, solo si Postiz tiene una
+# versión estable etiquetada más nueva que la base de este fork, abre (o actualiza) un aviso en Issues con sus commits
+# de seguridad, los avisos publicados y el `pnpm audit` de esta rama. El resumen sale cada semana en la ejecución.
+# No construye ni publica nada. Procedimiento: LEEME-DIMELO.md
 # § «Pasar a una versión nueva de Postiz». También se puede lanzar a mano desde la pestaña Actions.
 name: Vigilar Postiz
 
@@ -30,11 +31,13 @@ jobs:
           set -euo pipefail
           git remote add original https://github.com/gitroomhq/postiz-app.git
           git fetch --quiet --tags original main
-          base="$(git merge-base HEAD original/main)"
-          base_etiqueta="$(git describe --tags --abbrev=0 "$base" 2>/dev/null || echo "$base")"
-          ultima="$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --merged original/main --sort=-v:refname | grep -v -- '-' | head -1)"
-          detras="$(git rev-list --count "$base..original/main")"
-          arreglos="$(git log --no-merges --format='- `%h` %ad %s' --date=short "$base..original/main" \
+          # La base es la última versión estable de Postiz (vX.Y.Z, sin «-») que ya está dentro de esta rama; se compara
+          # con la última estable etiquetada en Postiz. Solo se avisa si esa es más nueva (RR-06: antes avisaba siempre).
+          base_etiqueta="$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --merged HEAD | grep -v -- '-' | sort -V | tail -1)"
+          ultima="$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' | grep -v -- '-' | sort -V | tail -1)"
+          base="$(git rev-parse "$base_etiqueta^{commit}")"
+          detras="$(git rev-list --count "$base..$ultima")"
+          arreglos="$(git log --no-merges --format='- `%h` %ad %s' --date=short "$base..$ultima" \
             | grep -i -E 'secur|ssrf|xss|csrf|cve|ghsa|bypass|inject|traversal|vulnerab|sanitiz|escape|auth' || true)"
           avisos="$(gh api 'repos/gitroomhq/postiz-app/security-advisories?per_page=20' \
             --jq '.[] | "- \(.published_at[0:10]) \(.severity) \(.ghsa_id): \(.summary)"' 2>/dev/null)" || avisos='- (no se pudieron leer)'
@@ -45,10 +48,10 @@ jobs:
             echo
             echo "- Base de este fork: \`$base_etiqueta\` (\`${base:0:8}\`)"
             echo "- Última versión estable de Postiz: \`$ultima\`"
-            echo "- Commits de Postiz que no están aquí: **$detras**"
+            echo "- Commits de Postiz entre la base y esa versión: **$detras**"
             echo "- \`pnpm audit --prod\` de esta rama: $auditoria"
             echo
-            echo "### Commits del original que parecen de seguridad"
+            echo "### Commits de esa versión que parecen de seguridad"
             echo "${arreglos:-- ninguno}"
             echo
             echo "### Avisos de seguridad publicados por Postiz (últimos 20)"
@@ -57,7 +60,7 @@ jobs:
             echo "Qué hacer: LEEME-DIMELO.md, «Pasar a una versión nueva de Postiz»."
           } > aviso.md
           avisar=no
-          if [ "$base_etiqueta" != "$ultima" ] || [ -n "$arreglos" ] || ! echo "$auditoria" | grep -q 'críticos 0, altos 0'; then
+          if [ "$base_etiqueta" != "$ultima" ] && [ "$(printf '%s\n%s\n' "$base_etiqueta" "$ultima" | sort -V | tail -1)" = "$ultima" ]; then
             avisar=si
           fi
           echo "avisar=$avisar" >> "$GITHUB_OUTPUT"

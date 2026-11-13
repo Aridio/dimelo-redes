@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { fetchPublicHttps } from '@gitroom/nestjs-libraries/dtos/webhooks/ssrf.safe.dispatcher';
 import { AutopostRepository } from '@gitroom/nestjs-libraries/database/prisma/autopost/autopost.repository';
 import { AutopostDto } from '@gitroom/nestjs-libraries/dtos/autopost/autopost.dto';
@@ -61,6 +61,8 @@ const dallePrompt = z.object({
 
 @Injectable()
 export class AutopostService {
+  private readonly _logger = new Logger(AutopostService.name);
+
   constructor(
     private _autopostsRepository: AutopostRepository,
     private _temporalService: TemporalService,
@@ -325,6 +327,14 @@ export class AutopostService {
   async startAutopost(id: string) {
     const getPost = await this._autopostsRepository.getAutopost(id);
     if (!getPost || !getPost.active) {
+      return;
+    }
+
+    // Dímelo Redes (RED-06, RR-03): solo se descarga https; uno guardado antes con http:// se omite, sin romper nada
+    if (!/^https:\/\//i.test(getPost.url || '')) {
+      this._logger.warn(
+        `Autopost ${id} omitido: su dirección no empieza por https:// (solo se leen direcciones https). Hay que cambiarla en Autopost.`
+      );
       return;
     }
 

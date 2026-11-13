@@ -26,6 +26,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw19 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw19` (sobre dw18: menú de la persona arriba a la derecha, solo un círculo con las iniciales, con Configuración, Volver a Mi Dímelo o a DWA y Cerrar sesión; sin el bloque de abajo del menú lateral ni el botón suelto de Configuración; «Cerrar sesión» a secas; el logo lleva al calendario) |
 | dw20 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw20` (sobre dw19: el círculo con el mismo alto y centro que el sol y la campana, con separador; hover del menú legible en claro y oscuro y foco con teclado; Configuración vuelve al menú lateral) |
 | dw21 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw21` (sobre dw20: el menú del círculo se pinta encima de todo, también de filtros y selectores; «Volver a Mi Dímelo» / «Volver a DWA» vuelve abajo del menú lateral, como en dw11) |
+| dw22 (sin instalar) | v2.25.3 (`a5affe62`) | `ghcr.io/aridio/dimelo-redes:v2.25.3-dw22` (dw21 unido a Postiz v2.25.3, con sus arreglos de seguridad y Next 16.4.2; arreglos propios de la auditoría del 2026-11-11: ver «Seguridad propia») |
 
 ## Qué cambia
 
@@ -56,6 +57,24 @@ Lo que el cliente no ve (paquetes `@gitroom/…`, variables `POSTIZ_…`, carpet
 
 Además, al instalar: `EMAIL_FROM_NAME=Dímelo Redes` y, para quitar del todo redes que no se ofrecen, la variable `HIDDEN_PROVIDERS` de Postiz (lista separada por comas).
 
+## Seguridad propia (dw22, auditoría del 2026-11-11)
+
+Pruebas sin Nest ni base: `node --test --experimental-strip-types apps/backend/src/dimelo/*.spec.ts 'apps/frontend/src/app/(app)/auth/ruta.interna.spec.ts'` y, las que importan paquetes, `node --require @swc-node/register --test <archivo>.spec.ts` (después de `pnpm install`).
+
+| Qué | Dónde (pruebas) |
+|---|---|
+| Volver después de entrar solo a una ruta relativa de este sitio | `apps/frontend/src/app/(app)/auth/ruta.interna.ts` (`ruta.interna.spec.ts`), `return.url.component.tsx` |
+| La IP de cada conexión saliente se revisa también si es literal; «copiar desde enlace» y el autopost solo a https público, cada redirección revisada, con tope de tiempo | `libraries/nestjs-libraries/src/dtos/webhooks/ssrf.safe.dispatcher.ts` (`.spec.ts`), `media.service.ts`, `autopost.service.ts` |
+| ffmpeg de TikTok: solo un archivo local, solo protocolo `file`, solo MP4/MOV; el remoto se descarga antes con tope | `libraries/nestjs-libraries/src/integrations/social/tiktok.ligero.ts` (`.spec.ts`), `tiktok.provider.ts` |
+| Lo oculto en pantalla se cierra en el servidor (404); sin MCP salvo `DIMELO_MCP=on`; `/user/self` sin la clave de la API | `apps/backend/src/dimelo/oculto.ts` (`oculto.spec.ts`), `main.ts`, `users.controller.ts` |
+| Cookies de sesión solo de esta dirección y `SameSite=Lax`; la vieja de `.dimeloweb.com` se sigue borrando | `libraries/helpers/src/subdomain/subdomain.management.ts` (`.spec.ts`), `auth.middleware.ts`, `proxy.ts`, `marca/aplicar.sh` § 9 |
+| Toda sesión vence (LOCAL 7 días); sin `exp` no se entra (ni con el enlace de cambiar la clave ni con el de activar) | `apps/backend/src/dimelo/sesion.ts` (`sesion.spec.ts`), `auth.middleware.ts`, `marca/aplicar.sh` § 9 |
+| Mi Dímelo exige siempre el `state` | `apps/backend/src/dimelo/estado.ts` (`estado.spec.ts`), `auth.service.ts` |
+| «Código fuente» a la etiqueta que se sirve y «basado en Postiz (AGPL-3.0)» | `marca/archivos/.../marca/codigo.fuente.tsx`; excepción en `aplicar.sh` § 5 y `comprobar.sh` |
+| Imagen base, acciones e imágenes de la prueba por huella; aviso semanal si Postiz va por delante | `Dockerfile.dev`, `.github/workflows/*.yml`, `marca/prueba/docker-compose.yml` |
+
+Propuesta sin probar (aquí no había Docker): que el contenedor no corra como root. `Dockerfile.dev` ya crea el usuario `www`, pero `nginx` y `pm2` arrancan como root. Haría falta: nginx escuchando en un puerto alto (ya es 5000) con `pid` y temporales en carpetas de `www`, `chown www` de `/app`, `/uploads`, `/var/lib/nginx` y `/var/log/nginx`, y `USER www` antes de `CMD`. Probarlo en local con `marca/prueba` antes de instalarlo.
+
 ## Probar en local
 
 Hace falta Docker. Desde la raíz del repositorio, sobre una copia limpia:
@@ -71,14 +90,15 @@ git checkout -- . && git clean -fd apps libraries           # vuelve a la copia 
 
 ## Pasar a una versión nueva de Postiz
 
-1. Traer la etiqueta nueva y la actual: `git fetch https://github.com/gitroomhq/postiz-app.git tag vX.Y.Z tag v2.25.1`.
-2. Rama nueva desde ella y llevar encima los commits de la marca: `git checkout -b dimelo-vX.Y.Z vX.Y.Z && git cherry-pick <commits de dimelo que no son de Postiz>` (o `git rebase --onto vX.Y.Z v2.25.1 dimelo`). Solo tocan `marca/`, `LEEME-DIMELO.md` y `.github/workflows/`. Si Postiz cambió alguno de sus workflows, git avisa de un choque «modify/delete»: se resuelve con `git rm .github/workflows/<ese archivo>` y `git rebase --continue` (o `git cherry-pick --continue`).
+1. Traer el original: `git remote add upstream https://github.com/gitroomhq/postiz-app && git fetch upstream main --tags`. La última estable es la etiqueta `vX.Y.Z` más alta sin guion (`git tag --merged upstream/main --sort=-v:refname | grep -v -- - | head -1`). El flujo «Vigilar Postiz» avisa cada lunes en Issues.
+2. Rama nueva desde la que está instalada y unir la etiqueta: `git checkout -b dimelo-vX.Y.Z <rama instalada> && git merge vX.Y.Z` (así se hizo dw22: los commits instalados quedan tal cual y los choques se resuelven una vez). Si Postiz cambió alguno de sus workflows, git avisa de un choque «modify/delete»: `git rm .github/workflows/<ese archivo>`. En cada choque, nunca se tira un arreglo de seguridad de Postiz para conservar un cambio propio. Comprobar también los choques sin texto: archivos propios que Postiz cambió por su lado (`git diff --name-only <base vieja> vX.Y.Z` contra `git diff --name-only <base vieja> HEAD`).
 3. `marca/aplicar.sh`. Si dice «no encontré …», Postiz movió o cambió ese texto: buscarlo en la versión nueva y corregir la línea en `textos.tsv`, `ocultar.txt` o `aplicar.sh`.
 4. `marca/comprobar.sh` hasta «0 restos de Postiz». Si aparece un texto nuevo de Postiz, añadirlo a `textos.tsv` (si hay que decirlo distinto) o dejar que lo cambie la regla general.
 5. Probar en local (arriba) y recorrer las pantallas en celular, tablet y computadora, claro y oscuro.
 6. Volver a la copia limpia, commit de los cambios de `marca/`, apuntar la versión en la tabla de arriba y pasar `dimelo` a la rama nueva.
 7. Etiqueta `vX.Y.Z-dw1` (o subir el número `-dwN` si es la misma versión de Postiz con cambios de marca) y `git push origin dimelo vX.Y.Z-dw1`. El workflow construye, prueba y publica la imagen.
-8. En el servidor se cambia la imagen a la etiqueta nueva, nunca a «latest».
+8. Antes de instalar: `pnpm audit --prod` sin críticos ni altos alcanzables (lo que quede, justificado), las pruebas de «Seguridad propia» en verde y la etiqueta subida a GitHub (el enlace «Código fuente» lleva a ella).
+9. En el servidor se cambia la imagen a la etiqueta nueva, nunca a «latest».
 
 Tras la primera publicación hay que hacer pública la imagen una vez, a mano (GitHub crea los paquetes privados): perfil → Packages → `dimelo-redes` → Package settings → Change visibility → Public. Las etiquetas nuevas heredan esa visibilidad. Para comprobarlo sin sesión: `docker manifest inspect ghcr.io/aridio/dimelo-redes:<etiqueta>`.
 
@@ -86,4 +106,4 @@ Cada construcción guarda las capturas del recorrido (celular, tablet y computad
 
 ## Workflows de Postiz
 
-En la rama `dimelo` se quitaron los workflows de Postiz (`.github/workflows/`, salvo `dimelo-redes.yml`): publicaban en la cuenta de Postiz al subir cualquier etiqueta.
+En la rama `dimelo` se quitaron los workflows de Postiz (`.github/workflows/`, salvo `dimelo-redes.yml` y `dimelo-vigilar-original.yml`): publicaban en la cuenta de Postiz al subir cualquier etiqueta.

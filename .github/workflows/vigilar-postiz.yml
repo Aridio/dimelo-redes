@@ -27,8 +27,8 @@ jobs:
         run: |
           git fetch https://github.com/gitroomhq/postiz-app.git main
           BASE=$(git merge-base HEAD FETCH_HEAD)
-          TOTAL=$(git rev-list --count $BASE..FETCH_HEAD)
-          LISTA=$(git log --oneline $BASE..FETCH_HEAD | grep -iE 'secur|ssrf|xss|jwt|cve|vuln|bypass|inject|redirect|travers' || true)
+          TOTAL=$(git rev-list --count --cherry-pick --right-only --no-merges HEAD...FETCH_HEAD)
+          LISTA=$(git log --oneline --cherry-pick --right-only --no-merges HEAD...FETCH_HEAD | grep -iE 'secur|ssrf|xss|jwt|cve|vuln|bypass|inject|redirect|travers' || true)
           if [ -z "$LISTA" ]; then
             echo "Sin arreglos de seguridad pendientes."
             exit 0

@@ -7,6 +7,7 @@ import {
   Query,
   Req,
   Res,
+  NotFoundException,
 } from '@nestjs/common';
 import { GetUserFromRequest } from '@gitroom/nestjs-libraries/user/user.from.request';
 import { sign } from 'jsonwebtoken';
@@ -248,6 +249,8 @@ export class UsersController {
   @Post('/api-key/rotate')
   @CheckPolicies([AuthorizationActions.Create, Sections.ADMIN])
   async rotateApiKey(@GetOrgFromRequest() organization: Organization) {
+    // La clave de la API no se entrega al navegador.
+    throw new NotFoundException();
     return this._orgService.updateApiKey(organization.id);
   }
 

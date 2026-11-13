@@ -73,12 +73,33 @@ export async function proxy(request: NextRequest) {
         ? {
             secure: true,
             httpOnly: true,
-            sameSite: false,
+            sameSite: 'lax',
           }
         : {}),
       maxAge: -1,
       domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
     });
+    let padre: string | undefined;
+    try {
+      const partes = new URL(process.env.FRONTEND_URL!).hostname.split('.');
+      if (partes.length > 2) padre = '.' + partes.slice(-2).join('.');
+    } catch {
+      padre = undefined;
+    }
+    if (padre) {
+      response.cookies.set('auth', '', {
+        path: '/',
+        ...(!process.env.NOT_SECURED
+          ? {
+              secure: true,
+              httpOnly: true,
+              sameSite: 'lax',
+            }
+          : {}),
+        maxAge: -1,
+        domain: padre,
+      });
+    }
     return response;
   }
 
@@ -121,7 +142,7 @@ export async function proxy(request: NextRequest) {
               path: '/',
               secure: true,
               httpOnly: true,
-              sameSite: false,
+              sameSite: 'lax',
               domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
             }
           : {}),
@@ -151,7 +172,7 @@ export async function proxy(request: NextRequest) {
                 path: '/',
                 secure: true,
                 httpOnly: true,
-                sameSite: false,
+                sameSite: 'lax',
                 domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
               }
             : {}),

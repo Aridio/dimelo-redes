@@ -9,6 +9,15 @@ import { HttpForbiddenException } from '@gitroom/nestjs-libraries/services/excep
 import { MastraService } from '@gitroom/nestjs-libraries/chat/mastra.service';
 import { setSentryUserContext } from '@gitroom/nestjs-libraries/sentry/initialize.sentry';
 
+const dominioPadre = (): string | undefined => {
+  try {
+    const partes = new URL(process.env.FRONTEND_URL!).hostname.split('.');
+    return partes.length > 2 ? '.' + partes.slice(-2).join('.') : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 export const removeAuth = (res: Response) => {
   res.cookie('auth', '', {
     domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
@@ -22,6 +31,21 @@ export const removeAuth = (res: Response) => {
     expires: new Date(0),
     maxAge: -1,
   });
+  const padre = dominioPadre();
+  if (padre) {
+    res.cookie('auth', '', {
+      domain: padre,
+      ...(!process.env.NOT_SECURED
+        ? {
+            secure: true,
+            httpOnly: true,
+            sameSite: 'lax',
+          }
+        : {}),
+      expires: new Date(0),
+      maxAge: -1,
+    });
+  }
   res.header('logout', 'true');
 };
 

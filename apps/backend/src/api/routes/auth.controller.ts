@@ -8,6 +8,7 @@ import {
   Req,
   Res,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { ThrottlerRealIpGuard } from '@gitroom/nestjs-libraries/throttler/throttler.provider';
@@ -52,6 +53,8 @@ export class AuthController {
     @RealIP() ip: string,
     @UserAgent() userAgent: string
   ) {
+    // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
+    throw new NotFoundException();
     try {
       const getOrgFromCookie = this._authService.getOrgFromCookie(
         req?.cookies?.org
@@ -126,6 +129,8 @@ export class AuthController {
     @RealIP() ip: string,
     @UserAgent() userAgent: string
   ) {
+    // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
+    throw new NotFoundException();
     try {
       const getOrgFromCookie = this._authService.getOrgFromCookie(
         req?.cookies?.org
@@ -184,6 +189,8 @@ export class AuthController {
 
   @Post('/forgot')
   async forgot(@Body() body: ForgotPasswordDto) {
+    // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
+    throw new NotFoundException();
     try {
       await this._authService.forgot(body.email);
       return {
@@ -198,6 +205,8 @@ export class AuthController {
 
   @Post('/forgot-return')
   async forgotReturn(@Body() body: ForgotReturnPasswordDto) {
+    // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
+    throw new NotFoundException();
     const reset = await this._authService.forgotReturn(body);
     return {
       reset: !!reset,
@@ -245,6 +254,8 @@ export class AuthController {
     @Body('datafast_visitor_id') datafast_visitor_id: string,
     @Res({ passthrough: false }) response: Response
   ) {
+    // Dímelo Redes: ruta cerrada. Solo se entra con Mi Dímelo.
+    throw new NotFoundException();
     const activate = await this._authService.activate(
       code,
       datafast_visitor_id

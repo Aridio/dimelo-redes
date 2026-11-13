@@ -760,8 +760,28 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   // 3 minutes, so lightening never blocks a post.
   private lightenVideo(source: string): Promise<string | undefined> {
     // solo videos de nuestro almacenamiento; el resto se manda original
-    const bucket = process.env.CLOUDFLARE_BUCKET_URL;
-    if (!bucket || !source.startsWith(bucket)) {
+    let url: URL;
+    try {
+      url = new URL(source);
+    } catch {
+      return Promise.resolve(undefined);
+    }
+    if (url.protocol !== 'https:') {
+      return Promise.resolve(undefined);
+    }
+    const origenDe = (x?: string): string | undefined => {
+      if (!x) return undefined;
+      try {
+        return new URL(x).origin;
+      } catch {
+        return undefined;
+      }
+    };
+    const bucketOrigin = origenDe(process.env.CLOUDFLARE_BUCKET_URL);
+    const frontOrigin = origenDe(process.env.FRONTEND_URL);
+    const permitido = [bucketOrigin, frontOrigin].includes(url.origin);
+    const soloUploads = url.origin !== frontOrigin || url.pathname.startsWith('/uploads/');
+    if (!permitido || !soloUploads || url.username !== '' || url.password !== '') {
       return Promise.resolve(undefined);
     }
     const out = join(tmpdir(), `tiktok-${makeSecureId(12)}.mp4`);

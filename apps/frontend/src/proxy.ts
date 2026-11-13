@@ -92,6 +92,11 @@ export async function proxy(request: NextRequest) {
         `auth=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=${padre}${!process.env.NOT_SECURED ? '; Secure; HttpOnly; SameSite=Lax' : ''}`
       );
     }
+    // Cookie de solo esta dirección (la pone el navegador).
+    response.headers.append(
+      'Set-Cookie',
+      `auth=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT${!process.env.NOT_SECURED ? '; Secure; SameSite=Lax' : ''}`
+    );
     return response;
   }
 

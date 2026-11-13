@@ -46,6 +46,17 @@ export const removeAuth = (res: Response) => {
       maxAge: -1,
     });
   }
+  // Cookie de solo esta dirección (sin domain, sin httpOnly).
+  res.cookie('auth', '', {
+    ...(!process.env.NOT_SECURED
+      ? {
+          secure: true,
+          sameSite: 'lax',
+        }
+      : {}),
+    expires: new Date(0),
+    maxAge: -1,
+  });
   res.header('logout', 'true');
 };
 

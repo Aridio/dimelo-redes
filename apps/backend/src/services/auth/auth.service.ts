@@ -1,4 +1,3 @@
-import { exigeEstado } from '@gitroom/backend/dimelo/estado';
 import { Injectable } from '@nestjs/common';
 import { Provider, User } from '@prisma/client';
 import { CreateOrgUserDto } from '@gitroom/nestjs-libraries/dtos/auth/create.org.user.dto';
@@ -303,19 +302,16 @@ export class AuthService {
     state?: string,
     stateCookie?: string
   ) {
-    // the mobile app passes redirect_uri and keeps no cookies, the web flow
-    // never passes it, so the state nonce is only enforced for the web flow
-    // Dímelo Redes (RED-18): para Mi Dímelo (GENERIC) siempre, venga o no
-    // redirect_uri (no hay app móvil; ver dimelo/estado.ts)
+    // each provider says when the state nonce is required (requiresState)
+    const providerInstance = this._providerManager.getProvider(provider);
     if (
       !process.env.NOT_SECURED &&
-      exigeEstado(provider, redirectUri) &&
+      providerInstance.requiresState(redirectUri) &&
       (!state || state !== stateCookie)
     ) {
       throw new Error('Invalid state');
     }
 
-    const providerInstance = this._providerManager.getProvider(provider);
     const token = await providerInstance.getToken(code, redirectUri);
     const user = await providerInstance.getUser(token);
     if (!user) {

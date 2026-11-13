@@ -5,6 +5,12 @@ import {
 
 @AuthProvider({ provider: 'GENERIC' })
 export class OauthProvider extends AuthProviderAbstract {
+  // Dímelo Redes (RED-18): Mi Dímelo no tiene app móvil; el state se exige
+  // siempre, aunque llegue redirect_uri
+  requiresState(_redirectUri?: string): boolean {
+    return true;
+  }
+
   private getConfig() {
     const {
       POSTIZ_OAUTH_AUTH_URL,

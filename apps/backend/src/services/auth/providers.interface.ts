@@ -6,6 +6,12 @@ export abstract class AuthProviderAbstract {
   abstract getUser(
     providerToken: string
   ): Promise<{ email: string; id: string }> | false;
+  // the mobile app passes redirect_uri and keeps no cookies, the web flow
+  // never passes it, so by default the state nonce is only enforced for the
+  // web flow; a provider without a mobile flow requires it always
+  requiresState(redirectUri?: string): boolean {
+    return !redirectUri;
+  }
   async postRegistration(
     providerToken: string,
     orgId: string

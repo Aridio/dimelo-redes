@@ -1,16 +1,20 @@
-// Pruebas de RED-18 (sin Nest ni base): node --test --experimental-strip-types apps/backend/src/dimelo/estado.spec.ts
+// Pruebas de RED-18 / RR-05 (cuándo se exige el state de la entrada; lo dice cada proveedor, no el código genérico):
+// node --require @swc-node/register --test apps/backend/src/dimelo/estado.spec.ts
+import 'reflect-metadata';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { exigeEstado } from './estado.ts';
+import { OauthProvider } from '../services/auth/providers/oauth.provider';
+import { GithubProvider } from '../services/auth/providers/github.provider';
 
-test('Mi Dímelo exige siempre el state, aunque llegue redirect_uri', () => {
-  assert.equal(exigeEstado('GENERIC', 'https://otra.example/vuelta'), true);
-  assert.equal(exigeEstado('generic', 'x'), true);
-  assert.equal(exigeEstado('GENERIC', undefined), true);
-  assert.equal(exigeEstado('GENERIC', ''), true);
+test('Mi Dímelo (GENERIC) exige siempre el state, aunque llegue redirect_uri', () => {
+  const generic = new OauthProvider();
+  assert.equal(generic.requiresState('https://otra.example/vuelta'), true);
+  assert.equal(generic.requiresState(undefined), true);
+  assert.equal(generic.requiresState(''), true);
 });
 
-test('lo demás queda como en Postiz', () => {
-  assert.equal(exigeEstado('GOOGLE', undefined), true);
-  assert.equal(exigeEstado('GOOGLE', 'postiz://vuelta'), false);
+test('los demás proveedores quedan como en Postiz (sin state solo con redirect_uri de la app móvil)', () => {
+  const github = new GithubProvider();
+  assert.equal(github.requiresState(undefined), true);
+  assert.equal(github.requiresState('postiz://vuelta'), false);
 });

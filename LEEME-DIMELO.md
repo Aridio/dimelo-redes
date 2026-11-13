@@ -69,7 +69,7 @@ Pruebas sin Nest ni base: `node --test --experimental-strip-types apps/backend/s
 | Lo oculto en pantalla se cierra en el servidor (404); sin MCP salvo `DIMELO_MCP=on`; `/user/self` sin la clave de la API | `apps/backend/src/dimelo/oculto.ts` (`oculto.spec.ts`), `main.ts`, `users.controller.ts` |
 | Cookies de sesión solo de esta dirección y `SameSite=Lax`; la vieja de `.dimeloweb.com` se sigue borrando (también `oauth_state` y `org`); el `state` de la entrada en `__Host-oauth_state`; con dos cookies `auth` no se usa ninguna | `libraries/helpers/src/subdomain/subdomain.management.ts` (`.spec.ts`), `auth.middleware.ts`, `proxy.ts`, `marca/aplicar.sh` § 9 |
 | Toda sesión vence (LOCAL 7 días); sin `exp` no se entra (ni con el enlace de cambiar la clave ni con el de activar) | `apps/backend/src/dimelo/sesion.ts` (`sesion.spec.ts`), `auth.middleware.ts`, `marca/aplicar.sh` § 9 |
-| Mi Dímelo exige siempre el `state` | `apps/backend/src/dimelo/estado.ts` (`estado.spec.ts`), `auth.service.ts` |
+| Mi Dímelo exige siempre el `state` (lo dice el proveedor: `requiresState`) | `providers.interface.ts`, `providers/oauth.provider.ts` (`dimelo/estado.spec.ts`), `auth.service.ts` |
 | «Código fuente» a la etiqueta que se sirve y «basado en Postiz (AGPL-3.0)» | `marca/archivos/.../marca/codigo.fuente.tsx`; excepción en `aplicar.sh` § 5 y `comprobar.sh` |
 | Imagen base, acciones e imágenes de la prueba por huella; aviso semanal si Postiz va por delante | `Dockerfile.dev`, `.github/workflows/*.yml`, `marca/prueba/docker-compose.yml` |
 

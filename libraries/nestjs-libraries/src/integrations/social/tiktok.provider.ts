@@ -759,6 +759,9 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
   // undefined (send the original) if ffmpeg is missing, fails or takes over
   // 3 minutes, so lightening never blocks a post.
   private lightenVideo(source: string): Promise<string | undefined> {
+    if (/[\\\s\x00-\x1f]/.test(source)) {
+      return Promise.resolve(undefined);
+    }
     // solo videos de nuestro almacenamiento; el resto se manda original
     let url: URL;
     try {
@@ -792,7 +795,7 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
           '-y', '-loglevel', 'error',
           '-protocol_whitelist', 'https,tls,tcp',
           '-format_whitelist', 'mov,mp4,m4a,3gp,3g2,mj2,matroska,webm',
-          '-i', source,
+          '-i', url.href,
           '-vf', "scale='min(1080,iw)':-2",
           '-c:v', 'libx264', '-preset', 'veryfast',
           '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k',

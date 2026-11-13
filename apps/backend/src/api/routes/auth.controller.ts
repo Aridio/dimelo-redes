@@ -287,6 +287,7 @@ export class AuthController {
 
   @Post('/resend-activation')
   async resendActivation(@Body() body: ResendActivationDto) {
+    throw new NotFoundException();
     try {
       await this._authService.resendActivationEmail(body.email);
       return {

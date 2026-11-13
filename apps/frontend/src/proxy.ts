@@ -87,18 +87,10 @@ export async function proxy(request: NextRequest) {
       padre = undefined;
     }
     if (padre) {
-      response.cookies.set('auth', '', {
-        path: '/',
-        ...(!process.env.NOT_SECURED
-          ? {
-              secure: true,
-              httpOnly: true,
-              sameSite: 'lax',
-            }
-          : {}),
-        maxAge: -1,
-        domain: padre,
-      });
+      response.headers.append(
+        'Set-Cookie',
+        `auth=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=${padre}${!process.env.NOT_SECURED ? '; Secure; HttpOnly; SameSite=Lax' : ''}`
+      );
     }
     return response;
   }

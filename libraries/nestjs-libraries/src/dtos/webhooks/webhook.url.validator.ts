@@ -18,7 +18,14 @@ const blockedIPv4Ranges: [string, number][] = [
   ['192.168.0.0', 16],
   ['100.64.0.0', 10],
   ['198.18.0.0', 15],
-  ['224.0.0.0', 3], // multicast/reserved
+  // Dímelo Redes (RR-07): the rest of IANA's special-purpose ranges that are
+  // not globally reachable (IETF assignments, documentation, old 6to4 relay)
+  ['192.0.0.0', 24],
+  ['192.0.2.0', 24],
+  ['192.88.99.0', 24],
+  ['198.51.100.0', 24],
+  ['203.0.113.0', 24],
+  ['224.0.0.0', 3], // multicast/reserved (240.0.0.0/4 included)
 ];
 
 // BlockList matches an IPv4 rule against the address in any notation,
@@ -42,6 +49,13 @@ blockedIps.addSubnet('fe80::', 10, 'ipv6'); // link-local
 blockedIps.addSubnet('fec0::', 10, 'ipv6'); // site-local (deprecated)
 blockedIps.addSubnet('fc00::', 7, 'ipv6'); // unique local
 blockedIps.addSubnet('ff00::', 8, 'ipv6'); // multicast
+// Dímelo Redes (RR-07): IPv6 special-purpose ranges that are not globally reachable
+blockedIps.addSubnet('64:ff9b:1::', 48, 'ipv6'); // local-use NAT64
+blockedIps.addSubnet('100::', 64, 'ipv6'); // discard-only
+blockedIps.addSubnet('2001::', 23, 'ipv6'); // IETF protocol assignments (Teredo, ORCHID…)
+blockedIps.addSubnet('2001:db8::', 32, 'ipv6'); // documentation
+blockedIps.addSubnet('3fff::', 20, 'ipv6'); // documentation
+blockedIps.addSubnet('5f00::', 16, 'ipv6'); // SRv6 SIDs
 
 export function isBlockedIPv4(ip: string): boolean {
   return net.isIPv4(ip) ? blockedIps.check(ip, 'ipv4') : true;

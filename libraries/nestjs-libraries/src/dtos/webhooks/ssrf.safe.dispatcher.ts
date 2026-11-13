@@ -102,9 +102,21 @@ class SsrfSafeHttpsAgent extends https.Agent {
 
 const MAX_REDIRECTS = 3;
 
+// Dímelo Redes (RR-07): a user-given download only goes to the https port
+// (443, written or not); any other port could reach a service of the server
+// itself on its public address, or of a neighbour, that also speaks TLS.
+const ALLOWED_PORTS = ['', '443'];
+const isAllowedPort = (url: string) => {
+  try {
+    return ALLOWED_PORTS.includes(new URL(url).port);
+  } catch {
+    return false;
+  }
+};
+
 // Downloads a user-given address (Dímelo Redes, RED-06): only https, only to
-// public addresses, every redirect checked again before following it (at
-// most 3), and the whole download has a deadline. The size cap stays with the
+// public addresses on port 443, every redirect checked again before
+// following it (at most 3), and the whole download has a deadline. The size cap stays with the
 // caller, which reads the body.
 export async function fetchPublicHttps(
   url: string,
@@ -114,7 +126,7 @@ export async function fetchPublicHttps(
   const signal = AbortSignal.timeout(timeoutMs);
   let current = url;
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-    if (!(await isSafePublicHttpsUrl(current))) {
+    if (!isAllowedPort(current) || !(await isSafePublicHttpsUrl(current))) {
       throw new Error('Blocked URL');
     }
     const response = await fetch(current, {

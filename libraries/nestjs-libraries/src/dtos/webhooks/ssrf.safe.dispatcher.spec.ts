@@ -99,3 +99,46 @@ test('RED-06: copiar desde enlace sigue los saltos a mano y revisa cada uno', as
     globalThis.fetch = original;
   }
 });
+
+test('RR-07: el resto de rangos internos o reservados de IANA cuentan como internos', () => {
+  for (const ip of [
+    '192.0.0.1', '192.0.0.170', '192.0.2.10', '192.88.99.1', '198.51.100.7', '203.0.113.9', '240.0.0.1', '255.255.255.255',
+    '::ffff:192.0.0.1', '64:ff9b::c000:1', '2002:c000:0201::',
+    '64:ff9b:1::a00:1', '100::1', '2001::1', '2001:db8::1', '3fff::1', '5f00::1',
+  ]) {
+    assert.equal(isBlockedIp(ip), true, ip);
+  }
+  // lo público sigue pasando (también IPv6 de Google y de Cloudflare, y NAT64 de una IPv4 pública)
+  for (const ip of ['8.8.8.8', '192.0.3.1', '203.0.114.1', '2001:4860:4860::8888', '2606:4700:4700::1111', '64:ff9b::808:808']) {
+    assert.equal(isBlockedIp(ip), false, ip);
+  }
+});
+
+test('RR-07: las descargas solo van al puerto 443', async () => {
+  const original = globalThis.fetch;
+  const pedidas: string[] = [];
+  try {
+    globalThis.fetch = (async (url: string) => {
+      pedidas.push(url);
+      return new Response('ok', { status: 200 });
+    }) as any;
+    // otro puerto, desde el principio
+    for (const url of ['https://93.184.215.14:8443/foto.jpg', 'https://93.184.215.14:22/', 'https://93.184.215.14:80/']) {
+      await assert.rejects(fetchPublicHttps(url), /Blocked URL/, url);
+    }
+    assert.deepEqual(pedidas, []);
+    // 443 escrito o sin escribir
+    assert.equal((await fetchPublicHttps('https://93.184.215.14/foto.jpg')).status, 200);
+    assert.equal((await fetchPublicHttps('https://93.184.215.14:443/foto.jpg')).status, 200);
+    // ni por una redirección a otro puerto
+    pedidas.length = 0;
+    globalThis.fetch = (async (url: string) => {
+      pedidas.push(url);
+      return new Response(null, { status: 302, headers: { location: 'https://93.184.215.14:9200/_cat' } });
+    }) as any;
+    await assert.rejects(fetchPublicHttps('https://93.184.215.14/foto.jpg'), /Blocked URL/);
+    assert.deepEqual(pedidas, ['https://93.184.215.14/foto.jpg']);
+  } finally {
+    globalThis.fetch = original;
+  }
+});

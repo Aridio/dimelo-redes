@@ -149,7 +149,7 @@ find "${ALCANCE[@]}" -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.json' 
     s{\bpostiz\.com\b}{dimeloweb.com}g;
     s{MyPostizAgent}{MiAgenteDeRedes}g;
     s{#Postiz\b}{#DimeloRedes}g;
-    s{\bPostiz\b}{Dímelo Redes}g;
+    s{(?<!basado en )\bPostiz\b}{Dímelo Redes}g;
     s{\bGitroom\b}{Dímelo Redes}g;
   '
 

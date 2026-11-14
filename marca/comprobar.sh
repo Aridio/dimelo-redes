@@ -28,7 +28,8 @@ done
 
 # 1. El nombre con mayúscula, en cualquier parte del código (también lo oculto)
 while IFS= read -r linea; do resto "$linea"; done < <(
-  grep -rIn -E '\b(Postiz|Gitroom)\b' "${ALCANCE[@]}" 2>/dev/null)
+  grep -rIn -E '\b(Postiz|Gitroom)\b' "${ALCANCE[@]}" 2>/dev/null |
+    PERM="$PERMITIDO" perl -ne 'my $p = $ENV{PERM}; my $t = $_; $t =~ s/$p//g; print if $t =~ /\b(Postiz|Gitroom)\b/')
 
 # 2. Enlaces y direcciones de Postiz
 while IFS= read -r linea; do resto "$linea"; done < <(

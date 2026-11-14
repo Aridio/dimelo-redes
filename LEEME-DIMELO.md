@@ -26,6 +26,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw19 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw19` (sobre dw18: menú de la persona arriba a la derecha, solo un círculo con las iniciales, con Configuración, Volver a Mi Dímelo o a DWA y Cerrar sesión; sin el bloque de abajo del menú lateral ni el botón suelto de Configuración; «Cerrar sesión» a secas; el logo lleva al calendario) |
 | dw20 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw20` (sobre dw19: el círculo con el mismo alto y centro que el sol y la campana, con separador; hover del menú legible en claro y oscuro y foco con teclado; Configuración vuelve al menú lateral) |
 | dw21 | v2.25.1 (`91c91f6`) | `ghcr.io/aridio/dimelo-redes:v2.25.1-dw21` (sobre dw20: el menú del círculo se pinta encima de todo, también de filtros y selectores; «Volver a Mi Dímelo» / «Volver a DWA» vuelve abajo del menú lateral, como en dw11) |
+| dw22 | v2.25.1 (`91c91f6`) | `dimelo-redes:local-dw22` (sobre dw21: arreglos de seguridad del original —returnUrl, ssrf, jwt bypass—, paquetes al día, cookie solo para redes.dimeloweb.com con SameSite=Lax y 8 h, sin entrada con correo, la clave de la API no llega al navegador, ffmpeg solo con videos propios, pie «basado en Postiz») |
 
 ## Qué cambia
 
@@ -51,6 +52,7 @@ Dímelo Redes es [Postiz](https://github.com/gitroomhq/postiz-app) con la marca 
 | dw19: menú de la persona arriba a la derecha (Configuración, Volver, Cerrar sesión); el logo lleva al calendario | `marca/archivos/.../components/marca/menu.usuario.tsx`, `marca/aplicar.sh` § 14, `textos.tsv` (cerrar sesión) y `es.json` |
 | Página 404 y página de error propias | `marca/archivos/.../app/(app)/not-found.tsx`, `marca/archivos/.../app/global-error.tsx` |
 | Enlace «Código fuente» a este repositorio (entrada y Ajustes) | `marca/archivos/.../components/marca/codigo.fuente.tsx` |
+| dw22: seguridad (spec 077 P02 de dimelo-web-admin) | cherry-picks 9a889598, 5f18f1ca, a5affe62; `package.json` (overrides); `auth.controller.ts`, `auth.service.ts`, `oauth.provider.ts`, `auth.middleware.ts`, `users.controller.ts`, `subdomain.management.ts`, `tiktok.provider.ts`, `proxy.ts`; `.github/workflows/vigilar-postiz.yml` |
 
 Lo que el cliente no ve (paquetes `@gitroom/…`, variables `POSTIZ_…`, carpetas) se queda como está.
 

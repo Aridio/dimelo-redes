@@ -362,8 +362,8 @@ patron "$MC" 's~<div className="w-full h-full p-\[50px\]">\s*\{hasExtension\(med
 literal "$OP" "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string }> {" \
   "async getUser(access_token: string): Promise<{ email: string; id: string; name?: string; dimelo?: unknown }> {"
 literal "$OP" "    const { email, sub: id, name } = await response.json();
-    return { email, id, name };" "    const { email, sub: id, name, dimelo_persona, dimelo_equipo, dimelo_volver } = await response.json();
-    return { email, id, name, dimelo: { persona: dimelo_persona, equipo: dimelo_equipo, volver: dimelo_volver } };"
+    return { email, id, name };" "    const { email, sub: id, name, dimelo_persona, dimelo_equipo, dimelo_volver, dimelo_negocio, dimelo_panel } = await response.json();
+    return { email, id, name, dimelo: { persona: dimelo_persona, equipo: dimelo_equipo, volver: dimelo_volver, negocio: dimelo_negocio, panel: dimelo_panel } };"
 literal "$AS" "    if (checkExists) {
       return { jwt: await this.jwt(checkExists) };
     }" "    if (checkExists) {

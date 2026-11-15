@@ -16,7 +16,28 @@ import { setCookie } from '@gitroom/frontend/components/layout/layout.context';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 
-type Dimelo = { negocio: string | null; persona: string | null; equipo: boolean; volver: string };
+// dw23: negocio = id de Mi Dímelo (para el cambio de negocio); nombre = el que se ve; panel = origen del panel.
+type Dimelo = { negocio: string | null; nombre: string | null; persona: string | null; equipo: boolean; volver: string; panel: string | null };
+
+// Cambiar de negocio (spec 087, dw23): el guion común del panel (cambiar-negocio.js) se carga una sola vez, al abrir el menú.
+type CambioNegocio = { montar: (elemento: HTMLElement, opciones: { herramienta: string; actual: string; panel: string; clase: string }) => unknown };
+const guionCambio = () => (window as unknown as { DimeloNegocio?: CambioNegocio }).DimeloNegocio;
+let cargaCambio: Promise<void> | null = null;
+const cargarCambio = (panel: string): Promise<void> => {
+  if (guionCambio()) return Promise.resolve();
+  cargaCambio ??= new Promise<void>((ok, mal) => {
+    const script = document.createElement('script');
+    script.src = `${panel}/assets/cambiar-negocio.js`;
+    script.defer = true;
+    script.onload = () => ok();
+    script.onerror = () => {
+      cargaCambio = null;
+      mal(new Error('cambiar-negocio'));
+    };
+    document.body.appendChild(script);
+  });
+  return cargaCambio;
+};
 
 const iniciales = (nombre: string) =>
   nombre
@@ -32,6 +53,7 @@ const opcion =
 
 export const MenuUsuario: FC = () => {
   const user = useUser() as unknown as { name?: string; email?: string; dimelo?: Dimelo } | undefined;
+  const cambioRef = useRef<HTMLDivElement>(null);
   const fetch = useFetch();
   const { isSecured } = useVariables();
   const [abierto, setAbierto] = useState(false);
@@ -64,6 +86,18 @@ export const MenuUsuario: FC = () => {
     if (abierto) panel.current?.querySelector<HTMLElement>('a,button')?.focus({ preventScroll: true });
   }, [abierto]);
   const t = useT();
+
+  // Solo con el panel de Mi Dímelo como origen (dimelo.panel) y un negocio con id (dimelo.negocio)
+  const cambioPanel = user?.dimelo?.panel ?? null;
+  const cambioNegocio = user?.dimelo?.negocio ?? null;
+  useEffect(() => {
+    const el = cambioRef.current;
+    if (!abierto || !el || !cambioPanel || !cambioNegocio) return;
+    const opciones = { herramienta: 'redes', actual: cambioNegocio, panel: cambioPanel, clase: opcion };
+    cargarCambio(cambioPanel)
+      .then(() => guionCambio()?.montar(el, opciones))
+      .catch(() => undefined);
+  }, [abierto, cambioPanel, cambioNegocio]);
 
   useEffect(() => {
     if (!abierto) return;
@@ -100,7 +134,7 @@ export const MenuUsuario: FC = () => {
 
   if (!user) return null;
   const dimelo = user.dimelo;
-  const nombre = dimelo?.negocio || user.name || user.email || '';
+  const nombre = dimelo?.nombre || user.name || user.email || '';
 
   return (
     <div
@@ -150,6 +184,19 @@ export const MenuUsuario: FC = () => {
           <div tabIndex={-1} className="outline-none px-[12px] pt-[8px] pb-[10px] mb-[4px] border-b border-blockSeparator text-[14px] font-[600] text-newTextColor break-words">
             {nombre}
           </div>
+        )}
+        {cambioPanel && cambioNegocio && (
+          <div
+            ref={cambioRef}
+            data-dimelo-negocio=""
+            data-herramienta="redes"
+            data-actual={cambioNegocio}
+            data-panel={cambioPanel}
+            data-clase={opcion}
+            // El globo de «Cambiar de negocio» abre aparte: el menú se cierra al tocarlo
+            onClick={() => setAbierto(false)}
+            className="w-full"
+          />
         )}
         <Link href="/settings" tabIndex={abierto ? 0 : -1} className={opcion} onClick={() => setAbierto(false)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">

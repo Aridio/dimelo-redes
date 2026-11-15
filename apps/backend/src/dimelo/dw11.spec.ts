@@ -53,6 +53,7 @@ test('vista del menú: id del negocio, nombre, persona, dirección completa y pa
     volver: 'https://admin.dimeloweb.com/panel/clients/c1',
     panel: 'https://admin.dimeloweb.com',
   });
+  assert.equal(vistaDimelo({ volver: '/panel', negocio: 'c1', panel: 'https://malo.example' }, 'N', ENV).panel, null, 'otro panel: nada');
   assert.deepEqual(vistaDimelo(undefined, 'Dímelo Web', ENV), {
     negocio: null,
     nombre: 'Dímelo Web',

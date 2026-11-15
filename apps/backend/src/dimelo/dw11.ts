@@ -58,5 +58,5 @@ export function vistaDimelo(
   env: Record<string, string | undefined>
 ): VistaDimelo {
   const s = sesionDimelo(sesion);
-  return { negocio: s.negocio, nombre: texto(nombre, 120), persona: s.persona, equipo: s.equipo, volver: panelOrigen(env) + s.volver, panel: s.panel };
+  return { negocio: s.negocio, nombre: texto(nombre, 120), persona: s.persona, equipo: s.equipo, volver: panelOrigen(env) + s.volver, panel: s.panel && s.panel === panelOrigen(env) ? s.panel : null };
 }
